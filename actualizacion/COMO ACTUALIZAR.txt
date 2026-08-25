@@ -1,0 +1,59 @@
+CÓMO ACTUALIZAR EL TABLERO COLJ
+===============================
+
+Lo que se edita a mano vive en esta carpeta. Lo demás se genera solo.
+
+
+1. AGREGAR, QUITAR O CORREGIR UN ENLACE
+---------------------------------------
+Abre enlaces.xlsx y edita la hoja "Enlaces". Tiene tres columnas:
+
+  Nombre    lo que se ve en grande en la ficha
+  Detalle   la línea de explicación debajo
+  Link      la dirección completa, empezando por https://
+
+Reglas:
+  - Una fila por enlace. Para agregar uno, escribe en la primera fila vacía.
+  - Para quitar uno, borra la fila completa.
+  - Si dejas el Link vacío, la ficha sale marcada "Dirección por definir".
+  - Las filas sin Nombre se ignoran.
+
+Guarda el Excel, cierra el archivo y corre el paso 3.
+
+
+2. ACTUALIZAR LAS CIFRAS
+------------------------
+Las cifras no se editan acá: salen solas de las carpetas de actas y del
+Excel de seguimiento. Basta con correr el paso 3 después de que entren
+actas nuevas o de que los equipos reporten al formulario.
+
+La fecha de corte también se calcula sola: es la última sesión reportada.
+
+
+3. VOLVER A GENERAR EL TABLERO
+------------------------------
+Abre una terminal en la carpeta tablero-calidad-colj y corre:
+
+    python programas/generar_tablero_calidad_colj.py
+
+Eso reescribe index.html, las páginas de html/, los datos y los estilos.
+Si algo sale mal, las versiones anteriores están en historico/.
+
+
+QUÉ HAY EN CADA CARPETA
+-----------------------
+  index.html       la portada, se abre con doble clic
+  html/            las demás páginas del tablero
+  actualizacion/   lo que se edita a mano (este Excel y este instructivo)
+  programas/       el programa que genera todo
+  datos/           las cifras ya procesadas, no editar
+  recursos/        estilos y funciones comunes, no editar
+  imagenes/        el banner y la marca del pie
+  fuentes/         las tipografías Distrito Joven
+  historico/       versiones anteriores
+
+
+IMPORTANTE AL COMPARTIR
+-----------------------
+El tablero es una carpeta, no un archivo suelto. Para mandarlo, comprime
+la carpeta completa. Si mandas solo index.html llega sin estilos ni datos.

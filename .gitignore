@@ -1,0 +1,21 @@
+# Versiones anteriores del tablero y del generador: se conservan solo en local.
+historico/
+
+# Vault de Obsidian del subproyecto.
+Notes/
+
+# El Excel de enlaces sí va al repo porque el generador lo lee.
+*.xlsx
+!actualizacion/enlaces.xlsx
+
+# Temporales de Office y de Python.
+~$*
+__pycache__/
+*.pyc
+
+# Basura del sistema operativo y atajos de Google Drive.
+.DS_Store
+Thumbs.db
+*.gsheet
+*.gdoc
+*.gslides

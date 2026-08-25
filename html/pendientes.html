@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qué está pendiente · COLJ 2026</title>
+<link rel="stylesheet" href="../recursos/tablero.css">
+</head>
+<body>
+
+<img class="banner" src="../imagenes/Header.png"
+     alt="Juventud en acción. Innovación para el seguimiento y la participación.
+          Distrito Joven, Secretaría Distrital de Integración Social, Bogotá">
+
+<div class="titulo-zona">
+  <a class="volver" href="zoom.html">&larr; Zoom año en curso</a>
+  <h1>Qué está pendiente</h1>
+  <p class="intro">Solo aparecen las localidades con algo por entregar. Son
+     pendientes de sesión o de documento; los ajustes de forma están en la
+     página de ajustes por localidad.</p>
+</div>
+
+<div class="container">
+
+  <div class="rejilla" id="pendientes"></div>
+
+</div>
+
+<img class="marca-pie" src="../imagenes/marca-pie.png"
+     alt="Distrito Joven, Secretaría Distrital de Integración Social">
+
+<script src="../datos/datos_colj.js"></script>
+<script src="../recursos/tablero.js"></script>
+<script>pintarPendientes();</script>
+</body>
+</html>

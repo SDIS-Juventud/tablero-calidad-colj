@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estadísticas generales · COLJ</title>
+<link rel="stylesheet" href="../recursos/tablero.css">
+</head>
+<body>
+
+<img class="banner" src="../imagenes/Header.png"
+     alt="Juventud en acción. Innovación para el seguimiento y la participación.
+          Distrito Joven, Secretaría Distrital de Integración Social, Bogotá">
+
+<div class="titulo-zona">
+  <a class="volver" href="../index.html">&larr; Inicio</a>
+  <h1>Estadísticas generales</h1>
+  <p class="intro">Actas archivadas en las tres vigencias. Sirve para ver cómo
+     se mueve el ritmo del espacio de un año a otro.</p>
+</div>
+
+<div class="container">
+
+  <div class="franja" id="franja-anios"></div>
+
+  <p class="nota-general"><strong>Nota:</strong> la caída en sesiones de 2024 a
+     2025 no es debilitamiento del espacio. En 2025 se pasó de sesiones
+     mensuales a ordinarias bimensuales, así que el mínimo esperado bajó de
+     doce a seis al año.</p>
+
+  <div class="rotulo-seccion">
+    <h2>Por localidad</h2>
+    <p>Número de sesiones con sus actas de asistencia.</p>
+  </div>
+  <div class="tarjeta tabla-ancha">
+    <table>
+      <thead>
+        <tr>
+          <th>Localidad</th>
+          <th>Actas 2024</th>
+          <th>Actas 2025</th>
+          <th>Actas 2026*</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-serie"></tbody>
+    </table>
+  </div>
+
+  <p class="pie-nota">* 2026 es el año en curso. Las cifras de 2024 y 2025
+     vienen del conteo de actas archivadas que ya estaba documentado en el
+     balance, y todavía no se recalcularon con el mismo método de 2026.</p>
+
+</div>
+
+<img class="marca-pie" src="../imagenes/marca-pie.png"
+     alt="Distrito Joven, Secretaría Distrital de Integración Social">
+
+<script src="../datos/datos_colj.js"></script>
+<script src="../recursos/tablero.js"></script>
+<script>pintarFranjaAnios();pintarSerie();</script>
+</body>
+</html>
