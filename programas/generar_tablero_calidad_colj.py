@@ -1092,6 +1092,13 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
 }
 .nota-general strong { color: var(--gris-oscuro); }
 
+/* Recordatorio del corte, bajo el título de cada página con datos. Texto
+   corriente en gris secundario: es una precisión de lectura, no una alerta. */
+.corte-aviso {
+  font-size: 0.85rem; color: var(--gris); margin-top: 0.7rem;
+}
+.corte-aviso b { font-weight: 600; color: var(--gris-oscuro); }
+
 .pie-nota {
   font-size: 0.8rem; line-height: 1.6; color: var(--gris); margin-top: 2.4rem;
 }
@@ -1194,6 +1201,17 @@ function franja(id, casillas) {
 
 /* --------------------------------------------------------------- portada */
 
+/* El recordatorio de hasta dónde llegan los datos. Se corre en todas las
+   páginas y no hace nada donde no está el nodo. La fecha de corte no es la de
+   consulta ni la de descarga: es la de la última sesión que quedó registrada,
+   así que una tabla puede estar al día aunque la fecha se vea vieja. */
+function pintarCorte() {
+  var nodo = document.getElementById('corte-aviso');
+  if (!nodo) return;
+  nodo.innerHTML = 'Los datos van hasta el <b>' + D.corte + '</b>, que es ' +
+    'la fecha en que sesionó la última acta registrada.';
+}
+
 function pintarCampos() {
   var r = D.resumen;
   var campos = [
@@ -1269,12 +1287,12 @@ function pintarAccesosZoom() {
     {href: 'pendientes.html', cifra: r.con_pendientes,
      nombre: 'Qué está pendiente',
      glosa: 'Localidades con alguna sesión o documento por entregar.'},
-    {href: 'ajustes.html', cifra: r.actas_con_ajustes,
-     nombre: 'Ajustes por localidad',
-     glosa: 'Actas que necesitan algún ajuste en su registro.'},
     {href: 'detalle.html', cifra: r.localidades_con_ajustes,
      nombre: 'Detalle acta por acta',
-     glosa: 'Localidades con el detalle de qué corregir en cada acta.'}
+     glosa: 'Localidades con el detalle de qué corregir en cada acta.'},
+    {href: 'ajustes.html', cifra: r.actas_con_ajustes,
+     nombre: 'Ajustes por localidad',
+     glosa: 'Actas que necesitan algún ajuste en su registro.'}
   ];
   var nodo = document.getElementById('accesos');
   if (!nodo) return;
@@ -1454,17 +1472,21 @@ ESQUELETO = """<!DOCTYPE html>
 
 <script src="%(raiz)sdatos/datos_colj.js"></script>
 <script src="%(raiz)srecursos/tablero.js"></script>
-<script>%(llamada)s</script>
+<script>pintarCorte();%(llamada)s</script>
 </body>
 </html>
 """
 
 
-def envoltura(pestana, pagina, llamada, es_portada=False, vuelve_a=None):
+def envoltura(pestana, pagina, llamada, es_portada=False, vuelve_a=None,
+              con_corte=False):
     """Arma una página completa con la cabecera y el pie comunes.
 
     La portada vive en la raíz de la carpeta y las demás páginas en html/, así
     que las rutas a recursos, datos e imágenes llevan ../ en esas últimas.
+
+    con_corte agrega el recordatorio de hasta cuándo llegan los datos. Va en
+    las páginas con tablas y no en las que solo tienen enlaces.
 
     vuelve_a dice a dónde lleva el botón de volver. Las cinco vistas del año
     en curso regresan a zoom.html, que es de donde se entra a ellas, y no a la
@@ -1478,8 +1500,13 @@ def envoltura(pestana, pagina, llamada, es_portada=False, vuelve_a=None):
     if es_portada:
         cabecera = pagina["titulo"]
     else:
-        cabecera = ('<div class="titulo-zona">\n%s%s</div>\n'
-                    % (volver, pagina["titulo"]))
+        # El aviso de corte lo llena tablero.js con el dato del año en curso.
+        # Va vacío en el HTML a propósito: si la fecha se escribiera aquí,
+        # habría que acordarse de cambiarla en nueve páginas.
+        aviso = ('  <p class="corte-aviso" id="corte-aviso"></p>\n'
+                 if con_corte else "")
+        cabecera = ('<div class="titulo-zona">\n%s%s%s</div>\n'
+                    % (volver, pagina["titulo"], aviso))
     # La portada no tiene cuerpo, solo el bloque del título, así que se omite
     # el contenedor: dejarlo vacío metía un espacio muerto antes del pie.
     contenedor = ("" if not pagina["cuerpo"].strip()
@@ -1823,13 +1850,17 @@ def main():
     vuelve_a_zoom = ("zoom.html", "Zoom año en curso")
     de_zoom = {"periodicidad.html", "documentos.html", "pendientes.html",
                "ajustes.html", "detalle.html"}
+    # Todas las páginas con datos llevan el recordatorio del corte. La de
+    # enlaces no, porque ahí no hay ninguna cifra que se pueda leer mal.
+    con_corte = de_zoom | {"estadisticas.html", "zoom.html"}
     os.makedirs(CARPETA_HTML, exist_ok=True)
     for archivo, pestana, pagina, llamada, portada in paginas:
         vuelve = vuelve_a_zoom if archivo in de_zoom else None
         # La portada queda en la raíz; las demás páginas dentro de html/
         destino = RAIZ_TABLERO if portada else CARPETA_HTML
         with open(os.path.join(destino, archivo), "w", encoding="utf-8") as f:
-            f.write(envoltura(pestana, pagina, llamada, portada, vuelve))
+            f.write(envoltura(pestana, pagina, llamada, portada, vuelve,
+                              archivo in con_corte))
 
     # Barrido de las páginas que quedaron en la raíz de versiones anteriores
     for archivo, _, _, _, portada in paginas:

@@ -78,6 +78,17 @@ function franja(id, casillas) {
 
 /* --------------------------------------------------------------- portada */
 
+/* El recordatorio de hasta dónde llegan los datos. Se corre en todas las
+   páginas y no hace nada donde no está el nodo. La fecha de corte no es la de
+   consulta ni la de descarga: es la de la última sesión que quedó registrada,
+   así que una tabla puede estar al día aunque la fecha se vea vieja. */
+function pintarCorte() {
+  var nodo = document.getElementById('corte-aviso');
+  if (!nodo) return;
+  nodo.innerHTML = 'Los datos van hasta el <b>' + D.corte + '</b>, que es ' +
+    'la fecha en que sesionó la última acta registrada.';
+}
+
 function pintarCampos() {
   var r = D.resumen;
   var campos = [
@@ -153,12 +164,12 @@ function pintarAccesosZoom() {
     {href: 'pendientes.html', cifra: r.con_pendientes,
      nombre: 'Qué está pendiente',
      glosa: 'Localidades con alguna sesión o documento por entregar.'},
-    {href: 'ajustes.html', cifra: r.actas_con_ajustes,
-     nombre: 'Ajustes por localidad',
-     glosa: 'Actas que necesitan algún ajuste en su registro.'},
     {href: 'detalle.html', cifra: r.localidades_con_ajustes,
      nombre: 'Detalle acta por acta',
-     glosa: 'Localidades con el detalle de qué corregir en cada acta.'}
+     glosa: 'Localidades con el detalle de qué corregir en cada acta.'},
+    {href: 'ajustes.html', cifra: r.actas_con_ajustes,
+     nombre: 'Ajustes por localidad',
+     glosa: 'Actas que necesitan algún ajuste en su registro.'}
   ];
   var nodo = document.getElementById('accesos');
   if (!nodo) return;

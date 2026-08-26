@@ -394,6 +394,13 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
 }
 .nota-general strong { color: var(--gris-oscuro); }
 
+/* Recordatorio del corte, bajo el título de cada página con datos. Texto
+   corriente en gris secundario: es una precisión de lectura, no una alerta. */
+.corte-aviso {
+  font-size: 0.85rem; color: var(--gris); margin-top: 0.7rem;
+}
+.corte-aviso b { font-weight: 600; color: var(--gris-oscuro); }
+
 .pie-nota {
   font-size: 0.8rem; line-height: 1.6; color: var(--gris); margin-top: 2.4rem;
 }
