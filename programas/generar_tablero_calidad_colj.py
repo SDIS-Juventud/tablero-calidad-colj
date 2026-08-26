@@ -58,9 +58,34 @@ RAIZ_COLJ = os.path.dirname(RAIZ_TABLERO)
 
 JSON_ACTAS = os.path.join(RAIZ_COLJ, "programas", "calidad_actas_2026.json")
 CARPETA_2026 = os.path.join(RAIZ_COLJ, "2026")
-EXCEL_SEGUIMIENTO = os.path.join(
-    RAIZ_COLJ, "Drive",
-    "Seguimiento - Comités Operativos Locales de Juventud (Respuestas) (1).xlsx")
+CARPETA_DRIVE = os.path.join(RAIZ_COLJ, "Drive")
+
+
+def buscar_excel_seguimiento():
+    """Encuentra el Excel de respuestas del formulario dentro de Drive/.
+
+    El nombre cambia con cada descarga porque el navegador le agrega " (1)",
+    " (2)" y así sucesivamente cuando ya existe una copia. Por eso no se fija
+    un nombre exacto: se buscan todos los que empiecen por "Seguimiento" y se
+    toma el más reciente. Se ignoran los archivos temporales de Excel, que son
+    los que empiezan por "~$" y aparecen mientras el libro está abierto.
+    """
+    candidatos = [
+        os.path.join(CARPETA_DRIVE, nombre)
+        for nombre in os.listdir(CARPETA_DRIVE)
+        if nombre.lower().startswith("seguimiento")
+        and nombre.lower().endswith(".xlsx")
+        and not nombre.startswith("~$")
+    ]
+    if not candidatos:
+        raise FileNotFoundError(
+            "No se encontró ningún Excel de seguimiento en:\n  "
+            + CARPETA_DRIVE
+            + "\nDescarga las respuestas del formulario y déjalas ahí.")
+    return max(candidatos, key=os.path.getmtime)
+
+
+EXCEL_SEGUIMIENTO = buscar_excel_seguimiento()
 CARPETA_DATOS = os.path.join(RAIZ_TABLERO, "datos")
 CARPETA_RECURSOS = os.path.join(RAIZ_TABLERO, "recursos")
 CARPETA_FUENTES = os.path.join(RAIZ_TABLERO, "fuentes")
@@ -94,6 +119,42 @@ CAMPOS = ["no_juveniles", "juveniles", "consejeros", "plataformas", "otros"]
 # bimestres cerrados: enero-febrero, marzo-abril y mayo-junio. El bimestre de
 # julio-agosto todavía está corriendo, así que no se le exige a nadie.
 BIMESTRES_CERRADOS = [1, 2, 3]
+
+# Sesiones ordinarias que se le piden a cada localidad al corte: una por cada
+# bimestre ya cerrado. Es el número, no la casilla del calendario, lo que se
+# mira para decir si una localidad sesionó lo que debía.
+ORDINARIAS_EXIGIDAS = len(BIMESTRES_CERRADOS)
+
+# Cargas del formulario que repiten una sesión ya registrada, pero con otra
+# fecha. El de-duplicado normal, que agrupa por localidad y fecha, no las ve:
+# para él son sesiones distintas.
+#
+# El número de comité es lo que las delata. Una localidad no tiene dos comités
+# número 2, así que cuando el mismo número llega con fechas distintas hay una
+# carga mal hecha. Engativá cargó cuatro veces su comité 2 mientras corregía
+# los datos, y dos de esas cargas traían fechas de sesiones que nunca
+# existieron: no hay acta archivada del 23 de abril ni del 29 de junio, y las
+# cuatro actas de la localidad corresponden a los comités 1, 2, 3 y 4 con
+# fechas 25 de febrero, 29 de abril, 3 de junio y 25 de junio.
+#
+# Se identifican por la marca temporal, que es única por respuesta. No se
+# resuelve con una regla automática porque no la hay: quedarse con la carga más
+# reciente daría la fecha equivocada en Engativá, y quedarse con la primera la
+# daría equivocada en otros casos. Son pocos y se revisan a mano.
+CARGAS_REPETIDAS = {
+    "2026-06-14 13:16:06": ("Engativá, comité 2 con fecha 23 de abril; la "
+                            "carga posterior lo corrigió al 29 de abril, que "
+                            "es la fecha del acta archivada"),
+    "2026-06-14 13:22:29": ("Engativá, comité 2 con fecha 29 de junio; no hay "
+                            "acta de esa fecha y el comité 4 es el del 25 de "
+                            "junio, así que la sesión no existió"),
+}
+
+# Días que pueden pasar sin que la localidad se reúna antes de que valga la
+# pena mirarlo. Son los dos meses del reglamento traducidos a días corridos.
+# No es una regla del decreto: es el punto donde el silencio del espacio deja
+# de ser una fecha corrida y empieza a ser una ausencia.
+DIAS_SIN_SESIONAR_ALERTA = 61
 NOMBRE_BIMESTRE = {1: "enero y febrero", 2: "marzo y abril",
                    3: "mayo y junio", 4: "julio y agosto"}
 MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
@@ -358,6 +419,29 @@ def revisar_carga(acta, archivos):
 
 # ------------------------------------------------------------------- datos
 
+def avisar_numeros_repetidos(unicas):
+    """Avisa si una localidad tiene el mismo número de comité en dos fechas.
+
+    Es la señal de que alguien cargó la misma sesión dos veces. No detiene el
+    programa, porque a veces el número está mal digitado y la sesión sí es
+    distinta, pero deja el caso a la vista para revisarlo antes de publicar.
+    Si el caso resulta ser una carga repetida, se agrega a CARGAS_REPETIDAS.
+    """
+    avisos = []
+    for (loc, num), grupo in unicas.groupby(["Localidad",
+                                             "Número de comité"]):
+        fechas = sorted(set(grupo["fecha"]))
+        if len(fechas) > 1:
+            avisos.append("  %s, comité %g en %s"
+                          % (loc, num,
+                             " y ".join(f.strftime("%d/%m") for f in fechas)))
+    if avisos:
+        print("\nOJO: el mismo número de comité aparece con fechas distintas.")
+        print("Puede ser una sesión cargada dos veces o un número mal escrito.")
+        print("\n".join(avisos))
+        print("Si es una carga repetida, agrégala a CARGAS_REPETIDAS.\n")
+
+
 def construir():
     """Arma el resumen por localidad cruzando actas, carpeta y formulario."""
     with open(JSON_ACTAS, encoding="utf-8") as f:
@@ -369,11 +453,30 @@ def construir():
     df["fecha"] = pd.to_datetime(df["Fecha del comité"], errors="coerce",
                                  dayfirst=True)
     f26 = df[df["fecha"].dt.year == 2026]
+
+    # Fuera las cargas que repiten una sesión ya registrada con otra fecha.
+    marcas = f26["Marca temporal"].dt.strftime("%Y-%m-%d %H:%M:%S")
+    f26 = f26[~marcas.isin(CARGAS_REPETIDAS)]
+
     unicas = f26.drop_duplicates(subset=["Localidad", "fecha"])
+    avisar_numeros_repetidos(unicas)
 
     # El corte es la última sesión reportada, no una fecha escrita a mano: así
     # se mueve solo cuando entren sesiones nuevas al formulario.
-    corte = fecha_larga(f26["fecha"].max())
+    fecha_corte = f26["fecha"].max()
+    corte = fecha_larga(fecha_corte)
+
+    # La última vez que alguien subió un acta: es la primera columna del Excel
+    # de respuestas, "Marca temporal", que el formulario llena solo. Sirve para
+    # saber si el registro está fresco o lleva semanas quieto.
+    ultima_carga = fecha_larga(f26["Marca temporal"].max())
+
+    # El último comité que quedó registrado, con su localidad. No siempre es el
+    # de la carga más reciente: las actas no entran en el mismo orden en que se
+    # sesiona, así que se calcula aparte.
+    fila_ultima = f26.loc[f26["fecha"].idxmax()]
+    ultima_sesion = "%s, %s" % (fila_ultima["Localidad"],
+                                fecha_larga(fila_ultima["fecha"]))
 
     # Cifras de asistentes que reportó el formulario, por localidad y fecha
     reportado = {}
@@ -399,6 +502,24 @@ def construir():
         cubiertos = sorted(b for b in bimestres if b in BIMESTRES_CERRADOS)
         faltantes_bim = [b for b in BIMESTRES_CERRADOS if b not in bimestres]
 
+        # El cumplimiento se mide por el número de sesiones ordinarias, no por
+        # la cuadrícula de bimestres. La razón está en los datos: hay
+        # localidades que sesionaron cada dos meses de forma pareja pero cuyas
+        # fechas cayeron a los lados del corte del calendario, y aparecían
+        # incumpliendo al lado de otras menos regulares que sí encajaron en la
+        # cuadrícula. Los bimestres se siguen mostrando, pero como lectura del
+        # ritmo del año, no como veredicto.
+        faltan_ordinarias = max(0, ORDINARIAS_EXIGIDAS - len(ordinarias))
+
+        # Cuánto lleva la localidad sin reunirse a la fecha de corte. Cuenta
+        # cualquier sesión, ordinaria o extraordinaria: lo que interesa aquí es
+        # si el espacio está activo, no de qué tipo fue la última reunión.
+        if len(del_form):
+            dias_sin_sesionar = int((fecha_corte
+                                     - del_form["fecha"].max()).days)
+        else:
+            dias_sin_sesionar = None
+
         # ---- documentos cargados
         planillas = digitales = 0
         pendientes_carga = []
@@ -415,9 +536,16 @@ def construir():
                 pendientes_carga.append(
                     "por cargar la planilla digital de la sesión %s"
                     % acta["num_nombre"])
-        pendientes_sesion = [
-            "queda pendiente la sesión ordinaria del bimestre de %s"
-            % NOMBRE_BIMESTRE[b] for b in faltantes_bim]
+        pendientes_sesion = []
+        if faltan_ordinarias:
+            pendientes_sesion.append(
+                "%s para llegar a las %d que se esperan al corte"
+                % ("queda pendiente una sesión ordinaria" if faltan_ordinarias
+                   == 1 else "quedan pendientes %d sesiones ordinarias"
+                   % faltan_ordinarias, ORDINARIAS_EXIGIDAS))
+        if dias_sin_sesionar is not None                 and dias_sin_sesionar > DIAS_SIN_SESIONAR_ALERTA:
+            pendientes_sesion.append(
+                "lleva %d días sin reunirse" % dias_sin_sesionar)
 
         # ---- revisión documento por documento
         num = collections.Counter()
@@ -457,7 +585,7 @@ def construir():
                                 "ajustes": ajustes})
 
         # ---- estado general de la localidad
-        if faltantes_bim:
+        if faltan_ordinarias:
             estado = "falta sesionar"
         elif pendientes_carga:
             estado = "falta cargar"
@@ -474,8 +602,12 @@ def construir():
             "ordinarias": len(ordinarias),
             "extraordinarias": len(extraordinarias),
             "bimestres_cubiertos": len(cubiertos),
+            "bimestres_con_ordinaria": cubiertos,
             "bimestres_exigidos": len(BIMESTRES_CERRADOS),
             "bimestres_faltantes": [NOMBRE_BIMESTRE[b] for b in faltantes_bim],
+            "ordinarias_exigidas": ORDINARIAS_EXIGIDAS,
+            "faltan_ordinarias": faltan_ordinarias,
+            "dias_sin_sesionar": dias_sin_sesionar,
             "planillas": planillas,
             "digitales": digitales,
             "pendientes_carga": pendientes_carga,
@@ -513,7 +645,13 @@ def construir():
         "planillas": suma("planillas"),
         "digitales": suma("digitales"),
         "al_dia_sesiones": sum(1 for l in localidades
-                               if not l["bimestres_faltantes"]),
+                               if not l["faltan_ordinarias"]),
+        "en_silencio": sum(1 for l in localidades
+                           if l["dias_sin_sesionar"] is not None
+                           and l["dias_sin_sesionar"]
+                           > DIAS_SIN_SESIONAR_ALERTA),
+        "dias_alerta": DIAS_SIN_SESIONAR_ALERTA,
+        "ordinarias_exigidas": ORDINARIAS_EXIGIDAS,
         "carga_completa": sum(1 for l in localidades
                               if not l["pendientes_carga"]),
         "sin_pendientes": sum(1 for l in localidades
@@ -551,7 +689,9 @@ def construir():
         "sesiones_matriz_2024": SESIONES_MATRIZ_2024,
     }
 
-    return {"corte": corte, "bimestres_exigidos": len(BIMESTRES_CERRADOS),
+    return {"corte": corte, "ultima_carga": ultima_carga,
+            "ultima_sesion": ultima_sesion,
+            "bimestres_exigidos": len(BIMESTRES_CERRADOS),
             "resumen": resumen, "localidades": localidades,
             "serie": serie, "totales_serie": totales_serie,
             "enlaces": leer_enlaces()}
@@ -714,9 +854,16 @@ a { color: inherit; }
   font-size: clamp(0.95rem, 1.5vw, 1.18rem); line-height: 1.25;
   color: var(--gris); margin-top: 0.55rem; max-width: 24ch;
 }
-.portada .corte {
-  font-size: 0.9rem; color: var(--gris); margin-top: 0.55rem;
+/* Las dos fechas del registro. El rótulo va en gris y el dato en el gris
+   oscuro: son dos hechos distintos y sin ese contraste quedaban con el mismo
+   peso. El tamaño no baja de 0.9rem para que el gris secundario mantenga
+   contraste suficiente sobre el fondo blanco. */
+.portada .ultimo-registro {
+  font-size: 0.9rem; color: var(--gris); margin-top: 0.9rem; line-height: 1.7;
 }
+.portada .ultimo-registro span { display: block; }
+.portada .ultimo-registro b { font-weight: 600; color: var(--gris-oscuro); }
+
 .portada .seguimiento {
   font-family: 'Anton', 'Segoe UI', sans-serif; font-weight: 400;
   text-transform: uppercase; letter-spacing: 0.01em;
@@ -768,7 +915,7 @@ a { color: inherit; }
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .acceso:hover {
-  transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.09);
+  transform: translateY(-2px); box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 .acceso .cifra {
   font-family: 'Anton', 'Figtree', sans-serif; font-weight: 400;
@@ -873,7 +1020,12 @@ tbody tr.total:hover td { background: var(--blanco); }
   font-style: normal;
 }
 .bimestres i.si { background: var(--bueno); }
-.bimestres i.no { background: var(--malo); }
+/* El cuadro de un bimestre sin sesión ordinaria va en el neutral, no en el
+   rojo de estado. Desde que el cumplimiento se mide por número de sesiones y
+   no por la cuadrícula del calendario, un bimestre vacío es un dato del ritmo
+   del año y no un incumplimiento, y el color tiene que decir lo mismo que el
+   texto de la página. */
+.bimestres i.no { background: var(--neutral); }
 
 /* --------------------------------------------------------- listas y pie */
 
@@ -928,14 +1080,15 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
   margin-right: 6px; vertical-align: -1px;
 }
 .leyenda .punto.bien { background: var(--bueno); }
-.leyenda .punto.mal { background: var(--malo); }
+.leyenda .punto.mal { background: var(--neutral); }
 
 /* Nota destacada bajo una franja de cifras: fondo suave, sin borde de color
    ni icono, para que se lea como aclaración y no como alerta. */
+/* Aclaración de lectura, no alerta: texto plano, sin fondo ni borde, a la
+   misma medida que el resto de los párrafos de la hoja. */
 .nota-general {
-  background: var(--gris-claro); border-radius: 8px;
-  padding: 0.9rem 1.2rem; font-size: 0.9rem; color: var(--gris);
-  margin-bottom: 1.6rem; max-width: 96ch;
+  font-size: 0.9rem; color: var(--gris);
+  margin-bottom: 1.6rem; max-width: 82ch;
 }
 .nota-general strong { color: var(--gris-oscuro); }
 
@@ -980,12 +1133,32 @@ function fraccion(parte, total) {
   return '<span class="pastilla mal">' + parte + ' de ' + total + '</span>';
 }
 
-function bimestres(cubiertos, exigidos) {
+/* Un cuadro por bimestre cerrado, en el orden del calendario. Recibe la lista
+   de bimestres que sí tuvieron sesión ordinaria, no cuántos fueron: pintar los
+   primeros N cuadros mostraba el bimestre equivocado a las localidades que se
+   saltaron uno del medio. */
+function bimestres(conOrdinaria, exigidos) {
   var h = '<span class="bimestres">';
-  for (var i = 0; i < exigidos; i++) {
-    h += '<i class="' + (i < cubiertos ? 'si' : 'no') + '"></i>';
+  for (var i = 1; i <= exigidos; i++) {
+    h += '<i class="' + (conOrdinaria.indexOf(i) >= 0 ? 'si' : 'no') +
+         '" title="' + NOMBRE_BIMESTRE[i] + '"></i>';
   }
   return h + '</span>';
+}
+
+var NOMBRE_BIMESTRE = {1: 'enero y febrero', 2: 'marzo y abril',
+                       3: 'mayo y junio', 4: 'julio y agosto'};
+
+/* Los días que una localidad lleva sin reunirse. Se marca solo cuando pasa el
+   umbral de dos meses, para que la columna no se lea como semáforo: todas las
+   localidades tienen algún número aquí y eso es normal. */
+function silencio(dias) {
+  if (dias === null) return '<span class="neutro">sin sesiones</span>';
+  var texto = dias + (dias === 1 ? ' día' : ' días');
+  if (dias > D.resumen.dias_alerta) {
+    return '<span class="pastilla mal">' + texto + '</span>';
+  }
+  return '<span class="neutro">' + texto + '</span>';
 }
 
 function barra(bien, total) {
@@ -1088,7 +1261,8 @@ function pintarAccesosZoom() {
   var fichas = [
     {href: 'periodicidad.html', cifra: r.al_dia_sesiones + ' de 20',
      nombre: 'Periodicidad de las sesiones',
-     glosa: 'Localidades que sesionaron en los tres bimestres cerrados.'},
+     glosa: 'Localidades con las ' + r.ordinarias_exigidas +
+            ' sesiones ordinarias que se esperan al corte.'},
     {href: 'documentos.html', cifra: r.digitales + ' de ' + r.actas,
      nombre: 'Documentos de cada sesión',
      glosa: 'Sesiones que ya tienen cargada su planilla digital.'},
@@ -1122,8 +1296,8 @@ function pintarPanorama() {
     {v: r.actas, rot: 'Sesiones con acta',
      glosa: 'De ' + r.sesiones_formulario + ' reportadas al formulario.'},
     {v: r.al_dia_sesiones + ' de 20', rot: 'Localidades al día en sesiones',
-     glosa: 'Sesionaron en los ' + D.bimestres_exigidos +
-            ' bimestres ya cerrados.'},
+     glosa: 'Hicieron las ' + r.ordinarias_exigidas +
+            ' sesiones ordinarias que se esperan al corte.'},
     {v: r.sin_pendientes + ' de 20', rot: 'Localidades sin nada pendiente',
      glosa: 'Sesionaron, cargaron todo y no tienen ajustes de forma.'}
   ]);
@@ -1150,15 +1324,16 @@ function pintarPeriodicidad() {
   var filas = D.localidades.map(function (l) {
     return '<tr>' +
       '<td>' + l.localidad + '</td>' +
-      '<td>' + bimestres(l.bimestres_cubiertos, l.bimestres_exigidos) +
+      '<td>' + bimestres(l.bimestres_con_ordinaria, l.bimestres_exigidos) +
       '</td>' +
-      '<td>' + l.ordinarias + '</td>' +
+      '<td>' + (l.faltan_ordinarias
+                ? '<span class="pastilla mal">' + l.ordinarias + ' de ' +
+                  l.ordinarias_exigidas + '</span>'
+                : '<span class="neutro">' + l.ordinarias + '</span>') +
+      '</td>' +
       '<td>' + l.extraordinarias + '</td>' +
       '<td>' + l.sesiones_formulario + '</td>' +
-      '<td>' + (l.bimestres_faltantes.length
-                ? '<span class="pastilla mal">' +
-                  l.bimestres_faltantes.join('; ') + '</span>'
-                : '<span class="neutro">ninguno</span>') + '</td></tr>';
+      '<td>' + silencio(l.dias_sin_sesionar) + '</td></tr>';
   }).join('');
   var r = D.resumen;
   document.getElementById('tabla-periodicidad').innerHTML = filas +
@@ -1166,7 +1341,16 @@ function pintarPeriodicidad() {
     '<td>' + r.ordinarias + '</td>' +
     '<td>' + r.extraordinarias + '</td>' +
     '<td>' + r.sesiones_formulario + '</td>' +
-    '<td>' + r.al_dia_sesiones + ' de 20 localidades al día</td></tr>';
+    '<td></td></tr>';
+
+  // El conteo de localidades en silencio va en la leyenda y no en la fila de
+  // total: esa fila suma columnas y una frase ahí rompe la lectura.
+  var aviso = document.getElementById('resumen-silencio');
+  if (aviso) {
+    aviso.innerHTML = r.en_silencio
+      ? 'Hoy, ' + r.en_silencio + (r.en_silencio === 1 ? ' localidad.' : ' localidades.')
+      : 'Hoy, ninguna.';
+  }
 }
 
 function pintarDocumentos() {
@@ -1263,10 +1447,7 @@ ESQUELETO = """<!DOCTYPE html>
      alt="Juventud en acción. Innovación para el seguimiento y la participación.
           Distrito Joven, Secretaría Distrital de Integración Social, Bogotá">
 
-%(cabecera)s
-<div class="container">
-%(cuerpo)s
-</div>
+%(cabecera)s%(contenedor)s
 
 <img class="marca-pie" src="%(raiz)s%(marca)s"
      alt="Distrito Joven, Secretaría Distrital de Integración Social">
@@ -1299,19 +1480,26 @@ def envoltura(pestana, pagina, llamada, es_portada=False, vuelve_a=None):
     else:
         cabecera = ('<div class="titulo-zona">\n%s%s</div>\n'
                     % (volver, pagina["titulo"]))
+    # La portada no tiene cuerpo, solo el bloque del título, así que se omite
+    # el contenedor: dejarlo vacío metía un espacio muerto antes del pie.
+    contenedor = ("" if not pagina["cuerpo"].strip()
+                  else '\n<div class="container">%s</div>\n' % pagina["cuerpo"])
     return ESQUELETO % {"pestana": pestana, "banner": BANNER, "raiz": raiz,
                         "marca": MARCA_PIE, "cabecera": cabecera,
-                        "cuerpo": pagina["cuerpo"], "llamada": llamada}
+                        "contenedor": contenedor, "llamada": llamada}
 
 
-def pagina_portada(corte):
-    """La portada: el título, la fecha de corte y los tres campos."""
+def pagina_portada(ultima_carga, ultima_sesion):
+    """La portada: el título, las fechas del registro y los tres campos."""
     titulo = """<div class="portada">
   <div class="col-izq">
     <h1>COLJ</h1>
     <p class="nombre-largo">Comités Operativos Locales de Juventud</p>
     <p class="seguimiento">Seguimiento</p>
-    <p class="corte">Corte al %s</p>
+    <p class="ultimo-registro">
+      <span>Última acta cargada al formulario: <b>%s</b></span>
+      <span>Último comité registrado: <b>%s</b></span>
+    </p>
   </div>
 
   <div class="col-der">
@@ -1319,12 +1507,8 @@ def pagina_portada(corte):
     <div class="campos" id="campos"></div>
   </div>
 </div>
-""" % corte
-    cuerpo = """
-  <p class="pie-nota">La metodología, las fuentes y el alcance de este tablero
-     están en el documento «Nota metodológica COLJ 2026».</p>
-"""
-    return {"titulo": titulo, "cuerpo": cuerpo}
+""" % (ultima_carga, ultima_sesion)
+    return {"titulo": titulo, "cuerpo": ""}
 
 
 def pagina_estadisticas():
@@ -1336,8 +1520,7 @@ def pagina_estadisticas():
     cuerpo = """
   <div class="franja" id="franja-anios"></div>
 
-  <p class="nota-general"><strong>Nota:</strong> la caída en sesiones de 2024 a
-     2025 no es debilitamiento del espacio. En 2025 se pasó de sesiones
+  <p class="nota-general"><strong>Nota:</strong> En 2025 se pasó de sesiones
      mensuales a ordinarias bimensuales, así que el mínimo esperado bajó de
      doce a seis al año.</p>
 
@@ -1358,10 +1541,6 @@ def pagina_estadisticas():
       <tbody id="tabla-serie"></tbody>
     </table>
   </div>
-
-  <p class="pie-nota">* 2026 es el año en curso. Las cifras de 2024 y 2025
-     vienen del conteo de actas archivadas que ya estaba documentado en el
-     balance, y todavía no se recalcularon con el mismo método de 2026.</p>
 """
     return {"titulo": titulo, "cuerpo": cuerpo}
 
@@ -1384,8 +1563,8 @@ def pagina_zoom():
   <div class="rotulo-seccion">
     <span class="numero">2</span>
     <h2>Resumen de ajustes</h2>
-    <p>Este bloque es para afinar el registro. Se verifican los documentos
-       adjuntos vs tabla de seguimiento en Excel.</p>
+    <p>Este bloque es para afinar el registro. Compara los documentos
+       adjuntos con la tabla de seguimiento en Excel.</p>
   </div>
   <div class="franja" id="franja-ajustes"></div>
 
@@ -1412,30 +1591,34 @@ def pagina_enlaces():
 def pagina_periodicidad():
     """Página de periodicidad de las sesiones."""
     titulo = """  <h1>Periodicidad de las sesiones</h1>
-  <p class="intro">El reglamento fija sesiones ordinarias cada dos meses. Al
-     corte hay tres bimestres cerrados, enero y febrero, marzo y abril, y mayo
-     y junio, así que a cada localidad se le piden tres sesiones ordinarias,
-     una por bimestre. Las extraordinarias son adicionales y no cuentan para
-     ese mínimo. El bimestre de julio y agosto todavía corre y no se exige.</p>
+  <p class="intro">El reglamento fija sesiones ordinarias cada dos meses, así
+     que al corte se le piden tres a cada localidad. Las extraordinarias son
+     adicionales y no cuentan para ese mínimo.</p>
 """
     cuerpo = """
+  <p class="nota-general"><strong>Bimestre fijo o móvil.</strong> El
+     calendario parte el año en bloques, pero el reglamento habla de dos meses
+     entre una sesión y la siguiente. Varias localidades mantuvieron esa
+     distancia y sus fechas cayeron a los lados de un corte. Por eso el
+     cumplimiento se cuenta por número de sesiones ordinarias, y los cuadros
+     solo muestran el ritmo del año.</p>
+
   <div class="leyenda">
     <div><span class="punto bien"></span>Bimestre con sesión ordinaria</div>
     <div><span class="punto mal"></span>Bimestre sin sesión ordinaria</div>
-    <div>Se cuentan bimestres cubiertos y no sesiones, porque hay localidades
-      con las tres ordinarias que hicieron dos en un bimestre y ninguna en
-      otro.</div>
+    <div>Días sin reunirse al corte, contando las extraordinarias. Se marca al
+      pasar de dos meses. <span id="resumen-silencio"></span></div>
   </div>
   <div class="tarjeta tabla-ancha">
     <table>
       <thead>
         <tr>
           <th>Localidad</th>
-          <th>Ene-feb · Mar-abr<br>May-jun</th>
+          <th>Ritmo en el año<br>Ene-feb · Mar-abr · May-jun</th>
           <th>Sesiones<br>ordinarias</th>
           <th>Sesiones<br>extraordinarias</th>
           <th>Total<br>sesiones</th>
-          <th>Bimestre sin sesión ordinaria</th>
+          <th>Días sin<br>reunirse al corte</th>
         </tr>
       </thead>
       <tbody id="tabla-periodicidad"></tbody>
@@ -1476,8 +1659,8 @@ def pagina_documentos():
       con detalles de formato por afinar en algunas actas</div>
     <div><span class="chip cargar">Por cargar</span> le falta subir algún
       documento</div>
-    <div><span class="chip sesionar">Por sesionar</span> quedó un bimestre
-      cerrado sin sesión ordinaria</div>
+    <div><span class="chip sesionar">Por sesionar</span> hizo menos de las tres
+      sesiones ordinarias que se esperan al corte</div>
   </div>
 """
     return {"titulo": titulo, "cuerpo": cuerpo}
@@ -1614,7 +1797,7 @@ def main():
     # ---- las seis páginas
     paginas = [
         ("index.html", "Revisión COLJ 2026",
-         pagina_portada(datos["corte"]),
+         pagina_portada(datos["ultima_carga"], datos["ultima_sesion"]),
          "pintarCampos();", True),
         ("estadisticas.html", "Estadísticas generales · COLJ",
          pagina_estadisticas(),

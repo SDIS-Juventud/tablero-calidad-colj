@@ -156,9 +156,16 @@ a { color: inherit; }
   font-size: clamp(0.95rem, 1.5vw, 1.18rem); line-height: 1.25;
   color: var(--gris); margin-top: 0.55rem; max-width: 24ch;
 }
-.portada .corte {
-  font-size: 0.9rem; color: var(--gris); margin-top: 0.55rem;
+/* Las dos fechas del registro. El rótulo va en gris y el dato en el gris
+   oscuro: son dos hechos distintos y sin ese contraste quedaban con el mismo
+   peso. El tamaño no baja de 0.9rem para que el gris secundario mantenga
+   contraste suficiente sobre el fondo blanco. */
+.portada .ultimo-registro {
+  font-size: 0.9rem; color: var(--gris); margin-top: 0.9rem; line-height: 1.7;
 }
+.portada .ultimo-registro span { display: block; }
+.portada .ultimo-registro b { font-weight: 600; color: var(--gris-oscuro); }
+
 .portada .seguimiento {
   font-family: 'Anton', 'Segoe UI', sans-serif; font-weight: 400;
   text-transform: uppercase; letter-spacing: 0.01em;
@@ -210,7 +217,7 @@ a { color: inherit; }
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .acceso:hover {
-  transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.09);
+  transform: translateY(-2px); box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 .acceso .cifra {
   font-family: 'Anton', 'Figtree', sans-serif; font-weight: 400;
@@ -315,7 +322,12 @@ tbody tr.total:hover td { background: var(--blanco); }
   font-style: normal;
 }
 .bimestres i.si { background: var(--bueno); }
-.bimestres i.no { background: var(--malo); }
+/* El cuadro de un bimestre sin sesión ordinaria va en el neutral, no en el
+   rojo de estado. Desde que el cumplimiento se mide por número de sesiones y
+   no por la cuadrícula del calendario, un bimestre vacío es un dato del ritmo
+   del año y no un incumplimiento, y el color tiene que decir lo mismo que el
+   texto de la página. */
+.bimestres i.no { background: var(--neutral); }
 
 /* --------------------------------------------------------- listas y pie */
 
@@ -370,14 +382,15 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
   margin-right: 6px; vertical-align: -1px;
 }
 .leyenda .punto.bien { background: var(--bueno); }
-.leyenda .punto.mal { background: var(--malo); }
+.leyenda .punto.mal { background: var(--neutral); }
 
 /* Nota destacada bajo una franja de cifras: fondo suave, sin borde de color
    ni icono, para que se lea como aclaración y no como alerta. */
+/* Aclaración de lectura, no alerta: texto plano, sin fondo ni borde, a la
+   misma medida que el resto de los párrafos de la hoja. */
 .nota-general {
-  background: var(--gris-claro); border-radius: 8px;
-  padding: 0.9rem 1.2rem; font-size: 0.9rem; color: var(--gris);
-  margin-bottom: 1.6rem; max-width: 96ch;
+  font-size: 0.9rem; color: var(--gris);
+  margin-bottom: 1.6rem; max-width: 82ch;
 }
 .nota-general strong { color: var(--gris-oscuro); }
 

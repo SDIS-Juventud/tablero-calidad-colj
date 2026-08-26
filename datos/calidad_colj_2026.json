@@ -1,18 +1,23 @@
 {
   "corte": "24 de julio de 2026",
+  "ultima_carga": "3 de agosto de 2026",
+  "ultima_sesion": "Teusaquillo, 24 de julio de 2026",
   "bimestres_exigidos": 3,
   "resumen": {
     "actas": 90,
-    "respuestas_formulario": 98,
-    "sesiones_formulario": 92,
-    "ordinarias": 61,
+    "respuestas_formulario": 96,
+    "sesiones_formulario": 90,
+    "ordinarias": 59,
     "extraordinarias": 31,
     "planillas": 90,
-    "digitales": 83,
-    "al_dia_sesiones": 16,
-    "carga_completa": 15,
+    "digitales": 86,
+    "al_dia_sesiones": 19,
+    "en_silencio": 1,
+    "dias_alerta": 61,
+    "ordinarias_exigidas": 3,
+    "carga_completa": 17,
     "sin_pendientes": 2,
-    "con_pendientes": 9,
+    "con_pendientes": 4,
     "actas_con_ajustes": 59,
     "localidades_con_ajustes": 18,
     "limpias": 31,
@@ -31,8 +36,16 @@
       "ordinarias": 3,
       "extraordinarias": 2,
       "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 38,
       "planillas": 5,
       "digitales": 5,
       "pendientes_carga": [],
@@ -104,8 +117,16 @@
       "ordinarias": 3,
       "extraordinarias": 0,
       "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 44,
       "planillas": 3,
       "digitales": 3,
       "pendientes_carga": [],
@@ -165,17 +186,22 @@
       "ordinarias": 3,
       "extraordinarias": 0,
       "bimestres_cubiertos": 2,
+      "bimestres_con_ordinaria": [
+        1,
+        2
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [
         "mayo y junio"
       ],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 18,
       "planillas": 3,
       "digitales": 3,
       "pendientes_carga": [],
-      "pendientes_sesion": [
-        "queda pendiente la sesión ordinaria del bimestre de mayo y junio"
-      ],
-      "estado": "falta sesionar",
+      "pendientes_sesion": [],
+      "estado": "revisar forma",
       "limpias": 0,
       "numeracion": {
         "ok": 3,
@@ -228,8 +254,16 @@
       "ordinarias": 3,
       "extraordinarias": 3,
       "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 9,
       "planillas": 6,
       "digitales": 6,
       "pendientes_carga": [],
@@ -287,15 +321,21 @@
       "ordinarias": 3,
       "extraordinarias": 2,
       "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 35,
       "planillas": 5,
-      "digitales": 4,
-      "pendientes_carga": [
-        "por cargar la planilla digital de la sesión 4"
-      ],
+      "digitales": 5,
+      "pendientes_carga": [],
       "pendientes_sesion": [],
-      "estado": "falta cargar",
+      "estado": "revisar forma",
       "limpias": 3,
       "numeracion": {
         "ok": 5,
@@ -342,8 +382,16 @@
       "ordinarias": 3,
       "extraordinarias": 2,
       "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 17,
       "planillas": 5,
       "digitales": 3,
       "pendientes_carga": [
@@ -397,8 +445,16 @@
       "ordinarias": 3,
       "extraordinarias": 4,
       "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 1,
       "planillas": 7,
       "digitales": 7,
       "pendientes_carga": [],
@@ -491,8 +547,16 @@
       "ordinarias": 3,
       "extraordinarias": 2,
       "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 28,
       "planillas": 5,
       "digitales": 5,
       "pendientes_carga": [],
@@ -572,8 +636,16 @@
       "ordinarias": 3,
       "extraordinarias": 1,
       "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 29,
       "planillas": 4,
       "digitales": 4,
       "pendientes_carga": [],
@@ -612,20 +684,26 @@
     {
       "localidad": "Engativá",
       "actas": 4,
-      "respuestas_formulario": 8,
-      "sesiones_formulario": 6,
-      "ordinarias": 5,
+      "respuestas_formulario": 6,
+      "sesiones_formulario": 4,
+      "ordinarias": 3,
       "extraordinarias": 1,
       "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 29,
       "planillas": 4,
-      "digitales": 3,
-      "pendientes_carga": [
-        "por cargar la planilla digital de la sesión 1"
-      ],
+      "digitales": 4,
+      "pendientes_carga": [],
       "pendientes_sesion": [],
-      "estado": "falta cargar",
+      "estado": "revisar forma",
       "limpias": 0,
       "numeracion": {
         "ok": 1,
@@ -687,17 +765,22 @@
       "ordinarias": 3,
       "extraordinarias": 1,
       "bimestres_cubiertos": 2,
+      "bimestres_con_ordinaria": [
+        1,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [
         "marzo y abril"
       ],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 43,
       "planillas": 4,
       "digitales": 4,
       "pendientes_carga": [],
-      "pendientes_sesion": [
-        "queda pendiente la sesión ordinaria del bimestre de marzo y abril"
-      ],
-      "estado": "falta sesionar",
+      "pendientes_sesion": [],
+      "estado": "revisar forma",
       "limpias": 0,
       "numeracion": {
         "ok": 2,
@@ -759,8 +842,16 @@
       "ordinarias": 3,
       "extraordinarias": 3,
       "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 8,
       "planillas": 6,
       "digitales": 5,
       "pendientes_carga": [
@@ -827,13 +918,20 @@
       "ordinarias": 3,
       "extraordinarias": 3,
       "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 0,
       "planillas": 6,
-      "digitales": 4,
+      "digitales": 5,
       "pendientes_carga": [
-        "por cargar la planilla digital de la sesión 1",
-        "por cargar la planilla digital de la sesión 3"
+        "por cargar la planilla digital de la sesión 1"
       ],
       "pendientes_sesion": [],
       "estado": "falta cargar",
@@ -884,8 +982,16 @@
       "ordinarias": 3,
       "extraordinarias": 1,
       "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 36,
       "planillas": 4,
       "digitales": 4,
       "pendientes_carga": [],
@@ -943,8 +1049,16 @@
       "ordinarias": 3,
       "extraordinarias": 2,
       "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 38,
       "planillas": 5,
       "digitales": 5,
       "pendientes_carga": [],
@@ -980,8 +1094,16 @@
       "ordinarias": 3,
       "extraordinarias": 2,
       "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 13,
       "planillas": 5,
       "digitales": 5,
       "pendientes_carga": [],
@@ -1017,15 +1139,23 @@
       "ordinarias": 2,
       "extraordinarias": 0,
       "bimestres_cubiertos": 2,
+      "bimestres_con_ordinaria": [
+        1,
+        2
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [
         "mayo y junio"
       ],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 1,
+      "dias_sin_sesionar": 87,
       "planillas": 2,
       "digitales": 2,
       "pendientes_carga": [],
       "pendientes_sesion": [
-        "queda pendiente la sesión ordinaria del bimestre de mayo y junio"
+        "queda pendiente una sesión ordinaria para llegar a las 3 que se esperan al corte",
+        "lleva 87 días sin reunirse"
       ],
       "estado": "falta sesionar",
       "limpias": 0,
@@ -1073,8 +1203,16 @@
       "ordinarias": 3,
       "extraordinarias": 1,
       "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 36,
       "planillas": 4,
       "digitales": 4,
       "pendientes_carga": [],
@@ -1132,8 +1270,16 @@
       "ordinarias": 3,
       "extraordinarias": 1,
       "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 37,
       "planillas": 4,
       "digitales": 4,
       "pendientes_carga": [],
@@ -1200,17 +1346,22 @@
       "ordinarias": 3,
       "extraordinarias": 0,
       "bimestres_cubiertos": 2,
+      "bimestres_con_ordinaria": [
+        1,
+        3
+      ],
       "bimestres_exigidos": 3,
       "bimestres_faltantes": [
         "marzo y abril"
       ],
+      "ordinarias_exigidas": 3,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 12,
       "planillas": 3,
       "digitales": 3,
       "pendientes_carga": [],
-      "pendientes_sesion": [
-        "queda pendiente la sesión ordinaria del bimestre de marzo y abril"
-      ],
-      "estado": "falta sesionar",
+      "pendientes_sesion": [],
+      "estado": "revisar forma",
       "limpias": 1,
       "numeracion": {
         "ok": 3,

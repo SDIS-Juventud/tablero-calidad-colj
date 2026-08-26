@@ -29,6 +29,10 @@ actas nuevas o de que los equipos reporten al formulario.
 
 La fecha de corte también se calcula sola: es la última sesión reportada.
 
+Para traer respuestas nuevas del formulario, descarga el Excel y déjalo en la
+carpeta Drive/. No importa cómo lo llame el navegador: el programa toma el más
+reciente que empiece por "Seguimiento". Cierra el archivo antes de correr.
+
 
 3. VOLVER A GENERAR EL TABLERO
 ------------------------------

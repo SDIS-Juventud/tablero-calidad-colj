@@ -17,12 +17,32 @@ function fraccion(parte, total) {
   return '<span class="pastilla mal">' + parte + ' de ' + total + '</span>';
 }
 
-function bimestres(cubiertos, exigidos) {
+/* Un cuadro por bimestre cerrado, en el orden del calendario. Recibe la lista
+   de bimestres que sí tuvieron sesión ordinaria, no cuántos fueron: pintar los
+   primeros N cuadros mostraba el bimestre equivocado a las localidades que se
+   saltaron uno del medio. */
+function bimestres(conOrdinaria, exigidos) {
   var h = '<span class="bimestres">';
-  for (var i = 0; i < exigidos; i++) {
-    h += '<i class="' + (i < cubiertos ? 'si' : 'no') + '"></i>';
+  for (var i = 1; i <= exigidos; i++) {
+    h += '<i class="' + (conOrdinaria.indexOf(i) >= 0 ? 'si' : 'no') +
+         '" title="' + NOMBRE_BIMESTRE[i] + '"></i>';
   }
   return h + '</span>';
+}
+
+var NOMBRE_BIMESTRE = {1: 'enero y febrero', 2: 'marzo y abril',
+                       3: 'mayo y junio', 4: 'julio y agosto'};
+
+/* Los días que una localidad lleva sin reunirse. Se marca solo cuando pasa el
+   umbral de dos meses, para que la columna no se lea como semáforo: todas las
+   localidades tienen algún número aquí y eso es normal. */
+function silencio(dias) {
+  if (dias === null) return '<span class="neutro">sin sesiones</span>';
+  var texto = dias + (dias === 1 ? ' día' : ' días');
+  if (dias > D.resumen.dias_alerta) {
+    return '<span class="pastilla mal">' + texto + '</span>';
+  }
+  return '<span class="neutro">' + texto + '</span>';
 }
 
 function barra(bien, total) {
@@ -125,7 +145,8 @@ function pintarAccesosZoom() {
   var fichas = [
     {href: 'periodicidad.html', cifra: r.al_dia_sesiones + ' de 20',
      nombre: 'Periodicidad de las sesiones',
-     glosa: 'Localidades que sesionaron en los tres bimestres cerrados.'},
+     glosa: 'Localidades con las ' + r.ordinarias_exigidas +
+            ' sesiones ordinarias que se esperan al corte.'},
     {href: 'documentos.html', cifra: r.digitales + ' de ' + r.actas,
      nombre: 'Documentos de cada sesión',
      glosa: 'Sesiones que ya tienen cargada su planilla digital.'},
@@ -159,8 +180,8 @@ function pintarPanorama() {
     {v: r.actas, rot: 'Sesiones con acta',
      glosa: 'De ' + r.sesiones_formulario + ' reportadas al formulario.'},
     {v: r.al_dia_sesiones + ' de 20', rot: 'Localidades al día en sesiones',
-     glosa: 'Sesionaron en los ' + D.bimestres_exigidos +
-            ' bimestres ya cerrados.'},
+     glosa: 'Hicieron las ' + r.ordinarias_exigidas +
+            ' sesiones ordinarias que se esperan al corte.'},
     {v: r.sin_pendientes + ' de 20', rot: 'Localidades sin nada pendiente',
      glosa: 'Sesionaron, cargaron todo y no tienen ajustes de forma.'}
   ]);
@@ -187,15 +208,16 @@ function pintarPeriodicidad() {
   var filas = D.localidades.map(function (l) {
     return '<tr>' +
       '<td>' + l.localidad + '</td>' +
-      '<td>' + bimestres(l.bimestres_cubiertos, l.bimestres_exigidos) +
+      '<td>' + bimestres(l.bimestres_con_ordinaria, l.bimestres_exigidos) +
       '</td>' +
-      '<td>' + l.ordinarias + '</td>' +
+      '<td>' + (l.faltan_ordinarias
+                ? '<span class="pastilla mal">' + l.ordinarias + ' de ' +
+                  l.ordinarias_exigidas + '</span>'
+                : '<span class="neutro">' + l.ordinarias + '</span>') +
+      '</td>' +
       '<td>' + l.extraordinarias + '</td>' +
       '<td>' + l.sesiones_formulario + '</td>' +
-      '<td>' + (l.bimestres_faltantes.length
-                ? '<span class="pastilla mal">' +
-                  l.bimestres_faltantes.join('; ') + '</span>'
-                : '<span class="neutro">ninguno</span>') + '</td></tr>';
+      '<td>' + silencio(l.dias_sin_sesionar) + '</td></tr>';
   }).join('');
   var r = D.resumen;
   document.getElementById('tabla-periodicidad').innerHTML = filas +
@@ -203,7 +225,16 @@ function pintarPeriodicidad() {
     '<td>' + r.ordinarias + '</td>' +
     '<td>' + r.extraordinarias + '</td>' +
     '<td>' + r.sesiones_formulario + '</td>' +
-    '<td>' + r.al_dia_sesiones + ' de 20 localidades al día</td></tr>';
+    '<td></td></tr>';
+
+  // El conteo de localidades en silencio va en la leyenda y no en la fila de
+  // total: esa fila suma columnas y una frase ahí rompe la lectura.
+  var aviso = document.getElementById('resumen-silencio');
+  if (aviso) {
+    aviso.innerHTML = r.en_silencio
+      ? 'Hoy, ' + r.en_silencio + (r.en_silencio === 1 ? ' localidad.' : ' localidades.')
+      : 'Hoy, ninguna.';
+  }
 }
 
 function pintarDocumentos() {
