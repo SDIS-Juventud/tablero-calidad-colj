@@ -1202,14 +1202,17 @@ function franja(id, casillas) {
 /* --------------------------------------------------------------- portada */
 
 /* El recordatorio de hasta dónde llegan los datos. Se corre en todas las
-   páginas y no hace nada donde no está el nodo. La fecha de corte no es la de
-   consulta ni la de descarga: es la de la última sesión que quedó registrada,
-   así que una tabla puede estar al día aunque la fecha se vea vieja. */
+   páginas y no hace nada donde no está el nodo.
+
+   Dice las dos cosas a la vez porque ahí está la confusión: la fecha de corte
+   es la del último COLJ que quedó registrado, no la del día en que alguien
+   abre el tablero. Una tabla puede estar completa aunque la fecha se vea
+   vieja, y eso solo se entiende si se dice de dónde sale la fecha. */
 function pintarCorte() {
   var nodo = document.getElementById('corte-aviso');
   if (!nodo) return;
-  nodo.innerHTML = 'Los datos van hasta el <b>' + D.corte + '</b>, que es ' +
-    'la fecha en que sesionó la última acta registrada.';
+  nodo.innerHTML = 'La fecha de corte es el <b>' + D.corte + '</b>: el día ' +
+    'en que sesionó el último COLJ registrado, no el día de consulta.';
 }
 
 function pintarCampos() {
