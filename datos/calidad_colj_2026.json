@@ -1530,6 +1530,11 @@
   },
   "enlaces": [
     {
+      "nombre": "Formulario de seguimiento",
+      "glosa": "Formulario en Forms de seguimiento de los COLJ",
+      "url": "https://docs.google.com/forms/d/e/1FAIpQLSeB9bHu8dLqEF40sYUGJoE5_Ah765P8QL0o70PQcOw2tG8UXg/viewform"
+    },
+    {
       "nombre": "Excel de seguimiento de los COLJ",
       "glosa": "Excel vinculado al forms de los COLJ",
       "url": "https://docs.google.com/spreadsheets/d/1IxTTkF4sZgHvKNDGGJX9f1eLetgUrbPtSoYWHoIMD3s/edit?usp=sharing"
