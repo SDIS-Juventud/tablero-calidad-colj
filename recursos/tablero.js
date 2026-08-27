@@ -99,8 +99,8 @@ function pintarCampos() {
      glosa: 'Las sesiones de 2024, 2025 y 2026 en las veinte localidades.'},
     {href: 'html/zoom.html', num: '2', titulo: 'Zoom año en curso',
      glosa: 'Cómo va cada localidad en 2026 y qué ajustes tiene su registro.'},
-    {href: 'html/enlaces.html', num: '3', titulo: 'Enlaces',
-     glosa: 'Dónde vive cada cosa: el archivo, el formulario y los tableros.'}
+    {href: 'html/enlaces.html', num: '3',
+     titulo: 'Enlaces generales para el análisis de los COLJ', glosa: ''}
   ];
   var nodo = document.getElementById('campos');
   if (!nodo) return;
@@ -108,7 +108,7 @@ function pintarCampos() {
     return '<a class="campo" href="' + c.href + '">' +
       '<div class="titulo-campo"><span class="num">' + c.num + '.</span>' +
       c.titulo + '</div>' +
-      '<div class="glosa-campo">' + c.glosa + '</div></a>';
+      (c.glosa ? '<div class="glosa-campo">' + c.glosa + '</div>' : '') + '</a>';
   }).join('');
 }
 
