@@ -10,21 +10,23 @@
     "ordinarias": 59,
     "extraordinarias": 31,
     "planillas": 90,
-    "digitales": 86,
+    "digitales": 26,
+    "piden_digital": 27,
     "al_dia_sesiones": 19,
     "en_silencio": 1,
     "dias_alerta": 61,
     "ordinarias_exigidas": 3,
-    "carga_completa": 17,
+    "carga_completa": 19,
     "sin_pendientes": 2,
-    "con_pendientes": 4,
+    "con_pendientes": 3,
     "actas_con_ajustes": 59,
     "localidades_con_ajustes": 18,
     "limpias": 31,
     "num_problema": 19,
-    "rec_problema": 33,
-    "cifras_difieren": 29,
-    "cifras_comparables": 74,
+    "rec_problema": 31,
+    "cifras_difieren": 31,
+    "fechas_difieren": 5,
+    "cifras_comparables": 78,
     "escaneadas": 2
   },
   "localidades": [
@@ -47,8 +49,10 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 38,
       "planillas": 5,
-      "digitales": 5,
+      "digitales": 2,
+      "piden_digital": 2,
       "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
       "limpias": 0,
@@ -71,12 +75,15 @@
         "coinciden": 4,
         "difieren": 1
       },
+      "fechas": {
+        "difieren": 0
+      },
       "detalle": [
         {
           "archivo": "20260224_USAQUEN_ACTA_1.pdf",
           "fecha": "2026-02-24",
           "ajustes": [
-            "el Excel reporta 21 y 1; el acta dice 22 y 1, hay que definir cuál queda"
+            "el formulario reporta 21 asistentes no juveniles y 1 asistente joven; el acta dice 22 asistentes no juveniles y 1 asistente joven, hay que definir cuál queda"
           ]
         },
         {
@@ -128,8 +135,10 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 44,
       "planillas": 3,
-      "digitales": 3,
+      "digitales": 0,
+      "piden_digital": 0,
       "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
       "limpias": 0,
@@ -152,6 +161,9 @@
         "coinciden": 1,
         "difieren": 2
       },
+      "fechas": {
+        "difieren": 0
+      },
       "detalle": [
         {
           "archivo": "20260211_CHAPINERO_ACTA_1.pdf",
@@ -165,7 +177,7 @@
           "fecha": "2026-04-08",
           "ajustes": [
             "el nombre del archivo dice acta 2 y por dentro dice ACTA N° 3",
-            "el Excel reporta 20 y 2; el acta dice 18 y 2, hay que definir cuál queda"
+            "el formulario reporta 20 asistentes no juveniles y 2 asistentes jóvenes; el acta dice 18 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
@@ -173,7 +185,7 @@
           "fecha": "2026-06-10",
           "ajustes": [
             "el nombre del archivo dice acta 3 y por dentro dice ACTA N° 4",
-            "el Excel reporta 14 y 2; el acta dice 16 y 2, hay que definir cuál queda"
+            "el formulario reporta 14 asistentes no juveniles y 2 asistentes jóvenes; el acta dice 16 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
           ]
         }
       ]
@@ -198,8 +210,10 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 18,
       "planillas": 3,
-      "digitales": 3,
+      "digitales": 0,
+      "piden_digital": 0,
       "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
       "limpias": 0,
@@ -220,6 +234,9 @@
       "cifras": {
         "comparables": 1,
         "coinciden": 1,
+        "difieren": 0
+      },
+      "fechas": {
         "difieren": 0
       },
       "detalle": [
@@ -265,8 +282,10 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 9,
       "planillas": 6,
-      "digitales": 6,
+      "digitales": 3,
+      "piden_digital": 3,
       "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
       "limpias": 3,
@@ -289,19 +308,22 @@
         "coinciden": 4,
         "difieren": 1
       },
+      "fechas": {
+        "difieren": 0
+      },
       "detalle": [
         {
           "archivo": "20260218_SANCRISTOBAL_ACTA_1.pdf",
           "fecha": "2026-02-18",
           "ajustes": [
-            "quedaron filas del recuadro sin número"
+            "la fila de total de jóvenes del recuadro quedó sin número"
           ]
         },
         {
           "archivo": "20260415_SAN_CRISTOBAL_ACTA_3.pdf",
           "fecha": "2026-04-15",
           "ajustes": [
-            "el Excel reporta 12 y 1; el acta dice 13 y 1, hay que definir cuál queda"
+            "el formulario reporta 12 asistentes no juveniles y 1 asistente joven; el acta dice 13 asistentes no juveniles y 1 asistente joven, hay que definir cuál queda"
           ]
         },
         {
@@ -332,8 +354,10 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 35,
       "planillas": 5,
-      "digitales": 5,
+      "digitales": 2,
+      "piden_digital": 2,
       "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
       "limpias": 3,
@@ -356,12 +380,15 @@
         "coinciden": 3,
         "difieren": 1
       },
+      "fechas": {
+        "difieren": 0
+      },
       "detalle": [
         {
           "archivo": "20260320_USME_ACTA_2.pdf",
           "fecha": "2026-03-20",
           "ajustes": [
-            "quedaron filas del recuadro sin número"
+            "la fila de asistentes no juveniles del recuadro quedó sin número"
           ]
         },
         {
@@ -369,7 +396,7 @@
           "fecha": "2026-04-17",
           "ajustes": [
             "el total de jóvenes dice 4 jóvenes y las tres filas de abajo suman 5",
-            "el Excel reporta 10 y 5; el acta dice 10 y 4, hay que definir cuál queda"
+            "el formulario reporta 10 asistentes no juveniles y 5 asistentes jóvenes; el acta dice 10 asistentes no juveniles y 4 asistentes jóvenes, hay que definir cuál queda"
           ]
         }
       ]
@@ -393,14 +420,15 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 17,
       "planillas": 5,
-      "digitales": 3,
+      "digitales": 1,
+      "piden_digital": 2,
       "pendientes_carga": [
-        "por cargar la planilla digital de la sesión 2",
-        "por cargar la planilla digital de la sesión 4"
+        "falta el «Registro de asistencia digital (sistematizado)» del comité 2, que fue mixta"
       ],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "falta cargar",
-      "limpias": 3,
+      "limpias": 4,
       "numeracion": {
         "ok": 5,
         "distinto": 0,
@@ -409,9 +437,9 @@
         "escaneo": 0
       },
       "recuadro": {
-        "ok": 4,
+        "ok": 5,
         "sin_recuadro": 0,
-        "modificado": 1,
+        "modificado": 0,
         "no_cuadra": 0,
         "escaneo": 0
       },
@@ -420,19 +448,15 @@
         "coinciden": 4,
         "difieren": 1
       },
+      "fechas": {
+        "difieren": 0
+      },
       "detalle": [
         {
           "archivo": "20260421_TUNJUELITO_ACTA_3.pdf",
           "fecha": "2026-04-21",
           "ajustes": [
-            "el Excel reporta 16 y 4; el acta dice 15 y 4, hay que definir cuál queda"
-          ]
-        },
-        {
-          "archivo": "20260707_TUNJUELITO_ACTA_5.pdf",
-          "fecha": "2026-07-07",
-          "ajustes": [
-            "quedaron filas del recuadro sin número"
+            "el formulario reporta 16 asistentes no juveniles y 4 asistentes jóvenes; el acta dice 15 asistentes no juveniles y 4 asistentes jóvenes, hay que definir cuál queda"
           ]
         }
       ]
@@ -456,8 +480,10 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 1,
       "planillas": 7,
-      "digitales": 7,
+      "digitales": 1,
+      "piden_digital": 1,
       "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
       "limpias": 0,
@@ -480,13 +506,16 @@
         "coinciden": 0,
         "difieren": 7
       },
+      "fechas": {
+        "difieren": 0
+      },
       "detalle": [
         {
           "archivo": "20260213_BOSA_ACTA_1.pdf",
           "fecha": "2026-02-13",
           "ajustes": [
             "el recuadro usa «entidades locales» donde el formato pide «otros jóvenes»",
-            "el Excel reporta 20 y 19; el acta dice 0 y 14, hay que definir cuál queda"
+            "el formulario reporta 20 asistentes no juveniles y 19 asistentes jóvenes; el acta dice 0 asistentes no juveniles y 14 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
@@ -494,14 +523,14 @@
           "fecha": "2026-02-27",
           "ajustes": [
             "el total de jóvenes dice 1 joven y las tres filas de abajo suman 0",
-            "el Excel reporta 11 y 0; el acta dice 8 y 1, hay que definir cuál queda"
+            "el formulario reporta 11 asistentes no juveniles y 0 asistentes jóvenes; el acta dice 8 asistentes no juveniles y 1 asistente joven, hay que definir cuál queda"
           ]
         },
         {
           "archivo": "20260317_BOSA_ACTA_3.pdf",
           "fecha": "2026-03-17",
           "ajustes": [
-            "el Excel reporta 13 y 5; el acta dice 12 y 3, hay que definir cuál queda"
+            "el formulario reporta 13 asistentes no juveniles y 5 asistentes jóvenes; el acta dice 12 asistentes no juveniles y 3 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
@@ -509,7 +538,7 @@
           "fecha": "2026-04-17",
           "ajustes": [
             "el total de jóvenes dice 3 jóvenes y las tres filas de abajo suman 4",
-            "el Excel reporta 21 y 7; el acta dice 21 y 3, hay que definir cuál queda"
+            "el formulario reporta 21 asistentes no juveniles y 7 asistentes jóvenes; el acta dice 21 asistentes no juveniles y 3 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
@@ -518,7 +547,7 @@
           "ajustes": [
             "el nombre del archivo dice acta 5 y por dentro dice ACTA N° 1",
             "el recuadro usa «entidades locales» donde el formato pide «otros jóvenes»",
-            "el Excel reporta 15 y 8; el acta dice 2 y 2, hay que definir cuál queda"
+            "el formulario reporta 15 asistentes no juveniles y 8 asistentes jóvenes; el acta dice 2 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
@@ -526,7 +555,7 @@
           "fecha": "2026-07-04",
           "ajustes": [
             "el recuadro usa «entidades locales» donde el formato pide «otros jóvenes»",
-            "el Excel reporta 14 y 13; el acta dice 0 y 12, hay que definir cuál queda"
+            "el formulario reporta 14 asistentes no juveniles y 13 asistentes jóvenes; el acta dice 0 asistentes no juveniles y 12 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
@@ -534,7 +563,7 @@
           "fecha": "2026-07-23",
           "ajustes": [
             "el recuadro usa «entidades locales» donde el formato pide «otros jóvenes»",
-            "el Excel reporta 23 y 5; el acta dice 1 y 2, hay que definir cuál queda"
+            "el formulario reporta 23 asistentes no juveniles y 5 asistentes jóvenes; el acta dice 1 asistente no juvenil y 2 asistentes jóvenes, hay que definir cuál queda"
           ]
         }
       ]
@@ -558,11 +587,13 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 28,
       "planillas": 5,
-      "digitales": 5,
+      "digitales": 0,
+      "piden_digital": 0,
       "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
-      "limpias": 0,
+      "limpias": 1,
       "numeracion": {
         "ok": 1,
         "distinto": 0,
@@ -571,10 +602,10 @@
         "escaneo": 0
       },
       "recuadro": {
-        "ok": 0,
+        "ok": 1,
         "sin_recuadro": 0,
-        "modificado": 2,
-        "no_cuadra": 3,
+        "modificado": 0,
+        "no_cuadra": 4,
         "escaneo": 0
       },
       "cifras": {
@@ -582,21 +613,17 @@
         "coinciden": 1,
         "difieren": 4
       },
+      "fechas": {
+        "difieren": 0
+      },
       "detalle": [
         {
           "archivo": "20260227_KENNEDY_ ACTA_1.pdf",
           "fecha": "2026-02-27",
           "ajustes": [
             "la línea ACTA N° quedó sin número",
-            "quedaron filas del recuadro sin número",
-            "el Excel reporta 10 y 24; el acta dice 24 y 10, hay que definir cuál queda"
-          ]
-        },
-        {
-          "archivo": "20260327_KENNEDY_ACTA_2.pdf",
-          "fecha": "2026-03-27",
-          "ajustes": [
-            "quedaron filas del recuadro sin número"
+            "el total de jóvenes dice 10 jóvenes y las tres filas de abajo suman 12",
+            "el formulario reporta 10 asistentes no juveniles y 24 asistentes jóvenes; el acta dice 24 asistentes no juveniles y 10 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
@@ -605,7 +632,7 @@
           "ajustes": [
             "al documento le falta la línea ACTA N°",
             "el total de jóvenes dice 4 jóvenes y las tres filas de abajo suman 28",
-            "el Excel reporta 18 y 29; el acta dice 18 y 4, hay que definir cuál queda"
+            "el formulario reporta 18 asistentes no juveniles y 29 asistentes jóvenes; el acta dice 18 asistentes no juveniles y 4 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
@@ -614,7 +641,7 @@
           "ajustes": [
             "al documento le falta la línea ACTA N°",
             "el total de jóvenes dice 0 jóvenes y las tres filas de abajo suman 14",
-            "el Excel reporta 13 y 13; el acta dice 13 y 0, hay que definir cuál queda"
+            "el formulario reporta 13 asistentes no juveniles y 13 asistentes jóvenes; el acta dice 13 asistentes no juveniles y 0 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
@@ -623,7 +650,7 @@
           "ajustes": [
             "al documento le falta la línea ACTA N°",
             "el total de jóvenes dice 0 jóvenes y las tres filas de abajo suman 2",
-            "el Excel reporta 15 y 2; el acta dice 15 y 0, hay que definir cuál queda"
+            "el formulario reporta 15 asistentes no juveniles y 2 asistentes jóvenes; el acta dice 15 asistentes no juveniles y 0 asistentes jóvenes, hay que definir cuál queda"
           ]
         }
       ]
@@ -647,8 +674,10 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 29,
       "planillas": 4,
-      "digitales": 4,
+      "digitales": 1,
+      "piden_digital": 1,
       "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
       "limpias": 3,
@@ -671,12 +700,15 @@
         "coinciden": 3,
         "difieren": 1
       },
+      "fechas": {
+        "difieren": 0
+      },
       "detalle": [
         {
           "archivo": "20260326_FONTIBON_ACTA_2.pdf",
           "fecha": "2026-03-26",
           "ajustes": [
-            "el Excel reporta 29 y 7; el acta dice 22 y 7, hay que definir cuál queda"
+            "el formulario reporta 29 asistentes no juveniles y 7 asistentes jóvenes; el acta dice 22 asistentes no juveniles y 7 asistentes jóvenes, hay que definir cuál queda"
           ]
         }
       ]
@@ -700,8 +732,10 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 29,
       "planillas": 4,
-      "digitales": 4,
+      "digitales": 2,
+      "piden_digital": 2,
       "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
       "limpias": 0,
@@ -722,6 +756,9 @@
       "cifras": {
         "comparables": 1,
         "coinciden": 1,
+        "difieren": 0
+      },
+      "fechas": {
         "difieren": 0
       },
       "detalle": [
@@ -777,8 +814,13 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 43,
       "planillas": 4,
-      "digitales": 4,
+      "digitales": 0,
+      "piden_digital": 0,
       "pendientes_carga": [],
+      "pendientes_imagen": [
+        "hay que volver a subir el «Acta de la reunión» del comité 1: la que está cargada es una imagen escaneada y no se alcanza a revisar",
+        "hay que volver a subir el «Acta de la reunión» del comité 2: la que está cargada es una imagen escaneada y no se alcanza a revisar"
+      ],
       "pendientes_sesion": [],
       "estado": "revisar forma",
       "limpias": 0,
@@ -801,6 +843,9 @@
         "coinciden": 0,
         "difieren": 0
       },
+      "fechas": {
+        "difieren": 1
+      },
       "detalle": [
         {
           "archivo": "20260212_SUBA_ACTA_1.pdf",
@@ -822,7 +867,8 @@
           "archivo": "20260409_SUBA_ACTA_3.pdf",
           "fecha": "2026-04-09",
           "ajustes": [
-            "falta el recuadro de participantes"
+            "falta el recuadro de participantes",
+            "el nombre del archivo dice que la sesión fue el 9 de abril de 2026 y en el formulario quedó el 9 de mayo de 2026, hay que definir cuál es la fecha real y dejarla igual en los dos"
           ]
         },
         {
@@ -853,13 +899,13 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 8,
       "planillas": 6,
-      "digitales": 5,
-      "pendientes_carga": [
-        "por cargar la planilla digital de la sesión 1"
-      ],
+      "digitales": 2,
+      "piden_digital": 2,
+      "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
-      "estado": "falta cargar",
-      "limpias": 2,
+      "estado": "revisar forma",
+      "limpias": 1,
       "numeracion": {
         "ok": 6,
         "distinto": 0,
@@ -875,37 +921,48 @@
         "escaneo": 0
       },
       "cifras": {
-        "comparables": 5,
+        "comparables": 6,
         "coinciden": 1,
-        "difieren": 4
+        "difieren": 5
+      },
+      "fechas": {
+        "difieren": 1
       },
       "detalle": [
         {
           "archivo": "20260226_BARRIOS UNIDOS_ACTA_1.pdf",
           "fecha": "2026-02-26",
           "ajustes": [
-            "el Excel reporta 19 y 7; el acta dice 12 y 7, hay que definir cuál queda"
+            "el formulario reporta 19 asistentes no juveniles y 7 asistentes jóvenes; el acta dice 12 asistentes no juveniles y 7 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
           "archivo": "20260319_BARRIOS_UNIDOS_ACTA_2.pdf",
           "fecha": "2026-03-19",
           "ajustes": [
-            "el Excel reporta 13 y 5; el acta dice 8 y 5, hay que definir cuál queda"
+            "el formulario reporta 13 asistentes no juveniles y 5 asistentes jóvenes; el acta dice 8 asistentes no juveniles y 5 asistentes jóvenes, hay que definir cuál queda"
+          ]
+        },
+        {
+          "archivo": "20260326_BARRIOS_UNIDOS_ACTA_3.pdf",
+          "fecha": "2026-03-26",
+          "ajustes": [
+            "el formulario reporta 7 asistentes no juveniles y 2 asistentes jóvenes; el acta dice 5 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda",
+            "el nombre del archivo dice que la sesión fue el 26 de marzo de 2026 y en el formulario quedó el 30 de abril de 2026, hay que definir cuál es la fecha real y dejarla igual en los dos"
           ]
         },
         {
           "archivo": "20260423_BARRIOS_UNIDOS_ACTA_4.pdf",
           "fecha": "2026-04-23",
           "ajustes": [
-            "el Excel reporta 13 y 3; el acta dice 13 y 2, hay que definir cuál queda"
+            "el formulario reporta 13 asistentes no juveniles y 3 asistentes jóvenes; el acta dice 13 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
           "archivo": "20260716_BARRIOS_UNIDOS_ACTA_6.docx",
           "fecha": "2026-07-16",
           "ajustes": [
-            "el Excel reporta 12 y 3; el acta dice 9 y 3, hay que definir cuál queda"
+            "el formulario reporta 12 asistentes no juveniles y 3 asistentes jóvenes; el acta dice 9 asistentes no juveniles y 3 asistentes jóvenes, hay que definir cuál queda"
           ]
         }
       ]
@@ -929,13 +986,13 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 0,
       "planillas": 6,
-      "digitales": 5,
-      "pendientes_carga": [
-        "por cargar la planilla digital de la sesión 1"
-      ],
+      "digitales": 2,
+      "piden_digital": 2,
+      "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
-      "estado": "falta cargar",
-      "limpias": 4,
+      "estado": "revisar forma",
+      "limpias": 3,
       "numeracion": {
         "ok": 5,
         "distinto": 1,
@@ -951,9 +1008,12 @@
         "escaneo": 0
       },
       "cifras": {
-        "comparables": 5,
-        "coinciden": 3,
+        "comparables": 6,
+        "coinciden": 4,
         "difieren": 2
+      },
+      "fechas": {
+        "difieren": 1
       },
       "detalle": [
         {
@@ -961,7 +1021,7 @@
           "fecha": "2026-03-27",
           "ajustes": [
             "el total de jóvenes dice 17 jóvenes y las tres filas de abajo suman 8",
-            "el Excel reporta 17 y 9; el acta dice 9 y 17, hay que definir cuál queda"
+            "el formulario reporta 17 asistentes no juveniles y 9 asistentes jóvenes; el acta dice 9 asistentes no juveniles y 17 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
@@ -969,7 +1029,14 @@
           "fecha": "2026-04-24",
           "ajustes": [
             "el nombre del archivo dice acta 3 y por dentro dice ACTA N° 4",
-            "el Excel reporta 20 y 12; el acta dice 8 y 12, hay que definir cuál queda"
+            "el formulario reporta 20 asistentes no juveniles y 12 asistentes jóvenes; el acta dice 8 asistentes no juveniles y 12 asistentes jóvenes, hay que definir cuál queda"
+          ]
+        },
+        {
+          "archivo": "20260626_TEUSAQUILLO_ACTA_5.pdf",
+          "fecha": "2026-06-26",
+          "ajustes": [
+            "el nombre del archivo dice que la sesión fue el 26 de junio de 2026 y en el formulario quedó el 27 de junio de 2026, hay que definir cuál es la fecha real y dejarla igual en los dos"
           ]
         }
       ]
@@ -993,8 +1060,10 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 36,
       "planillas": 4,
-      "digitales": 4,
+      "digitales": 1,
+      "piden_digital": 1,
       "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
       "limpias": 1,
@@ -1013,16 +1082,21 @@
         "escaneo": 0
       },
       "cifras": {
-        "comparables": 3,
+        "comparables": 4,
         "coinciden": 3,
-        "difieren": 0
+        "difieren": 1
+      },
+      "fechas": {
+        "difieren": 1
       },
       "detalle": [
         {
           "archivo": "20260119_MÁRTIRES_ACTA_1.pdf",
           "fecha": "2026-01-19",
           "ajustes": [
-            "el total de jóvenes dice 22 jóvenes y las tres filas de abajo suman 25"
+            "el total de jóvenes dice 22 jóvenes y las tres filas de abajo suman 25",
+            "el formulario reporta 25 asistentes no juveniles y 19 asistentes jóvenes; el acta dice 25 asistentes no juveniles y 22 asistentes jóvenes, hay que definir cuál queda",
+            "el nombre del archivo dice que la sesión fue el 19 de enero de 2026 y en el formulario quedó el 19 de febrero de 2026, hay que definir cuál es la fecha real y dejarla igual en los dos"
           ]
         },
         {
@@ -1060,8 +1134,10 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 38,
       "planillas": 5,
-      "digitales": 5,
+      "digitales": 3,
+      "piden_digital": 3,
       "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "al día",
       "limpias": 5,
@@ -1082,6 +1158,9 @@
       "cifras": {
         "comparables": 5,
         "coinciden": 5,
+        "difieren": 0
+      },
+      "fechas": {
         "difieren": 0
       },
       "detalle": []
@@ -1105,8 +1184,10 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 13,
       "planillas": 5,
-      "digitales": 5,
+      "digitales": 3,
+      "piden_digital": 3,
       "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "al día",
       "limpias": 5,
@@ -1127,6 +1208,9 @@
       "cifras": {
         "comparables": 5,
         "coinciden": 5,
+        "difieren": 0
+      },
+      "fechas": {
         "difieren": 0
       },
       "detalle": []
@@ -1151,8 +1235,10 @@
       "faltan_ordinarias": 1,
       "dias_sin_sesionar": 87,
       "planillas": 2,
-      "digitales": 2,
+      "digitales": 0,
+      "piden_digital": 0,
       "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [
         "queda pendiente una sesión ordinaria para llegar a las 3 que se esperan al corte",
         "lleva 87 días sin reunirse"
@@ -1176,6 +1262,9 @@
       "cifras": {
         "comparables": 1,
         "coinciden": 1,
+        "difieren": 0
+      },
+      "fechas": {
         "difieren": 0
       },
       "detalle": [
@@ -1214,8 +1303,10 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 36,
       "planillas": 4,
-      "digitales": 4,
+      "digitales": 1,
+      "piden_digital": 1,
       "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
       "limpias": 1,
@@ -1238,12 +1329,15 @@
         "coinciden": 3,
         "difieren": 1
       },
+      "fechas": {
+        "difieren": 0
+      },
       "detalle": [
         {
           "archivo": "20260319_RAFAEL_URIBE_URIBE_ACTA_2.pdf",
           "fecha": "2026-03-19",
           "ajustes": [
-            "el Excel reporta 23 y 13; el acta dice 11 y 13, hay que definir cuál queda"
+            "el formulario reporta 23 asistentes no juveniles y 13 asistentes jóvenes; el acta dice 11 asistentes no juveniles y 13 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
@@ -1281,8 +1375,10 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 37,
       "planillas": 4,
-      "digitales": 4,
+      "digitales": 0,
+      "piden_digital": 0,
       "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
       "limpias": 0,
@@ -1301,16 +1397,20 @@
         "escaneo": 0
       },
       "cifras": {
-        "comparables": 3,
-        "coinciden": 1,
+        "comparables": 4,
+        "coinciden": 2,
         "difieren": 2
+      },
+      "fechas": {
+        "difieren": 1
       },
       "detalle": [
         {
           "archivo": "20250211_CIUDAD_BOLIVAR_ACTA_1.pdf",
           "fecha": "2025-02-11",
           "ajustes": [
-            "el total de jóvenes dice 11 jóvenes y las tres filas de abajo suman 6"
+            "el total de jóvenes dice 11 jóvenes y las tres filas de abajo suman 6",
+            "el nombre del archivo dice que la sesión fue el 11 de febrero de 2025 y en el formulario quedó el 11 de febrero de 2026, hay que definir cuál es la fecha real y dejarla igual en los dos"
           ]
         },
         {
@@ -1318,7 +1418,7 @@
           "fecha": "2026-03-14",
           "ajustes": [
             "el total de jóvenes dice 6 jóvenes y las tres filas de abajo suman 2",
-            "el Excel reporta 26 y 6; el acta dice 24 y 6, hay que definir cuál queda"
+            "el formulario reporta 26 asistentes no juveniles y 6 asistentes jóvenes; el acta dice 24 asistentes no juveniles y 6 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
@@ -1333,7 +1433,7 @@
           "fecha": "2026-06-17",
           "ajustes": [
             "el total de jóvenes dice 2 jóvenes y las tres filas de abajo suman 6",
-            "el Excel reporta 30 y 6; el acta dice 25 y 2, hay que definir cuál queda"
+            "el formulario reporta 30 asistentes no juveniles y 6 asistentes jóvenes; el acta dice 25 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
           ]
         }
       ]
@@ -1358,8 +1458,10 @@
       "faltan_ordinarias": 0,
       "dias_sin_sesionar": 12,
       "planillas": 3,
-      "digitales": 3,
+      "digitales": 2,
+      "piden_digital": 2,
       "pendientes_carga": [],
+      "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
       "limpias": 1,
@@ -1382,19 +1484,22 @@
         "coinciden": 1,
         "difieren": 2
       },
+      "fechas": {
+        "difieren": 0
+      },
       "detalle": [
         {
           "archivo": "20260224_SUMAPAZ_ACTA_1.pdf",
           "fecha": "2026-02-24",
           "ajustes": [
-            "el Excel reporta 18 y 5; el acta dice 23 y 5, hay que definir cuál queda"
+            "el formulario reporta 18 asistentes no juveniles y 5 asistentes jóvenes; el acta dice 23 asistentes no juveniles y 5 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
           "archivo": "20260523_SUMAPAZ_ACTA_2.pdf",
           "fecha": "2026-05-23",
           "ajustes": [
-            "el Excel reporta 23 y 5; el acta dice 13 y 9, hay que definir cuál queda"
+            "el formulario reporta 23 asistentes no juveniles y 5 asistentes jóvenes; el acta dice 13 asistentes no juveniles y 9 asistentes jóvenes, hay que definir cuál queda"
           ]
         }
       ]

@@ -161,14 +161,14 @@ function pintarAccesosZoom() {
      nombre: 'Periodicidad de las sesiones',
      glosa: 'Localidades con las ' + r.ordinarias_exigidas +
             ' sesiones ordinarias que se esperan al corte.'},
-    {href: 'documentos.html', cifra: r.digitales + ' de ' + r.actas,
+    {href: 'documentos.html', cifra: r.digitales + ' de ' + r.piden_digital,
      nombre: 'Documentos de cada sesión',
-     glosa: 'Sesiones que ya tienen cargada su planilla digital.'},
+     glosa: 'Comités virtuales y mixtos con su registro digital cargado.'},
     {href: 'pendientes.html', cifra: r.con_pendientes,
-     nombre: 'Qué está pendiente',
+     nombre: 'Qué queda pendiente de cargar',
      glosa: 'Localidades con alguna sesión o documento por entregar.'},
     {href: 'detalle.html', cifra: r.localidades_con_ajustes,
-     nombre: 'Detalle acta por acta',
+     nombre: 'Ajustes por acta',
      glosa: 'Localidades con el detalle de qué corregir en cada acta.'},
     {href: 'ajustes.html', cifra: r.actas_con_ajustes,
      nombre: 'Ajustes por localidad',
@@ -258,7 +258,9 @@ function pintarDocumentos() {
       '<td>' + l.sesiones_formulario + '</td>' +
       '<td>' + fraccion(l.actas, l.sesiones_formulario) + '</td>' +
       '<td>' + fraccion(l.planillas, l.actas) + '</td>' +
-      '<td>' + fraccion(l.digitales, l.actas) + '</td>' +
+      '<td>' + (l.piden_digital
+                ? fraccion(l.digitales, l.piden_digital)
+                : '<span class="neutro">no aplica</span>') + '</td>' +
       '<td>' + chip(l.estado) + '</td></tr>';
   }).join('');
   var r = D.resumen;
@@ -267,14 +269,16 @@ function pintarDocumentos() {
     '<td>' + r.sesiones_formulario + '</td>' +
     '<td>' + r.actas + '</td>' +
     '<td>' + r.planillas + '</td>' +
-    '<td>' + r.digitales + '</td><td></td></tr>';
+    '<td>' + r.digitales + ' de ' + r.piden_digital + '</td><td></td></tr>';
 }
 
 function pintarPendientes() {
   var bloques = D.localidades.filter(function (l) {
-    return l.pendientes_sesion.length || l.pendientes_carga.length;
+    return l.pendientes_sesion.length || l.pendientes_carga.length ||
+           l.pendientes_imagen.length;
   }).map(function (l) {
-    var todos = l.pendientes_sesion.concat(l.pendientes_carga);
+    var todos = l.pendientes_sesion.concat(l.pendientes_carga)
+                                   .concat(l.pendientes_imagen);
     return '<div class="bloque"><div class="nombre">' + l.localidad +
       '</div><ul>' + todos.map(function (p) {
         return '<li>' + p + '</li>';
@@ -289,24 +293,22 @@ function pintarAjustes() {
     var n = l.numeracion, c = l.recuadro;
     return '<tr>' +
       '<td>' + l.localidad + '</td>' +
-      '<td>' + l.respuestas_formulario + '</td>' +
-      '<td>' + l.sesiones_formulario + '</td>' +
       '<td>' + l.actas + '</td>' +
       '<td>' + pastilla(n.distinto + n.blanco + n.sin_linea) + '</td>' +
       '<td>' + pastilla(c.sin_recuadro + c.modificado + c.no_cuadra) + '</td>' +
       '<td>' + pastilla(l.cifras.difieren) + '</td>' +
+      '<td>' + pastilla(l.fechas.difieren) + '</td>' +
       '<td>' + l.limpias + ' de ' + l.actas + barra(l.limpias, l.actas) +
       '</td></tr>';
   }).join('');
   var r = D.resumen;
   document.getElementById('tabla-ajustes').innerHTML = filas +
     '<tr class="total"><td>Total</td>' +
-    '<td>' + r.respuestas_formulario + '</td>' +
-    '<td>' + r.sesiones_formulario + '</td>' +
     '<td>' + r.actas + '</td>' +
     '<td>' + r.num_problema + '</td>' +
     '<td>' + r.rec_problema + '</td>' +
     '<td>' + r.cifras_difieren + '</td>' +
+    '<td>' + r.fechas_difieren + '</td>' +
     '<td>' + r.limpias + ' de ' + r.actas + '</td></tr>';
 }
 

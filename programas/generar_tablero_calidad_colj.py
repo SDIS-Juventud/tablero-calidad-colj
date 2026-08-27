@@ -114,6 +114,24 @@ ORDEN = ["Usaquén", "Chapinero", "Santa Fe", "San Cristóbal", "Usme",
 
 CAMPOS = ["no_juveniles", "juveniles", "consejeros", "plataformas", "otros"]
 
+# Cómo se llama cada fila del recuadro en el formato del acta. Los mensajes
+# tienen que nombrarlas así y no por su nombre interno: quien recibe el aviso
+# va a buscar esa fila en el documento, y «no_juveniles» no existe ahí.
+NOMBRE_FILA = {
+    "no_juveniles": "asistentes no juveniles",
+    "juveniles": "total de jóvenes",
+    "consejeros": "consejeros de juventud",
+    "plataformas": "plataforma de juventud",
+    "otros": "otros jóvenes",
+}
+
+
+def lista_es(items):
+    """Une varios nombres con comas y una «y» al final, como se escribe."""
+    if len(items) == 1:
+        return items[0]
+    return ", ".join(items[:-1]) + " y " + items[-1]
+
 # El reglamento acordado en 2025 y recogido en el Decreto 647 de 2025 fija
 # sesiones ordinarias cada dos meses. Al corte del 24 de julio de 2026 hay tres
 # bimestres cerrados: enero-febrero, marzo-abril y mayo-junio. El bimestre de
@@ -124,6 +142,12 @@ BIMESTRES_CERRADOS = [1, 2, 3]
 # bimestre ya cerrado. Es el número, no la casilla del calendario, lo que se
 # mira para decir si una localidad sesionó lo que debía.
 ORDINARIAS_EXIGIDAS = len(BIMESTRES_CERRADOS)
+
+# Modalidades a las que el formulario les pide el registro de asistencia
+# digital. En un comité presencial la asistencia se firma en papel y se sube
+# como foto o PDF; no hay nada que sistematizar, así que pedirle además el
+# archivo de Excel es pedirle un documento que no existe.
+MODALIDADES_CON_DIGITAL = {"Virtual", "Mixta"}
 
 # Cargas del formulario que repiten una sesión ya registrada, pero con otra
 # fecha. El de-duplicado normal, que agrupa por localidad y fecha, no las ve:
@@ -159,6 +183,29 @@ NOMBRE_BIMESTRE = {1: "enero y febrero", 2: "marzo y abril",
                    3: "mayo y junio", 4: "julio y agosto"}
 MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
          "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
+
+
+def personas(cantidad, singular, plural):
+    """Escribe una cantidad con su palabra en singular o plural.
+
+    Existe para que no salga «1 jóvenes» en un documento que leen los equipos
+    locales, que es de esas cosas pequeñas que restan credibilidad al resto.
+    """
+    return "%d %s" % (cantidad, singular if cantidad == 1 else plural)
+
+
+def texto_fecha(iso):
+    """Escribe en palabras una fecha que viene como texto AAAA-MM-DD.
+
+    Se usa para la fecha del nombre del archivo, que es texto y no una fecha
+    de verdad: puede traer un año equivocado, como el acta 1 de Ciudad
+    Bolívar que quedó con 2025, y hay que poder escribirla tal como está.
+    """
+    try:
+        anio, mes, dia = (int(x) for x in iso.split("-"))
+        return "%d de %s de %d" % (dia, MESES[mes - 1], anio)
+    except (AttributeError, ValueError, IndexError):
+        return str(iso)
 
 
 def fecha_larga(fecha):
@@ -303,13 +350,30 @@ def revisar_recuadro(acta):
     if acta.get("recuadro_con_fila_propia"):
         return "modificado", ("el recuadro usa «entidades locales» donde el "
                               "formato pide «otros jóvenes»")
-    vacias = [c for c in CAMPOS if c in etiquetas and rec.get(c) is None]
     faltantes = [c for c in CAMPOS if c not in etiquetas]
     if faltantes:
-        return "modificado", "al recuadro le faltan filas respecto al formato"
+        return "modificado", ("al recuadro le falta la fila de %s"
+                              % lista_es([NOMBRE_FILA[c] for c in faltantes])
+                              if len(faltantes) == 1 else
+                              "al recuadro le faltan las filas de %s"
+                              % lista_es([NOMBRE_FILA[c] for c in faltantes]))
+
+    # Las dos cifras que el acta tiene que traer sí o sí: el total de no
+    # juveniles y el de jóvenes. Sin ellas no hay nada que verificar ni con
+    # qué comparar contra el formulario.
+    vacias = [c for c in ("no_juveniles", "juveniles") if rec.get(c) is None]
     if vacias:
-        return "modificado", "quedaron filas del recuadro sin número"
-    suma = sum(rec[c] for c in ("consejeros", "plataformas", "otros"))
+        return "modificado", (
+            "la fila de %s del recuadro quedó sin número"
+            % NOMBRE_FILA[vacias[0]] if len(vacias) == 1 else
+            "las filas de %s del recuadro quedaron sin número"
+            % lista_es([NOMBRE_FILA[c] for c in vacias]))
+
+    # Las tres filas del desglose sí pueden ir vacías y eso no es un error:
+    # si a la sesión no fue ningún consejero de juventud, dejar la casilla en
+    # blanco dice lo mismo que escribir cero. Se leen como cero y lo único
+    # que se verifica es que el desglose sume el total declarado.
+    suma = sum(rec[c] or 0 for c in ("consejeros", "plataformas", "otros"))
     if suma != rec["juveniles"]:
         return "no_cuadra", ("el total de jóvenes dice %d %s y las tres filas "
                              "de abajo suman %d"
@@ -479,11 +543,49 @@ def construir():
                                 fecha_larga(fila_ultima["fecha"]))
 
     # Cifras de asistentes que reportó el formulario, por localidad y fecha
+    # Cada respuesta se indexa dos veces, por fecha y por número de comité,
+    # para poder emparejarla con el acta aunque una de las dos cosas esté mal
+    # escrita en el nombre del archivo.
     reportado = {}
+    modalidad = {}
+    reportado_num = {}
+    modalidad_num = {}
+    fecha_form_num = {}
     for _, fila in unicas.iterrows():
         clave = (fila["Localidad"], fila["fecha"].strftime("%Y-%m-%d"))
-        reportado[clave] = (fila["Cantidad de asistentes (no juveniles)"],
-                            fila["Cantidad de asistentes jóvenes"])
+        cifras_fila = (fila["Cantidad de asistentes (no juveniles)"],
+                       fila["Cantidad de asistentes jóvenes"])
+        reportado[clave] = cifras_fila
+        modalidad[clave] = fila["Modalidad"]
+        try:
+            clave_num = (fila["Localidad"], int(fila["Número de comité"]))
+        except (TypeError, ValueError):
+            continue
+        # Si un número viniera repetido dentro de una localidad no se usa,
+        # porque no habría forma de saber a cuál de las dos se refiere.
+        if clave_num in reportado_num:
+            reportado_num[clave_num] = None
+            modalidad_num[clave_num] = None
+            fecha_form_num[clave_num] = None
+        else:
+            reportado_num[clave_num] = cifras_fila
+            modalidad_num[clave_num] = fila["Modalidad"]
+            fecha_form_num[clave_num] = fila["fecha"]
+
+    def respuesta_de(acta_loc, acta, por_fecha, por_numero):
+        """Busca la respuesta del formulario que corresponde a un acta.
+
+        Primero por fecha, que es lo normal, y si no aparece por número de
+        comité. Devuelve None cuando el acta no tiene respuesta asociada por
+        ninguno de los dos caminos.
+        """
+        valor = por_fecha.get((acta_loc, acta["fecha_nombre"]))
+        if valor is not None:
+            return valor
+        try:
+            return por_numero.get((acta_loc, int(acta["num_nombre"])))
+        except (TypeError, ValueError):
+            return None
 
     por_loc = collections.defaultdict(list)
     for a in actas:
@@ -521,21 +623,31 @@ def construir():
             dias_sin_sesionar = None
 
         # ---- documentos cargados
-        planillas = digitales = 0
+        planillas = digitales = piden_digital = 0
         pendientes_carga = []
         for acta in propias:
             tiene_planilla, tiene_digital = revisar_carga(
                 acta, archivos.get(nombre, []))
             planillas += tiene_planilla
-            digitales += tiene_digital
+
+            # El registro digital solo cuenta donde se pide. Si una sesión
+            # presencial lo subió de todas formas, bienvenido sea, pero no
+            # entra al conteo: inflaría un denominador que no le corresponde.
+            modo = respuesta_de(nombre, acta, modalidad, modalidad_num)
+            requiere_digital = modo in MODALIDADES_CON_DIGITAL
+            if requiere_digital:
+                piden_digital += 1
+                digitales += tiene_digital
+
             if not tiene_planilla:
                 pendientes_carga.append(
-                    "por cargar la planilla de asistencia de la sesión %s"
-                    % acta["num_nombre"])
-            if not tiene_digital:
+                    "falta el «Registro de asistencia (fotografía o PDF)» "
+                    "del comité %s" % acta["num_nombre"])
+            if requiere_digital and not tiene_digital:
                 pendientes_carga.append(
-                    "por cargar la planilla digital de la sesión %s"
-                    % acta["num_nombre"])
+                    "falta el «Registro de asistencia digital "
+                    "(sistematizado)» del comité %s, que fue %s"
+                    % (acta["num_nombre"], modo.lower()))
         pendientes_sesion = []
         if faltan_ordinarias:
             pendientes_sesion.append(
@@ -551,32 +663,73 @@ def construir():
         num = collections.Counter()
         rec = collections.Counter()
         cifras = {"comparables": 0, "coinciden": 0, "difieren": 0}
+        fechas = {"difieren": 0}
         limpias = 0
         detalle = []
+        pendientes_imagen = []
         for acta in propias:
             estado_num, nota_num = revisar_numeracion(acta)
             estado_rec, nota_rec = revisar_recuadro(acta)
             num[estado_num] += 1
             rec[estado_rec] += 1
 
+            # El acta escaneada no tiene nada por ajustar: no se puede leer.
+            # Se resuelve volviéndola a cargar, así que es un pendiente de
+            # entrega y va con los demás, no en el detalle de ajustes.
+            if estado_num == "escaneo":
+                pendientes_imagen.append(
+                    "hay que volver a subir el «Acta de la reunión» del "
+                    "comité %s: la que está cargada es una imagen escaneada y "
+                    "no se alcanza a revisar" % acta["num_nombre"])
+
+            # La fecha del nombre del archivo contra la que se digitó en el
+            # formulario. Solo se puede comparar cuando el acta no cruzó por
+            # fecha pero sí por número: si cruzó por fecha, es que coinciden.
+            nota_fecha = None
+            if (nombre, acta["fecha_nombre"]) not in modalidad:
+                try:
+                    fecha_form = fecha_form_num.get(
+                        (nombre, int(acta["num_nombre"])))
+                except (TypeError, ValueError):
+                    fecha_form = None
+                if fecha_form is not None:
+                    fechas["difieren"] += 1
+                    nota_fecha = (
+                        "el nombre del archivo dice que la sesión fue el %s y "
+                        "en el formulario quedó el %s, hay que definir cuál es "
+                        "la fecha real y dejarla igual en los dos"
+                        % (texto_fecha(acta["fecha_nombre"]),
+                           fecha_larga(fecha_form)))
+
             nota_cif = None
-            clave = (nombre, acta["fecha_nombre"])
+            del_formulario = respuesta_de(nombre, acta, reportado,
+                                          reportado_num)
             caja = acta["recuadro"]
-            if clave in reportado and caja.get("no_juveniles") is not None \
+            if del_formulario is not None \
+                    and caja.get("no_juveniles") is not None \
                     and caja.get("juveniles") is not None:
                 cifras["comparables"] += 1
-                rep_nj, rep_j = reportado[clave]
+                rep_nj, rep_j = del_formulario
                 if int(rep_nj) == caja["no_juveniles"] \
                         and int(rep_j) == caja["juveniles"]:
                     cifras["coinciden"] += 1
                 else:
                     cifras["difieren"] += 1
-                    nota_cif = ("el Excel reporta %d y %d; el acta dice %d y "
-                                "%d, hay que definir cuál queda"
-                                % (int(rep_nj), int(rep_j),
-                                   caja["no_juveniles"], caja["juveniles"]))
+                    nota_cif = (
+                        "el formulario reporta %s y %s; el acta dice %s y "
+                        "%s, hay que definir cuál queda"
+                        % (personas(int(rep_nj), "asistente no juvenil",
+                                    "asistentes no juveniles"),
+                           personas(int(rep_j), "asistente joven",
+                                    "asistentes jóvenes"),
+                           personas(caja["no_juveniles"],
+                                    "asistente no juvenil",
+                                    "asistentes no juveniles"),
+                           personas(caja["juveniles"], "asistente joven",
+                                    "asistentes jóvenes")))
 
-            ajustes = [x for x in (nota_num, nota_rec, nota_cif) if x]
+            ajustes = [x for x in (nota_num, nota_rec, nota_cif, nota_fecha)
+                       if x]
             if not ajustes:
                 limpias += 1
             else:
@@ -610,7 +763,9 @@ def construir():
             "dias_sin_sesionar": dias_sin_sesionar,
             "planillas": planillas,
             "digitales": digitales,
+            "piden_digital": piden_digital,
             "pendientes_carga": pendientes_carga,
+            "pendientes_imagen": pendientes_imagen,
             "pendientes_sesion": pendientes_sesion,
             "estado": estado,
             "limpias": limpias,
@@ -623,6 +778,7 @@ def construir():
                          "no_cuadra": rec["no_cuadra"],
                          "escaneo": rec["escaneo"]},
             "cifras": cifras,
+            "fechas": fechas,
             "detalle": detalle,
         })
 
@@ -644,6 +800,7 @@ def construir():
         "extraordinarias": suma("extraordinarias"),
         "planillas": suma("planillas"),
         "digitales": suma("digitales"),
+        "piden_digital": suma("piden_digital"),
         "al_dia_sesiones": sum(1 for l in localidades
                                if not l["faltan_ordinarias"]),
         "en_silencio": sum(1 for l in localidades
@@ -658,7 +815,8 @@ def construir():
                               if l["estado"] == "al día"),
         "con_pendientes": sum(1 for l in localidades
                               if l["pendientes_sesion"]
-                              or l["pendientes_carga"]),
+                              or l["pendientes_carga"]
+                              or l["pendientes_imagen"]),
         "actas_con_ajustes": sum(len(l["detalle"]) for l in localidades),
         "localidades_con_ajustes": sum(1 for l in localidades if l["detalle"]),
         "limpias": suma("limpias"),
@@ -669,6 +827,7 @@ def construir():
                          + suma("recuadro", "modificado")
                          + suma("recuadro", "no_cuadra")),
         "cifras_difieren": suma("cifras", "difieren"),
+        "fechas_difieren": suma("fechas", "difieren"),
         "cifras_comparables": suma("cifras", "comparables"),
         "escaneadas": suma("numeracion", "escaneo"),
     }
@@ -1080,7 +1239,10 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
   margin-right: 6px; vertical-align: -1px;
 }
 .leyenda .punto.bien { background: var(--bueno); }
-.leyenda .punto.mal { background: var(--neutral); }
+.leyenda .punto.mal { background: var(--malo); }
+/* Punto descriptivo, no de estado: el bimestre sin ordinaria no es una falta,
+   así que no puede llevar el rojo que sí llevan las actas con ajuste. */
+.leyenda .punto.sin { background: var(--neutral); }
 
 /* Nota destacada bajo una franja de cifras: fondo suave, sin borde de color
    ni icono, para que se lea como aclaración y no como alerta. */
@@ -1102,6 +1264,7 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
 .pie-nota {
   font-size: 0.8rem; line-height: 1.6; color: var(--gris); margin-top: 2.4rem;
 }
+.pie-nota strong { color: var(--gris-oscuro); }
 .marca-pie {
   display: block; width: 100%; height: auto;
   margin-top: auto;   /* empuja el pie al fondo cuando sobra alto */
@@ -1284,14 +1447,14 @@ function pintarAccesosZoom() {
      nombre: 'Periodicidad de las sesiones',
      glosa: 'Localidades con las ' + r.ordinarias_exigidas +
             ' sesiones ordinarias que se esperan al corte.'},
-    {href: 'documentos.html', cifra: r.digitales + ' de ' + r.actas,
+    {href: 'documentos.html', cifra: r.digitales + ' de ' + r.piden_digital,
      nombre: 'Documentos de cada sesión',
-     glosa: 'Sesiones que ya tienen cargada su planilla digital.'},
+     glosa: 'Comités virtuales y mixtos con su registro digital cargado.'},
     {href: 'pendientes.html', cifra: r.con_pendientes,
-     nombre: 'Qué está pendiente',
+     nombre: 'Qué queda pendiente de cargar',
      glosa: 'Localidades con alguna sesión o documento por entregar.'},
     {href: 'detalle.html', cifra: r.localidades_con_ajustes,
-     nombre: 'Detalle acta por acta',
+     nombre: 'Ajustes por acta',
      glosa: 'Localidades con el detalle de qué corregir en cada acta.'},
     {href: 'ajustes.html', cifra: r.actas_con_ajustes,
      nombre: 'Ajustes por localidad',
@@ -1381,7 +1544,9 @@ function pintarDocumentos() {
       '<td>' + l.sesiones_formulario + '</td>' +
       '<td>' + fraccion(l.actas, l.sesiones_formulario) + '</td>' +
       '<td>' + fraccion(l.planillas, l.actas) + '</td>' +
-      '<td>' + fraccion(l.digitales, l.actas) + '</td>' +
+      '<td>' + (l.piden_digital
+                ? fraccion(l.digitales, l.piden_digital)
+                : '<span class="neutro">no aplica</span>') + '</td>' +
       '<td>' + chip(l.estado) + '</td></tr>';
   }).join('');
   var r = D.resumen;
@@ -1390,14 +1555,16 @@ function pintarDocumentos() {
     '<td>' + r.sesiones_formulario + '</td>' +
     '<td>' + r.actas + '</td>' +
     '<td>' + r.planillas + '</td>' +
-    '<td>' + r.digitales + '</td><td></td></tr>';
+    '<td>' + r.digitales + ' de ' + r.piden_digital + '</td><td></td></tr>';
 }
 
 function pintarPendientes() {
   var bloques = D.localidades.filter(function (l) {
-    return l.pendientes_sesion.length || l.pendientes_carga.length;
+    return l.pendientes_sesion.length || l.pendientes_carga.length ||
+           l.pendientes_imagen.length;
   }).map(function (l) {
-    var todos = l.pendientes_sesion.concat(l.pendientes_carga);
+    var todos = l.pendientes_sesion.concat(l.pendientes_carga)
+                                   .concat(l.pendientes_imagen);
     return '<div class="bloque"><div class="nombre">' + l.localidad +
       '</div><ul>' + todos.map(function (p) {
         return '<li>' + p + '</li>';
@@ -1412,24 +1579,22 @@ function pintarAjustes() {
     var n = l.numeracion, c = l.recuadro;
     return '<tr>' +
       '<td>' + l.localidad + '</td>' +
-      '<td>' + l.respuestas_formulario + '</td>' +
-      '<td>' + l.sesiones_formulario + '</td>' +
       '<td>' + l.actas + '</td>' +
       '<td>' + pastilla(n.distinto + n.blanco + n.sin_linea) + '</td>' +
       '<td>' + pastilla(c.sin_recuadro + c.modificado + c.no_cuadra) + '</td>' +
       '<td>' + pastilla(l.cifras.difieren) + '</td>' +
+      '<td>' + pastilla(l.fechas.difieren) + '</td>' +
       '<td>' + l.limpias + ' de ' + l.actas + barra(l.limpias, l.actas) +
       '</td></tr>';
   }).join('');
   var r = D.resumen;
   document.getElementById('tabla-ajustes').innerHTML = filas +
     '<tr class="total"><td>Total</td>' +
-    '<td>' + r.respuestas_formulario + '</td>' +
-    '<td>' + r.sesiones_formulario + '</td>' +
     '<td>' + r.actas + '</td>' +
     '<td>' + r.num_problema + '</td>' +
     '<td>' + r.rec_problema + '</td>' +
     '<td>' + r.cifras_difieren + '</td>' +
+    '<td>' + r.fechas_difieren + '</td>' +
     '<td>' + r.limpias + ' de ' + r.actas + '</td></tr>';
 }
 
@@ -1594,7 +1759,7 @@ def pagina_zoom():
     <span class="numero">2</span>
     <h2>Resumen de ajustes</h2>
     <p>Este bloque es para afinar el registro. Compara los documentos
-       adjuntos con la tabla de seguimiento en Excel.</p>
+       adjuntos con lo que se diligenció en el formulario.</p>
   </div>
   <div class="franja" id="franja-ajustes"></div>
 
@@ -1635,7 +1800,7 @@ def pagina_periodicidad():
 
   <div class="leyenda">
     <div><span class="punto bien"></span>Bimestre con sesión ordinaria</div>
-    <div><span class="punto mal"></span>Bimestre sin sesión ordinaria</div>
+    <div><span class="punto sin"></span>Bimestre sin sesión ordinaria</div>
     <div>Días sin reunirse al corte, contando las extraordinarias. Se marca al
       pasar de dos meses. <span id="resumen-silencio"></span></div>
   </div>
@@ -1661,9 +1826,11 @@ def pagina_periodicidad():
 def pagina_documentos():
     """Página de documentos cargados por sesión."""
     titulo = """  <h1>Documentos de cada sesión</h1>
-  <p class="intro">Cada sesión debería quedar con tres documentos: el acta, la
-     planilla de asistencia firmada y esa misma planilla sistematizada en
-     Excel. La planilla digital es la que permite analizar la asistencia sin
+  <p class="intro">Cada sesión debería quedar con el acta y el registro de
+     asistencia firmado. El registro digital sistematizado solo se le pide a
+     los comités virtuales y mixtos, porque en un comité presencial la
+     asistencia se firma en papel y no hay nada que sistematizar. Es el que
+     permite analizar la asistencia sin
      transcribir a mano.</p>
 """
     cuerpo = """
@@ -1675,7 +1842,7 @@ def pagina_documentos():
           <th>Sesiones<br>reportadas</th>
           <th>Actas<br>cargadas</th>
           <th>Planilla de<br>asistencia</th>
-          <th>Planilla<br>digital</th>
+          <th>Registro digital<br>de los virtuales</th>
           <th>Estado general<br>de la localidad</th>
         </tr>
       </thead>
@@ -1698,7 +1865,7 @@ def pagina_documentos():
 
 def pagina_pendientes():
     """Página con lo que le falta a cada localidad."""
-    titulo = """  <h1>Qué está pendiente</h1>
+    titulo = """  <h1>Qué queda pendiente de cargar</h1>
   <p class="intro">Solo aparecen las localidades con algo por entregar. Son
      pendientes de sesión o de documento; los ajustes de forma están en la
      página de ajustes por localidad.</p>
@@ -1712,10 +1879,10 @@ def pagina_pendientes():
 def pagina_ajustes():
     """Página con los ajustes de registro por localidad."""
     titulo = """  <h1>Ajustes por localidad</h1>
-  <p class="intro">Las tres primeras columnas responden cuántas sesiones hubo
-     según cada fuente. Las tres siguientes cuentan actas que necesitan un
-     ajuste, así que entre menos, mejor. La última resume cuántas actas de la
-     localidad ya quedaron listas.</p>
+  <p class="intro">Cuántas actas de cada localidad necesitan algún ajuste y de
+     qué tipo, así que entre menos, mejor. La última columna resume cuántas ya
+     quedaron listas. El ajuste puntual de cada acta está en la página de
+     detalle.</p>
 """
     cuerpo = """
   <div class="tarjeta tabla-ancha">
@@ -1723,12 +1890,11 @@ def pagina_ajustes():
       <thead>
         <tr>
           <th>Localidad</th>
-          <th>Respuestas<br>en el Excel</th>
-          <th>Sesiones<br>distintas</th>
-          <th>Actas<br>archivadas</th>
+          <th>Sesiones</th>
           <th>Numeración<br>por ajustar</th>
           <th>Recuadro<br>por completar</th>
           <th>Cifras por<br>conciliar</th>
+          <th>Fecha por<br>conciliar</th>
           <th>Actas<br>ya listas</th>
         </tr>
       </thead>
@@ -1742,14 +1908,16 @@ def pagina_ajustes():
       del archivo, quedó vacío o no está.</div>
     <div>Recuadro: al cuadro de participantes le falta diligenciar algo, se
       cambió respecto al formato o sus filas no suman.</div>
+    <div>Fecha: el nombre del archivo del acta dice una fecha de sesión y en
+      el formulario quedó otra.</div>
   </div>
 """
     return {"titulo": titulo, "cuerpo": cuerpo}
 
 
-def pagina_detalle(escaneadas):
-    """Página con el detalle acta por acta."""
-    titulo = """  <h1>Detalle acta por acta</h1>
+def pagina_detalle():
+    """Página con el ajuste puntual de cada acta."""
+    titulo = """  <h1>Ajustes por acta</h1>
   <p class="intro">Solo aparecen las localidades con algún ajuste por hacer. De
      cada acta se indica qué habría que corregir. Haz clic en una localidad
      para abrir su lista.</p>
@@ -1757,11 +1925,10 @@ def pagina_detalle(escaneadas):
     cuerpo = """
   <div id="detalle"></div>
 
-  <p class="pie-nota">Un alcance que conviene tener presente: la lectura de los
-     PDF es automática, así que las actas guardadas como imagen escaneada no se
-     pueden leer y quedan por fuera de estos conteos. Son %d. No es que tengan
-     algo por ajustar, es que no se alcanzan a revisar.</p>
-""" % escaneadas
+  <p class="pie-nota"><strong>Nota:</strong> la lectura de los PDF es
+     automática, así que las actas guardadas como imagen escaneada no se pueden
+     leer y quedan por fuera de estos conteos.</p>
+"""
     return {"titulo": titulo, "cuerpo": cuerpo}
 
 
@@ -1841,12 +2008,12 @@ def main():
          pagina_periodicidad(), "pintarPeriodicidad();", False),
         ("documentos.html", "Documentos de cada sesión · COLJ 2026",
          pagina_documentos(), "pintarDocumentos();", False),
-        ("pendientes.html", "Qué está pendiente · COLJ 2026",
+        ("pendientes.html", "Qué queda pendiente de cargar · COLJ 2026",
          pagina_pendientes(), "pintarPendientes();", False),
         ("ajustes.html", "Ajustes por localidad · COLJ 2026",
          pagina_ajustes(), "pintarAjustes();", False),
-        ("detalle.html", "Detalle acta por acta · COLJ 2026",
-         pagina_detalle(r["escaneadas"]), "pintarDetalle();", False),
+        ("detalle.html", "Ajustes por acta · COLJ 2026",
+         pagina_detalle(), "pintarDetalle();", False),
     ]
     # Las cinco vistas del año en curso vuelven a zoom.html, que es de donde
     # se entra a ellas; el resto vuelve a la portada.

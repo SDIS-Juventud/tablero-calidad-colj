@@ -382,7 +382,10 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
   margin-right: 6px; vertical-align: -1px;
 }
 .leyenda .punto.bien { background: var(--bueno); }
-.leyenda .punto.mal { background: var(--neutral); }
+.leyenda .punto.mal { background: var(--malo); }
+/* Punto descriptivo, no de estado: el bimestre sin ordinaria no es una falta,
+   así que no puede llevar el rojo que sí llevan las actas con ajuste. */
+.leyenda .punto.sin { background: var(--neutral); }
 
 /* Nota destacada bajo una franja de cifras: fondo suave, sin borde de color
    ni icono, para que se lea como aclaración y no como alerta. */
@@ -404,6 +407,7 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
 .pie-nota {
   font-size: 0.8rem; line-height: 1.6; color: var(--gris); margin-top: 2.4rem;
 }
+.pie-nota strong { color: var(--gris-oscuro); }
 .marca-pie {
   display: block; width: 100%; height: auto;
   margin-top: auto;   /* empuja el pie al fondo cuando sobra alto */
