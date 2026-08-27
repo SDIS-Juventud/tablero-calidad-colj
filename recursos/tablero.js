@@ -161,9 +161,10 @@ function pintarAccesosZoom() {
      nombre: 'Periodicidad de las sesiones',
      glosa: 'Localidades con las ' + r.ordinarias_exigidas +
             ' sesiones ordinarias que se esperan al corte.'},
-    {href: 'documentos.html', cifra: r.digitales + ' de ' + r.piden_digital,
+    {href: 'documentos.html',
+     cifra: r.sesiones_completas + ' de ' + r.actas,
      nombre: 'Documentos de cada sesión',
-     glosa: 'Comités virtuales y mixtos con su registro digital cargado.'},
+     glosa: 'Sesiones con todos sus soportes cargados en el formulario.'},
     {href: 'pendientes.html', cifra: r.con_pendientes,
      nombre: 'Qué queda pendiente de cargar',
      glosa: 'Localidades con alguna sesión o documento por entregar.'},

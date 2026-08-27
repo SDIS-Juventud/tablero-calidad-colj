@@ -623,7 +623,7 @@ def construir():
             dias_sin_sesionar = None
 
         # ---- documentos cargados
-        planillas = digitales = piden_digital = 0
+        planillas = digitales = piden_digital = completas = 0
         pendientes_carga = []
         for acta in propias:
             tiene_planilla, tiene_digital = revisar_carga(
@@ -638,6 +638,9 @@ def construir():
             if requiere_digital:
                 piden_digital += 1
                 digitales += tiene_digital
+
+            if tiene_planilla and (tiene_digital or not requiere_digital):
+                completas += 1
 
             if not tiene_planilla:
                 pendientes_carga.append(
@@ -764,6 +767,7 @@ def construir():
             "planillas": planillas,
             "digitales": digitales,
             "piden_digital": piden_digital,
+            "sesiones_completas": completas,
             "pendientes_carga": pendientes_carga,
             "pendientes_imagen": pendientes_imagen,
             "pendientes_sesion": pendientes_sesion,
@@ -801,6 +805,7 @@ def construir():
         "planillas": suma("planillas"),
         "digitales": suma("digitales"),
         "piden_digital": suma("piden_digital"),
+        "sesiones_completas": suma("sesiones_completas"),
         "al_dia_sesiones": sum(1 for l in localidades
                                if not l["faltan_ordinarias"]),
         "en_silencio": sum(1 for l in localidades
@@ -1447,9 +1452,10 @@ function pintarAccesosZoom() {
      nombre: 'Periodicidad de las sesiones',
      glosa: 'Localidades con las ' + r.ordinarias_exigidas +
             ' sesiones ordinarias que se esperan al corte.'},
-    {href: 'documentos.html', cifra: r.digitales + ' de ' + r.piden_digital,
+    {href: 'documentos.html',
+     cifra: r.sesiones_completas + ' de ' + r.actas,
      nombre: 'Documentos de cada sesión',
-     glosa: 'Comités virtuales y mixtos con su registro digital cargado.'},
+     glosa: 'Sesiones con todos sus soportes cargados en el formulario.'},
     {href: 'pendientes.html', cifra: r.con_pendientes,
      nombre: 'Qué queda pendiente de cargar',
      glosa: 'Localidades con alguna sesión o documento por entregar.'},
