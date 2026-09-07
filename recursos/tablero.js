@@ -138,6 +138,15 @@ function pintarSerie() {
     '<td>' + t.a2026 + '</td></tr>';
 }
 
+/* Las direcciones se arman dentro de innerHTML, asi que el & de cada
+   parametro tiene que ir escapado. Con los enlaces de hoy funciona sin
+   escapar, pero es por suerte: si alguna direccion trae &reg=, &not= o
+   &para=, el navegador los lee como entidades heredadas y las convierte en
+   simbolos. El enlace queda roto y no avisa. */
+function escaparUrl(u) {
+  return String(u).replace(/&/g, '&amp;').replace(/"/g, '%22');
+}
+
 function pintarEnlaces() {
   var nodo = document.getElementById('enlaces');
   if (!nodo) return;
@@ -145,7 +154,7 @@ function pintarEnlaces() {
     var cuerpo = '<div class="nombre-enlace">' + e.nombre + '</div>' +
       '<div class="glosa">' + e.glosa + '</div>';
     if (e.url) {
-      return '<a class="enlace" href="' + e.url + '" target="_blank" ' +
+      return '<a class="enlace" href="' + escaparUrl(e.url) + '" target="_blank" ' +
         'rel="noopener">' + cuerpo +
         '<span class="ir">Abrir &rarr;</span></a>';
     }
@@ -162,18 +171,18 @@ function pintarAccesosZoom() {
      glosa: 'Localidades con las ' + r.ordinarias_exigidas +
             ' sesiones ordinarias que se esperan al corte.'},
     {href: 'documentos.html',
-     cifra: r.sesiones_completas + ' de ' + r.actas,
+     cifra: r.sesiones_completas + ' de ' + r.sesiones_formulario,
      nombre: 'Documentos de cada sesión',
      glosa: 'Sesiones con todos sus soportes cargados en el formulario.'},
     {href: 'pendientes.html', cifra: r.con_pendientes,
      nombre: 'Qué queda pendiente de cargar',
      glosa: 'Localidades con alguna sesión o documento por entregar.'},
-    {href: 'detalle.html', cifra: r.localidades_con_ajustes,
+    {href: 'detalle.html', cifra: r.actas_con_ajustes,
      nombre: 'Ajustes por acta',
-     glosa: 'Localidades con el detalle de qué corregir en cada acta.'},
-    {href: 'ajustes.html', cifra: r.actas_con_ajustes,
+     glosa: 'Actas que necesitan algún ajuste en su registro.'},
+    {href: 'ajustes.html', cifra: r.localidades_con_ajustes,
      nombre: 'Ajustes por localidad',
-     glosa: 'Actas que necesitan algún ajuste en su registro.'}
+     glosa: 'Localidades con alguna acta por ajustar.'}
   ];
   var nodo = document.getElementById('accesos');
   if (!nodo) return;
@@ -247,8 +256,8 @@ function pintarPeriodicidad() {
   var aviso = document.getElementById('resumen-silencio');
   if (aviso) {
     aviso.innerHTML = r.en_silencio
-      ? 'Hoy, ' + r.en_silencio + (r.en_silencio === 1 ? ' localidad.' : ' localidades.')
-      : 'Hoy, ninguna.';
+      ? 'Al corte, ' + r.en_silencio + (r.en_silencio === 1 ? ' localidad.' : ' localidades.')
+      : 'Al corte, ninguna.';
   }
 }
 

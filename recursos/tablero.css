@@ -189,9 +189,14 @@ a { color: inherit; }
   transition: transform 0.15s ease;
 }
 .campo:hover { transform: translateY(-2px); }
+/* Los tres campos llevan texto blanco encima, asi que van en el nivel que
+   da contraste suficiente. El teal y el azul cielo base se quedan cortos
+   (3,3:1 y 2,8:1 sobre blanco), y por eso se usan sus variantes oscuras ya
+   documentadas en la identidad. Con ellas los tres campos pesan parejo y el
+   tercero deja de verse lavado al lado del morado. */
 .campo:nth-child(1) { background: #663a93; }
-.campo:nth-child(2) { background: #1e9da3; }
-.campo:nth-child(3) { background: #2fa4d4; }
+.campo:nth-child(2) { background: #14666b; }
+.campo:nth-child(3) { background: #217394; }
 .campo .titulo-campo {
   font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.05em; font-size: 1.12rem;
@@ -217,7 +222,7 @@ a { color: inherit; }
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .acceso:hover {
-  transform: translateY(-2px); box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transform: translateY(-2px); box-shadow: 0 3px 12px rgba(0,0,0,0.08);
 }
 .acceso .cifra {
   font-family: 'Anton', 'Figtree', sans-serif; font-weight: 400;
@@ -253,7 +258,10 @@ a.enlace { transition: transform 0.15s ease; }
 .enlace .glosa { font-size: 0.85rem; color: var(--gris); margin-top: 0.3rem; }
 .enlace .marca-pendiente {
   display: inline-block; margin-top: 0.7rem; padding: 3px 10px;
-  border-radius: 4px; background: var(--gris-claro); color: var(--gris);
+  border-radius: 4px; background: var(--gris-claro);
+  /* En gris secundario este chip queda en 3,9:1 sobre el gris claro, por
+     debajo del umbral. Va en gris oscuro, que es texto de 0,68rem. */
+  color: var(--gris-oscuro);
   font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.68rem;
 }

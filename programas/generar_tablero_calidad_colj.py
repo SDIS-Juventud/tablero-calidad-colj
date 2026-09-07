@@ -31,7 +31,10 @@ sin problema y evita repetir el mismo PNG en seis páginas.
 
 Se alimenta de:
   - ../../programas/calidad_actas_2026.json, que produce
-    extraer_calidad_actas_2026.py al abrir las 90 actas una por una.
+    extraer_calidad_actas_2026.py al abrir una por una las actas archivadas.
+    Antes de correr este generador conviene correr, en ../../programas/,
+    validar_nombres_2026.py: un acta cuyo nombre no traiga la fecha se cae del
+    conteo sin avisar y el tablero queda con una cifra corta.
   - La carpeta ../../2026/, para saber qué documentos se cargaron.
   - El Excel de seguimiento con las respuestas del formulario.
 
@@ -520,6 +523,19 @@ def construir():
 
     # Fuera las cargas que repiten una sesión ya registrada con otra fecha.
     marcas = f26["Marca temporal"].dt.strftime("%Y-%m-%d %H:%M:%S")
+    # Si una marca temporal de la lista ya no encuentra fila, es que esa
+    # respuesta se corrigio o se borro del formulario. Conviene saberlo: una
+    # exclusion que dejo de aplicar es una regla que quedo escrita sin efecto,
+    # y la siguiente persona que lea la lista va a creer que sigue actuando.
+    huerfanas = [m for m in CARGAS_REPETIDAS if m not in set(marcas)]
+    if huerfanas:
+        print("\nOJO: %d entrada(s) de CARGAS_REPETIDAS ya no encuentran fila "
+              "en el Excel." % len(huerfanas))
+        for m in huerfanas:
+            print("  %s  ->  %s" % (m, CARGAS_REPETIDAS[m]))
+        print("Esa respuesta se corrigio o se borro. Si ya no hace falta, "
+              "quitala de la lista.\n")
+
     f26 = f26[~marcas.isin(CARGAS_REPETIDAS)]
 
     unicas = f26.drop_duplicates(subset=["Localidad", "fecha"])
@@ -538,9 +554,20 @@ def construir():
     # El último comité que quedó registrado, con su localidad. No siempre es el
     # de la carga más reciente: las actas no entran en el mismo orden en que se
     # sesiona, así que se calcula aparte.
-    fila_ultima = f26.loc[f26["fecha"].idxmax()]
-    ultima_sesion = "%s, %s" % (fila_ultima["Localidad"],
-                                fecha_larga(fila_ultima["fecha"]))
+    #
+    # Puede haber varias localidades sesionando el mismo dia. Antes se tomaba
+    # una sola con idxmax(), que desempata por orden de fila, y el tablero
+    # anunciaba como "ultimo comite" a una localidad elegida al azar entre las
+    # empatadas. Se nombran todas.
+    fecha_ultima = f26["fecha"].max()
+    locs_ultima = sorted(set(f26[f26["fecha"] == fecha_ultima]["Localidad"]))
+    if len(locs_ultima) == 1:
+        quienes = locs_ultima[0]
+    elif len(locs_ultima) == 2:
+        quienes = " y ".join(locs_ultima)
+    else:
+        quienes = ", ".join(locs_ultima[:-1]) + " y " + locs_ultima[-1]
+    ultima_sesion = "%s, %s" % (quienes, fecha_larga(fecha_ultima))
 
     # Cifras de asistentes que reportó el formulario, por localidad y fecha
     # Cada respuesta se indexa dos veces, por fecha y por número de comité,
@@ -623,8 +650,25 @@ def construir():
             dias_sin_sesionar = None
 
         # ---- documentos cargados
-        planillas = digitales = piden_digital = completas = 0
+        #
+        # El universo de esta sección son las sesiones que la localidad
+        # reportó al formulario, no las actas que alcanzó a archivar. La
+        # diferencia importa: si se cuenta sobre actas, una sesión cuya acta
+        # nunca se cargó desaparece del denominador y la localidad queda
+        # felicitada por haber cargado el cien por ciento de lo que cargó.
+        # Contando sobre sesiones, esa acta faltante se ve.
+        planillas = digitales = completas = 0
         pendientes_carga = []
+
+        # Cuántas sesiones piden registro digital, contado sobre el
+        # formulario. Antes se contaba recorriendo actas, así que una sesión
+        # virtual sin acta cargada no entraba al denominador.
+        piden_digital = int(
+            del_form["Modalidad"].isin(MODALIDADES_CON_DIGITAL).sum())
+
+        # Sesiones reportadas que no tienen acta archivada.
+        actas_faltantes = max(0, len(del_form) - len(propias))
+
         for acta in propias:
             tiene_planilla, tiene_digital = revisar_carga(
                 acta, archivos.get(nombre, []))
@@ -636,7 +680,6 @@ def construir():
             modo = respuesta_de(nombre, acta, modalidad, modalidad_num)
             requiere_digital = modo in MODALIDADES_CON_DIGITAL
             if requiere_digital:
-                piden_digital += 1
                 digitales += tiene_digital
 
             if tiene_planilla and (tiene_digital or not requiere_digital):
@@ -651,6 +694,18 @@ def construir():
                     "falta el «Registro de asistencia digital "
                     "(sistematizado)» del comité %s, que fue %s"
                     % (acta["num_nombre"], modo.lower()))
+
+        # El acta que no se cargó es el pendiente más grande que puede tener
+        # una localidad, y hasta ahora no aparecía en ninguna parte: la lista
+        # se armaba recorriendo las actas existentes, así que un acta que no
+        # existe no generaba pendiente. Se agrega al final para que quede
+        # después de los faltantes de planilla, que son de la misma sesión.
+        if actas_faltantes:
+            pendientes_carga.append(
+                "falta cargar el acta de %s"
+                % ("una sesión reportada al formulario" if actas_faltantes == 1
+                   else "%d sesiones reportadas al formulario"
+                        % actas_faltantes))
         pendientes_sesion = []
         if faltan_ordinarias:
             pendientes_sesion.append(
@@ -768,6 +823,7 @@ def construir():
             "digitales": digitales,
             "piden_digital": piden_digital,
             "sesiones_completas": completas,
+            "actas_faltantes": actas_faltantes,
             "pendientes_carga": pendientes_carga,
             "pendientes_imagen": pendientes_imagen,
             "pendientes_sesion": pendientes_sesion,
@@ -806,6 +862,7 @@ def construir():
         "digitales": suma("digitales"),
         "piden_digital": suma("piden_digital"),
         "sesiones_completas": suma("sesiones_completas"),
+        "actas_faltantes": suma("actas_faltantes"),
         "al_dia_sesiones": sum(1 for l in localidades
                                if not l["faltan_ordinarias"]),
         "en_silencio": sum(1 for l in localidades
@@ -1051,9 +1108,14 @@ a { color: inherit; }
   transition: transform 0.15s ease;
 }
 .campo:hover { transform: translateY(-2px); }
+/* Los tres campos llevan texto blanco encima, asi que van en el nivel que
+   da contraste suficiente. El teal y el azul cielo base se quedan cortos
+   (3,3:1 y 2,8:1 sobre blanco), y por eso se usan sus variantes oscuras ya
+   documentadas en la identidad. Con ellas los tres campos pesan parejo y el
+   tercero deja de verse lavado al lado del morado. */
 .campo:nth-child(1) { background: #663a93; }
-.campo:nth-child(2) { background: #1e9da3; }
-.campo:nth-child(3) { background: #2fa4d4; }
+.campo:nth-child(2) { background: #14666b; }
+.campo:nth-child(3) { background: #217394; }
 .campo .titulo-campo {
   font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.05em; font-size: 1.12rem;
@@ -1079,7 +1141,7 @@ a { color: inherit; }
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .acceso:hover {
-  transform: translateY(-2px); box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transform: translateY(-2px); box-shadow: 0 3px 12px rgba(0,0,0,0.08);
 }
 .acceso .cifra {
   font-family: 'Anton', 'Figtree', sans-serif; font-weight: 400;
@@ -1115,7 +1177,10 @@ a.enlace { transition: transform 0.15s ease; }
 .enlace .glosa { font-size: 0.85rem; color: var(--gris); margin-top: 0.3rem; }
 .enlace .marca-pendiente {
   display: inline-block; margin-top: 0.7rem; padding: 3px 10px;
-  border-radius: 4px; background: var(--gris-claro); color: var(--gris);
+  border-radius: 4px; background: var(--gris-claro);
+  /* En gris secundario este chip queda en 3,9:1 sobre el gris claro, por
+     debajo del umbral. Va en gris oscuro, que es texto de 0,68rem. */
+  color: var(--gris-oscuro);
   font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.68rem;
 }
@@ -1429,6 +1494,15 @@ function pintarSerie() {
     '<td>' + t.a2026 + '</td></tr>';
 }
 
+/* Las direcciones se arman dentro de innerHTML, asi que el & de cada
+   parametro tiene que ir escapado. Con los enlaces de hoy funciona sin
+   escapar, pero es por suerte: si alguna direccion trae &reg=, &not= o
+   &para=, el navegador los lee como entidades heredadas y las convierte en
+   simbolos. El enlace queda roto y no avisa. */
+function escaparUrl(u) {
+  return String(u).replace(/&/g, '&amp;').replace(/"/g, '%22');
+}
+
 function pintarEnlaces() {
   var nodo = document.getElementById('enlaces');
   if (!nodo) return;
@@ -1436,7 +1510,7 @@ function pintarEnlaces() {
     var cuerpo = '<div class="nombre-enlace">' + e.nombre + '</div>' +
       '<div class="glosa">' + e.glosa + '</div>';
     if (e.url) {
-      return '<a class="enlace" href="' + e.url + '" target="_blank" ' +
+      return '<a class="enlace" href="' + escaparUrl(e.url) + '" target="_blank" ' +
         'rel="noopener">' + cuerpo +
         '<span class="ir">Abrir &rarr;</span></a>';
     }
@@ -1453,18 +1527,18 @@ function pintarAccesosZoom() {
      glosa: 'Localidades con las ' + r.ordinarias_exigidas +
             ' sesiones ordinarias que se esperan al corte.'},
     {href: 'documentos.html',
-     cifra: r.sesiones_completas + ' de ' + r.actas,
+     cifra: r.sesiones_completas + ' de ' + r.sesiones_formulario,
      nombre: 'Documentos de cada sesión',
      glosa: 'Sesiones con todos sus soportes cargados en el formulario.'},
     {href: 'pendientes.html', cifra: r.con_pendientes,
      nombre: 'Qué queda pendiente de cargar',
      glosa: 'Localidades con alguna sesión o documento por entregar.'},
-    {href: 'detalle.html', cifra: r.localidades_con_ajustes,
+    {href: 'detalle.html', cifra: r.actas_con_ajustes,
      nombre: 'Ajustes por acta',
-     glosa: 'Localidades con el detalle de qué corregir en cada acta.'},
-    {href: 'ajustes.html', cifra: r.actas_con_ajustes,
+     glosa: 'Actas que necesitan algún ajuste en su registro.'},
+    {href: 'ajustes.html', cifra: r.localidades_con_ajustes,
      nombre: 'Ajustes por localidad',
-     glosa: 'Actas que necesitan algún ajuste en su registro.'}
+     glosa: 'Localidades con alguna acta por ajustar.'}
   ];
   var nodo = document.getElementById('accesos');
   if (!nodo) return;
@@ -1538,8 +1612,8 @@ function pintarPeriodicidad() {
   var aviso = document.getElementById('resumen-silencio');
   if (aviso) {
     aviso.innerHTML = r.en_silencio
-      ? 'Hoy, ' + r.en_silencio + (r.en_silencio === 1 ? ' localidad.' : ' localidades.')
-      : 'Hoy, ninguna.';
+      ? 'Al corte, ' + r.en_silencio + (r.en_silencio === 1 ? ' localidad.' : ' localidades.')
+      : 'Al corte, ninguna.';
   }
 }
 
@@ -1712,6 +1786,12 @@ def pagina_portada(ultima_carga, ultima_sesion):
     return {"titulo": titulo, "cuerpo": ""}
 
 
+def mes_de(corte):
+    """Saca el nombre del mes de una fecha escrita como "27 de agosto de 2026"."""
+    partes = corte.split(" de ")
+    return partes[1] if len(partes) >= 2 else corte
+
+
 def pagina_estadisticas():
     """Página de estadísticas generales: la serie 2024, 2025 y 2026."""
     titulo = """  <h1>Estadísticas generales</h1>
@@ -1746,8 +1826,13 @@ def pagina_estadisticas():
     return {"titulo": titulo, "cuerpo": cuerpo}
 
 
-def pagina_zoom():
-    """Página que agrupa las cinco vistas de la vigencia en curso."""
+def pagina_zoom(mes_corte):
+    """Página que agrupa las cinco vistas de la vigencia en curso.
+
+    Recibe el mes de corte porque el texto de entrada nombra el rango de meses
+    que cubre el tablero. Antes esa frase estaba escrita a mano y se quedaba
+    con el mes del corte anterior cada vez que entraban sesiones nuevas.
+    """
     titulo = """  <h1>Zoom año en curso</h1>
   <p class="intro">Cómo va cada localidad en 2026, en cinco vistas. La cifra de
      cada acceso adelanta lo que se va a encontrar adentro.</p>
@@ -1756,8 +1841,8 @@ def pagina_zoom():
   <div class="rotulo-seccion">
     <span class="numero">1</span>
     <h2>El panorama general</h2>
-    <p>Lo que pasó en las veinte localidades entre enero y julio de 2026, antes
-       de mirar localidad por localidad.</p>
+    <p>Lo que pasó en las veinte localidades entre enero y MES_CORTE de 2026,
+       antes de mirar localidad por localidad.</p>
   </div>
   <div class="franja" id="franja-general"></div>
 
@@ -1776,6 +1861,7 @@ def pagina_zoom():
   </div>
   <div class="accesos" id="accesos"></div>
 """
+    cuerpo = cuerpo.replace("MES_CORTE", mes_corte)
     return {"titulo": titulo, "cuerpo": cuerpo}
 
 
@@ -1896,7 +1982,7 @@ def pagina_ajustes():
       <thead>
         <tr>
           <th>Localidad</th>
-          <th>Sesiones</th>
+          <th>Actas</th>
           <th>Numeración<br>por ajustar</th>
           <th>Recuadro<br>por completar</th>
           <th>Cifras por<br>conciliar</th>
@@ -1933,7 +2019,9 @@ def pagina_detalle():
 
   <p class="pie-nota"><strong>Nota:</strong> la lectura de los PDF es
      automática, así que las actas guardadas como imagen escaneada no se pueden
-     leer y quedan por fuera de estos conteos.</p>
+     revisar por dentro. Sí aparecen en esta lista, con el ajuste «está guardada
+     como imagen», pero de ellas no se puede decir si la numeración o el
+     recuadro están bien.</p>
 """
     return {"titulo": titulo, "cuerpo": cuerpo}
 
@@ -2006,7 +2094,7 @@ def main():
          pagina_estadisticas(),
          "pintarFranjaAnios();pintarSerie();", False),
         ("zoom.html", "Zoom año en curso · COLJ 2026",
-         pagina_zoom(),
+         pagina_zoom(mes_de(datos["corte"])),
          "pintarPanorama();pintarResumenAjustes();pintarAccesosZoom();", False),
         ("enlaces.html", "Enlaces · COLJ", pagina_enlaces(),
          "pintarEnlaces();", False),
