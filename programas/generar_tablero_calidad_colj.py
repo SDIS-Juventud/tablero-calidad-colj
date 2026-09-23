@@ -136,15 +136,16 @@ def lista_es(items):
     return ", ".join(items[:-1]) + " y " + items[-1]
 
 # El reglamento acordado en 2025 y recogido en el Decreto 647 de 2025 fija
-# sesiones ordinarias cada dos meses. Al corte del 24 de julio de 2026 hay tres
-# bimestres cerrados: enero-febrero, marzo-abril y mayo-junio. El bimestre de
-# julio-agosto todavía está corriendo, así que no se le exige a nadie.
-BIMESTRES_CERRADOS = [1, 2, 3]
-
-# Sesiones ordinarias que se le piden a cada localidad al corte: una por cada
-# bimestre ya cerrado. Es el número, no la casilla del calendario, lo que se
-# mira para decir si una localidad sesionó lo que debía.
-ORDINARIAS_EXIGIDAS = len(BIMESTRES_CERRADOS)
+# sesiones ordinarias cada dos meses. Cuáles bimestres ya cerraron depende de
+# la fecha de corte, así que estas dos variables no se escriben a mano:
+# construir() las calcula y las reescribe antes de armar ninguna página.
+#
+# Estuvieron escritas a mano hasta el 22 de septiembre de 2026, con el valor
+# del corte de julio. Al regenerar el tablero en septiembre el mínimo se quedó
+# en tres sesiones cuando ya eran cuatro, y tres localidades salieron al día
+# sin estarlo. Un parámetro que depende del corte se calcula desde el corte.
+BIMESTRES_CERRADOS = []
+ORDINARIAS_EXIGIDAS = 0
 
 # Modalidades a las que el formulario les pide el registro de asistencia
 # digital. En un comité presencial la asistencia se firma en papel y se sube
@@ -183,7 +184,16 @@ CARGAS_REPETIDAS = {
 # de ser una fecha corrida y empieza a ser una ausencia.
 DIAS_SIN_SESIONAR_ALERTA = 61
 NOMBRE_BIMESTRE = {1: "enero y febrero", 2: "marzo y abril",
-                   3: "mayo y junio", 4: "julio y agosto"}
+                   3: "mayo y junio", 4: "julio y agosto",
+                   5: "septiembre y octubre", 6: "noviembre y diciembre"}
+
+# El mismo nombre, corto, para el encabezado de la tabla de periodicidad.
+ABREV_BIMESTRE = {1: "Ene-feb", 2: "Mar-abr", 3: "May-jun",
+                  4: "Jul-ago", 5: "Sep-oct", 6: "Nov-dic"}
+
+# Para escribir el mínimo con letra en los textos que lee la gente.
+EN_LETRA = {0: "cero", 1: "una", 2: "dos", 3: "tres",
+            4: "cuatro", 5: "cinco", 6: "seis"}
 MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
          "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
 
@@ -315,6 +325,16 @@ def sin_tildes(texto):
     """Quita tildes y pasa a minúscula, para poder comparar nombres."""
     texto = unicodedata.normalize("NFD", str(texto))
     return "".join(c for c in texto if unicodedata.category(c) != "Mn").lower()
+
+
+def bimestres_cerrados_al(fecha):
+    """Bimestres que ya terminaron en la fecha de corte.
+
+    Un bimestre está cerrado cuando su último mes ya pasó. Al 12 de septiembre
+    el de julio y agosto ya cerró, y el de septiembre y octubre todavía no.
+    Solo a los cerrados se les exige sesión ordinaria.
+    """
+    return [b for b in range(1, 7) if 2 * b < fecha.month]
 
 
 def bimestre_de(mes):
@@ -462,26 +482,38 @@ def inventario_carpeta():
     return inventario
 
 
-def revisar_carga(acta, archivos):
+def revisar_carga(acta, archivos, usados=None):
     """Mira si la sesión tiene planilla de asistencia y planilla digital.
 
     Se empareja primero por número de sesión y solo si eso no da, por fecha.
     El orden importa: hay actas con la fecha mal escrita en el nombre, como
     la sesión 1 de Ciudad Bolívar que quedó con año 2025, y emparejar por
     fecha las daría por incompletas cuando sus planillas sí están.
+
+    `usados` guarda los archivos que ya se le acreditaron a otra sesión de la
+    misma localidad. Sin eso, dos sesiones con el mismo número de comité se
+    llevan las dos el mismo archivo: Usme tiene dos actas 5, la de junio y la
+    de agosto, y la planilla de junio le contaba a las dos, así que la
+    localidad aparecía con seis planillas teniendo cinco.
     """
+    if usados is None:
+        usados = set()
+    disponibles = [a for a in archivos if a not in usados]
     numero = acta["num_nombre"]
     clave_fecha = (acta["fecha_nombre"] or "").replace("-", "")
-    candidatos = [a for a in archivos
+    candidatos = [a for a in disponibles
                   if (numero is not None and numero_al_final(a) == numero)
                   or (clave_fecha and clave_fecha in a)]
-    tiene_planilla = any(es_planilla(a) for a in candidatos)
-    if not tiene_planilla and clave_fecha:
+    planilla = next((a for a in candidatos if es_planilla(a)), None)
+    if planilla is None and clave_fecha:
         # Hay planillas sin número al final, como en Tunjuelito
-        tiene_planilla = any(es_planilla(a) for a in archivos
-                             if clave_fecha in a)
-    tiene_digital = any(es_digital(a) for a in candidatos)
-    return tiene_planilla, tiene_digital
+        planilla = next((a for a in disponibles
+                         if clave_fecha in a and es_planilla(a)), None)
+    digital = next((a for a in candidatos if es_digital(a)), None)
+    for archivo in (planilla, digital):
+        if archivo is not None:
+            usados.add(archivo)
+    return planilla is not None, digital is not None
 
 
 # ------------------------------------------------------------------- datos
@@ -545,6 +577,13 @@ def construir():
     # se mueve solo cuando entren sesiones nuevas al formulario.
     fecha_corte = f26["fecha"].max()
     corte = fecha_larga(fecha_corte)
+
+    # Cuántos bimestres cerraron a esa fecha. Se recalcula acá, y las páginas
+    # leen estas mismas variables, para que el mínimo exigido no se quede
+    # atrás cuando el corte avanza.
+    global BIMESTRES_CERRADOS, ORDINARIAS_EXIGIDAS
+    BIMESTRES_CERRADOS = bimestres_cerrados_al(fecha_corte)
+    ORDINARIAS_EXIGIDAS = len(BIMESTRES_CERRADOS)
 
     # La última vez que alguien subió un acta: es la primera columna del Excel
     # de respuestas, "Marca temporal", que el formulario llena solo. Sirve para
@@ -666,34 +705,68 @@ def construir():
         piden_digital = int(
             del_form["Modalidad"].isin(MODALIDADES_CON_DIGITAL).sum())
 
-        # Sesiones reportadas que no tienen acta archivada.
-        actas_faltantes = max(0, len(del_form) - len(propias))
+        # Una fila por sesión reportada, en orden de fecha. Este bloque
+        # recorría las actas archivadas hasta el 22 de septiembre de 2026, y
+        # por eso una sesión cuya acta nunca se cargó desaparecía del
+        # denominador: la localidad quedaba felicitada por haber cargado el
+        # cien por ciento de lo que cargó. Suba salía con 5 de 5 planillas
+        # teniendo seis sesiones, y su planilla del 13 de agosto, que sí está
+        # en la carpeta, no se veía por ningún lado.
+        actas_faltantes = 0
+        sin_emparejar = list(propias)
+        usados = set()
+        for _, fila in del_form.sort_values("fecha").iterrows():
+            iso = fila["fecha"].strftime("%Y-%m-%d")
+            try:
+                numero_form = int(fila["Número de comité"])
+            except (TypeError, ValueError):
+                numero_form = None
 
-        for acta in propias:
+            # El acta de esta sesión, buscada primero por fecha y después por
+            # número. Cada acta se empareja con una sola sesión.
+            acta = next((a for a in sin_emparejar
+                         if a["fecha_nombre"] == iso), None)
+            if acta is None and numero_form is not None:
+                acta = next((a for a in sin_emparejar
+                             if a["num_nombre"] == numero_form), None)
+            if acta is not None:
+                sin_emparejar.remove(acta)
+                referencia = acta
+                etiqueta = acta["num_nombre"]
+            else:
+                # Sesión reportada sin acta archivada. Sus planillas pueden
+                # estar cargadas igual, como en Suba: lo que falta es el acta.
+                actas_faltantes += 1
+                referencia = {"num_nombre": numero_form, "fecha_nombre": iso}
+                etiqueta = numero_form
+
             tiene_planilla, tiene_digital = revisar_carga(
-                acta, archivos.get(nombre, []))
+                referencia, archivos.get(nombre, []), usados)
             planillas += tiene_planilla
 
             # El registro digital solo cuenta donde se pide. Si una sesión
             # presencial lo subió de todas formas, bienvenido sea, pero no
             # entra al conteo: inflaría un denominador que no le corresponde.
-            modo = respuesta_de(nombre, acta, modalidad, modalidad_num)
+            modo = fila["Modalidad"]
             requiere_digital = modo in MODALIDADES_CON_DIGITAL
             if requiere_digital:
                 digitales += tiene_digital
 
-            if tiene_planilla and (tiene_digital or not requiere_digital):
+            # Una sesión completa tiene acta y planilla, y el digital cuando
+            # se le pide. Sin acta no está completa, aunque la planilla esté.
+            if (acta is not None and tiene_planilla
+                    and (tiene_digital or not requiere_digital)):
                 completas += 1
 
             if not tiene_planilla:
                 pendientes_carga.append(
                     "falta el «Registro de asistencia (fotografía o PDF)» "
-                    "del comité %s" % acta["num_nombre"])
+                    "del comité %s" % etiqueta)
             if requiere_digital and not tiene_digital:
                 pendientes_carga.append(
                     "falta el «Registro de asistencia digital "
                     "(sistematizado)» del comité %s, que fue %s"
-                    % (acta["num_nombre"], modo.lower()))
+                    % (etiqueta, str(modo).lower()))
 
         # El acta que no se cargó es el pendiente más grande que puede tener
         # una localidad, y hasta ahora no aparecía en ninguna parte: la lista
@@ -1623,7 +1696,7 @@ function pintarDocumentos() {
       '<td>' + l.localidad + '</td>' +
       '<td>' + l.sesiones_formulario + '</td>' +
       '<td>' + fraccion(l.actas, l.sesiones_formulario) + '</td>' +
-      '<td>' + fraccion(l.planillas, l.actas) + '</td>' +
+      '<td>' + fraccion(l.planillas, l.sesiones_formulario) + '</td>' +
       '<td>' + (l.piden_digital
                 ? fraccion(l.digitales, l.piden_digital)
                 : '<span class="neutro">no aplica</span>') + '</td>' +
@@ -1634,7 +1707,7 @@ function pintarDocumentos() {
     '<tr class="total"><td>Total</td>' +
     '<td>' + r.sesiones_formulario + '</td>' +
     '<td>' + r.actas + '</td>' +
-    '<td>' + r.planillas + '</td>' +
+    '<td>' + r.planillas + ' de ' + r.sesiones_formulario + '</td>' +
     '<td>' + r.digitales + ' de ' + r.piden_digital + '</td><td></td></tr>';
 }
 
@@ -1879,9 +1952,9 @@ def pagina_periodicidad():
     """Página de periodicidad de las sesiones."""
     titulo = """  <h1>Periodicidad de las sesiones</h1>
   <p class="intro">El reglamento fija sesiones ordinarias cada dos meses, así
-     que al corte se le piden tres a cada localidad. Las extraordinarias son
+     que al corte se le piden %s a cada localidad. Las extraordinarias son
      adicionales y no cuentan para ese mínimo.</p>
-"""
+""" % EN_LETRA.get(ORDINARIAS_EXIGIDAS, ORDINARIAS_EXIGIDAS)
     cuerpo = """
   <p class="nota-general"><strong>Bimestre fijo o móvil.</strong> El
      calendario parte el año en bloques, pero el reglamento habla de dos meses
@@ -1901,7 +1974,8 @@ def pagina_periodicidad():
       <thead>
         <tr>
           <th>Localidad</th>
-          <th>Ritmo en el año<br>Ene-feb · Mar-abr · May-jun</th>
+          <th>Ritmo en el año<br>""" + " · ".join(
+              ABREV_BIMESTRE[b] for b in BIMESTRES_CERRADOS) + """</th>
           <th>Sesiones<br>ordinarias</th>
           <th>Sesiones<br>extraordinarias</th>
           <th>Total<br>sesiones</th>
@@ -1948,7 +2022,8 @@ def pagina_documentos():
       con detalles de formato por afinar en algunas actas</div>
     <div><span class="chip cargar">Por cargar</span> le falta subir algún
       documento</div>
-    <div><span class="chip sesionar">Por sesionar</span> hizo menos de las tres
+    <div><span class="chip sesionar">Por sesionar</span> hizo menos de las """ + (
+        EN_LETRA.get(ORDINARIAS_EXIGIDAS, str(ORDINARIAS_EXIGIDAS))) + """
       sesiones ordinarias que se esperan al corte</div>
   </div>
 """
