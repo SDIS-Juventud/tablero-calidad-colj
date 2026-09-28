@@ -31,15 +31,18 @@ sin problema y evita repetir el mismo PNG en seis páginas.
 
 Se alimenta de:
   - ../../programas/calidad_actas_2026.json, que produce
-    extraer_calidad_actas_2026.py al abrir una por una las actas archivadas.
-    Antes de correr este generador conviene correr, en ../../programas/,
-    validar_nombres_2026.py: un acta cuyo nombre no traiga la fecha se cae del
-    conteo sin avisar y el tablero queda con una cifra corta.
+    ../../programas/revision_periodica/3_extraer_calidad_actas_2026.py al
+    abrir una por una las actas archivadas. Antes de correr este generador
+    conviene correr 2_validar_nombres_2026.py, de esa misma carpeta: un acta
+    cuyo nombre no traiga la fecha se cae del conteo sin avisar y el tablero
+    queda con una cifra corta.
   - La carpeta ../../2026/, para saber qué documentos se cargaron.
   - El Excel de seguimiento con las respuestas del formulario.
 
-Se corre desde esta carpeta:
+Se corre desde la carpeta tablero-calidad-colj:
     python programas/generar_tablero_calidad_colj.py
+o, dentro de la revisión periódica, desde ../../programas/revision_periodica/:
+    python 4_generar_tablero.py
 """
 
 import os

@@ -1,18 +1,18 @@
 {
-  "corte": "12 de septiembre de 2026",
-  "ultima_carga": "22 de septiembre de 2026",
-  "ultima_sesion": "Sumapaz, 12 de septiembre de 2026",
+  "corte": "24 de septiembre de 2026",
+  "ultima_carga": "24 de septiembre de 2026",
+  "ultima_sesion": "Barrios Unidos, 24 de septiembre de 2026",
   "bimestres_exigidos": 4,
   "resumen": {
-    "actas": 110,
-    "respuestas_formulario": 111,
-    "sesiones_formulario": 111,
+    "actas": 113,
+    "respuestas_formulario": 115,
+    "sesiones_formulario": 114,
     "ordinarias": 75,
-    "extraordinarias": 36,
-    "planillas": 108,
-    "digitales": 31,
-    "piden_digital": 34,
-    "sesiones_completas": 104,
+    "extraordinarias": 39,
+    "planillas": 111,
+    "digitales": 33,
+    "piden_digital": 36,
+    "sesiones_completas": 107,
     "actas_faltantes": 1,
     "al_dia_sesiones": 16,
     "en_silencio": 3,
@@ -21,14 +21,14 @@
     "carga_completa": 15,
     "sin_pendientes": 2,
     "con_pendientes": 9,
-    "actas_con_ajustes": 68,
+    "actas_con_ajustes": 70,
     "localidades_con_ajustes": 18,
-    "limpias": 42,
-    "num_problema": 21,
-    "rec_problema": 37,
-    "cifras_difieren": 35,
+    "limpias": 43,
+    "num_problema": 22,
+    "rec_problema": 38,
+    "cifras_difieren": 36,
     "fechas_difieren": 3,
-    "cifras_comparables": 96,
+    "cifras_comparables": 98,
     "escaneadas": 2
   },
   "localidades": [
@@ -50,7 +50,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 24,
+      "dias_sin_sesionar": 36,
       "planillas": 5,
       "digitales": 2,
       "piden_digital": 2,
@@ -101,14 +101,14 @@
           ]
         },
         {
-          "archivo": "20260421_USAQUEN_ ACTA_3.pdf",
+          "archivo": "20260421_USAQUEN_ACTA_3.pdf",
           "fecha": "2026-04-21",
           "ajustes": [
             "el nombre del archivo dice acta 3 y por dentro dice ACTA N° 1"
           ]
         },
         {
-          "archivo": "20260519_USAQUEN_ ACTA_4.pdf",
+          "archivo": "20260519_USAQUEN_ACTA_4.pdf",
           "fecha": "2026-05-19",
           "ajustes": [
             "el nombre del archivo dice acta 4 y por dentro dice ACTA N° 1"
@@ -149,7 +149,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 24,
+      "dias_sin_sesionar": 36,
       "planillas": 4,
       "digitales": 0,
       "piden_digital": 0,
@@ -227,7 +227,7 @@
       ],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 1,
-      "dias_sin_sesionar": 68,
+      "dias_sin_sesionar": 80,
       "planillas": 3,
       "digitales": 0,
       "piden_digital": 0,
@@ -237,7 +237,7 @@
       "pendientes_imagen": [],
       "pendientes_sesion": [
         "queda pendiente una sesión ordinaria para llegar a las 4 que se esperan al corte",
-        "lleva 68 días sin reunirse"
+        "lleva 80 días sin reunirse"
       ],
       "estado": "falta sesionar",
       "limpias": 0,
@@ -289,11 +289,11 @@
     },
     {
       "localidad": "San Cristóbal",
-      "actas": 7,
-      "respuestas_formulario": 7,
-      "sesiones_formulario": 7,
+      "actas": 8,
+      "respuestas_formulario": 8,
+      "sesiones_formulario": 8,
       "ordinarias": 4,
-      "extraordinarias": 3,
+      "extraordinarias": 4,
       "bimestres_cubiertos": 4,
       "bimestres_con_ordinaria": [
         1,
@@ -305,11 +305,11 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 24,
-      "planillas": 7,
-      "digitales": 3,
-      "piden_digital": 3,
-      "sesiones_completas": 7,
+      "dias_sin_sesionar": 8,
+      "planillas": 8,
+      "digitales": 4,
+      "piden_digital": 4,
+      "sesiones_completas": 8,
       "actas_faltantes": 0,
       "pendientes_carga": [],
       "pendientes_imagen": [],
@@ -317,23 +317,23 @@
       "estado": "revisar forma",
       "limpias": 4,
       "numeracion": {
-        "ok": 7,
+        "ok": 8,
         "distinto": 0,
         "blanco": 0,
         "sin_linea": 0,
         "escaneo": 0
       },
       "recuadro": {
-        "ok": 5,
+        "ok": 6,
         "sin_recuadro": 0,
         "modificado": 1,
         "no_cuadra": 1,
         "escaneo": 0
       },
       "cifras": {
-        "comparables": 6,
+        "comparables": 7,
         "coinciden": 5,
-        "difieren": 1
+        "difieren": 2
       },
       "fechas": {
         "difieren": 0
@@ -359,6 +359,13 @@
           "ajustes": [
             "el total de jóvenes dice 3 jóvenes y las tres filas de abajo suman 2"
           ]
+        },
+        {
+          "archivo": "20260916_SAN_CRISTOBAL_ACTA_8.pdf",
+          "fecha": "2026-09-16",
+          "ajustes": [
+            "el formulario reporta 11 asistentes no juveniles y 11 asistentes jóvenes; el acta dice 11 asistentes no juveniles y 1 asistente joven, hay que definir cuál queda"
+          ]
         }
       ]
     },
@@ -380,7 +387,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 22,
+      "dias_sin_sesionar": 34,
       "planillas": 5,
       "digitales": 1,
       "piden_digital": 2,
@@ -459,7 +466,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 25,
+      "dias_sin_sesionar": 37,
       "planillas": 6,
       "digitales": 2,
       "piden_digital": 3,
@@ -523,7 +530,7 @@
       ],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 8,
+      "dias_sin_sesionar": 20,
       "planillas": 8,
       "digitales": 1,
       "piden_digital": 1,
@@ -642,7 +649,7 @@
       ],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 1,
-      "dias_sin_sesionar": 43,
+      "dias_sin_sesionar": 55,
       "planillas": 6,
       "digitales": 0,
       "piden_digital": 0,
@@ -679,7 +686,7 @@
       },
       "detalle": [
         {
-          "archivo": "20260227_KENNEDY_ ACTA_1.pdf",
+          "archivo": "20260227_KENNEDY_ACTA_1.pdf",
           "fecha": "2026-02-27",
           "ajustes": [
             "la línea ACTA N° quedó sin número",
@@ -741,7 +748,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 16,
+      "dias_sin_sesionar": 28,
       "planillas": 5,
       "digitales": 1,
       "piden_digital": 2,
@@ -789,11 +796,11 @@
     },
     {
       "localidad": "Engativá",
-      "actas": 5,
-      "respuestas_formulario": 5,
-      "sesiones_formulario": 5,
+      "actas": 6,
+      "respuestas_formulario": 6,
+      "sesiones_formulario": 6,
       "ordinarias": 4,
-      "extraordinarias": 1,
+      "extraordinarias": 2,
       "bimestres_cubiertos": 4,
       "bimestres_con_ordinaria": [
         1,
@@ -805,11 +812,11 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 32,
-      "planillas": 5,
-      "digitales": 2,
-      "piden_digital": 2,
-      "sesiones_completas": 5,
+      "dias_sin_sesionar": 7,
+      "planillas": 6,
+      "digitales": 3,
+      "piden_digital": 3,
+      "sesiones_completas": 6,
       "actas_faltantes": 0,
       "pendientes_carga": [],
       "pendientes_imagen": [],
@@ -820,12 +827,12 @@
         "ok": 1,
         "distinto": 0,
         "blanco": 2,
-        "sin_linea": 2,
+        "sin_linea": 3,
         "escaneo": 0
       },
       "recuadro": {
         "ok": 1,
-        "sin_recuadro": 4,
+        "sin_recuadro": 5,
         "modificado": 0,
         "no_cuadra": 0,
         "escaneo": 0
@@ -876,6 +883,14 @@
             "al documento le falta la línea ACTA N°",
             "falta el recuadro de participantes"
           ]
+        },
+        {
+          "archivo": "20260917_ENGATIVA_ACTA_6.pdf",
+          "fecha": "2026-09-17",
+          "ajustes": [
+            "al documento le falta la línea ACTA N°",
+            "falta el recuadro de participantes"
+          ]
         }
       ]
     },
@@ -898,7 +913,7 @@
       ],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 2,
+      "dias_sin_sesionar": 14,
       "planillas": 6,
       "digitales": 1,
       "piden_digital": 1,
@@ -979,11 +994,11 @@
     },
     {
       "localidad": "Barrios Unidos",
-      "actas": 7,
-      "respuestas_formulario": 7,
-      "sesiones_formulario": 7,
+      "actas": 8,
+      "respuestas_formulario": 8,
+      "sesiones_formulario": 8,
       "ordinarias": 4,
-      "extraordinarias": 3,
+      "extraordinarias": 4,
       "bimestres_cubiertos": 4,
       "bimestres_con_ordinaria": [
         1,
@@ -995,34 +1010,34 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 16,
-      "planillas": 7,
+      "dias_sin_sesionar": 0,
+      "planillas": 8,
       "digitales": 2,
       "piden_digital": 2,
-      "sesiones_completas": 7,
+      "sesiones_completas": 8,
       "actas_faltantes": 0,
       "pendientes_carga": [],
       "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
-      "limpias": 1,
+      "limpias": 2,
       "numeracion": {
-        "ok": 7,
+        "ok": 8,
         "distinto": 0,
         "blanco": 0,
         "sin_linea": 0,
         "escaneo": 0
       },
       "recuadro": {
-        "ok": 6,
+        "ok": 7,
         "sin_recuadro": 0,
         "modificado": 0,
         "no_cuadra": 1,
         "escaneo": 0
       },
       "cifras": {
-        "comparables": 7,
-        "coinciden": 2,
+        "comparables": 8,
+        "coinciden": 3,
         "difieren": 5
       },
       "fechas": {
@@ -1030,7 +1045,7 @@
       },
       "detalle": [
         {
-          "archivo": "20260226_BARRIOS UNIDOS_ACTA_1.pdf",
+          "archivo": "20260226_BARRIOS_UNIDOS_ACTA_1.pdf",
           "fecha": "2026-02-26",
           "ajustes": [
             "el formulario reporta 19 asistentes no juveniles y 7 asistentes jóvenes; el acta dice 12 asistentes no juveniles y 7 asistentes jóvenes, hay que definir cuál queda"
@@ -1091,7 +1106,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 2,
+      "dias_sin_sesionar": 14,
       "planillas": 8,
       "digitales": 2,
       "piden_digital": 2,
@@ -1176,7 +1191,7 @@
       ],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 1,
-      "dias_sin_sesionar": 86,
+      "dias_sin_sesionar": 98,
       "planillas": 4,
       "digitales": 1,
       "piden_digital": 1,
@@ -1186,7 +1201,7 @@
       "pendientes_imagen": [],
       "pendientes_sesion": [
         "queda pendiente una sesión ordinaria para llegar a las 4 que se esperan al corte",
-        "lleva 86 días sin reunirse"
+        "lleva 98 días sin reunirse"
       ],
       "estado": "falta sesionar",
       "limpias": 1,
@@ -1214,7 +1229,7 @@
       },
       "detalle": [
         {
-          "archivo": "20260119_MÁRTIRES_ACTA_1.pdf",
+          "archivo": "20260119_MARTIRES_ACTA_1.pdf",
           "fecha": "2026-01-19",
           "ajustes": [
             "el total de jóvenes dice 22 jóvenes y las tres filas de abajo suman 25",
@@ -1230,7 +1245,7 @@
           ]
         },
         {
-          "archivo": "20260423_LOSMÁRTIRES_ACTA_3.pdf",
+          "archivo": "20260423_MARTIRES_ACTA_3.pdf",
           "fecha": "2026-04-23",
           "ajustes": [
             "la línea ACTA N° quedó sin número"
@@ -1256,7 +1271,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 3,
+      "dias_sin_sesionar": 15,
       "planillas": 7,
       "digitales": 5,
       "piden_digital": 5,
@@ -1309,7 +1324,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 16,
+      "dias_sin_sesionar": 28,
       "planillas": 6,
       "digitales": 4,
       "piden_digital": 4,
@@ -1363,7 +1378,7 @@
       ],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 2,
-      "dias_sin_sesionar": 137,
+      "dias_sin_sesionar": 149,
       "planillas": 2,
       "digitales": 0,
       "piden_digital": 0,
@@ -1373,7 +1388,7 @@
       "pendientes_imagen": [],
       "pendientes_sesion": [
         "quedan pendientes 2 sesiones ordinarias para llegar a las 4 que se esperan al corte",
-        "lleva 137 días sin reunirse"
+        "lleva 149 días sin reunirse"
       ],
       "estado": "falta sesionar",
       "limpias": 0,
@@ -1434,7 +1449,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 23,
+      "dias_sin_sesionar": 35,
       "planillas": 5,
       "digitales": 1,
       "piden_digital": 1,
@@ -1509,7 +1524,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 25,
+      "dias_sin_sesionar": 37,
       "planillas": 5,
       "digitales": 0,
       "piden_digital": 0,
@@ -1585,7 +1600,7 @@
     {
       "localidad": "Sumapaz",
       "actas": 4,
-      "respuestas_formulario": 4,
+      "respuestas_formulario": 5,
       "sesiones_formulario": 4,
       "ordinarias": 4,
       "extraordinarias": 0,
@@ -1601,7 +1616,7 @@
       ],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 0,
+      "dias_sin_sesionar": 12,
       "planillas": 4,
       "digitales": 3,
       "piden_digital": 3,
@@ -1675,7 +1690,7 @@
       "localidad": "San Cristóbal",
       "a2024": 12,
       "a2025": 10,
-      "a2026": 7
+      "a2026": 8
     },
     {
       "localidad": "Usme",
@@ -1711,7 +1726,7 @@
       "localidad": "Engativá",
       "a2024": 11,
       "a2025": 6,
-      "a2026": 5
+      "a2026": 6
     },
     {
       "localidad": "Suba",
@@ -1723,7 +1738,7 @@
       "localidad": "Barrios Unidos",
       "a2024": 6,
       "a2025": 9,
-      "a2026": 7
+      "a2026": 8
     },
     {
       "localidad": "Teusaquillo",
@@ -1777,7 +1792,7 @@
   "totales_serie": {
     "a2024": 222,
     "a2025": 173,
-    "a2026": 110,
+    "a2026": 113,
     "sesiones_matriz_2024": 234
   },
   "enlaces": [
