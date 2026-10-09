@@ -1328,11 +1328,14 @@ a { color: inherit; }
   font-size: clamp(4rem, 8vw, 6.4rem); line-height: 0.92;
   color: var(--gris-oscuro);
 }
+/* El nombre completo del comité va en grande y en el acento, y la palabra
+   "Seguimiento" debajo en pequeño y gris: lo que importa es qué instancia es,
+   no el tipo de tablero. Antes estaba al revés. */
 .portada .nombre-largo {
-  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.045em;
-  font-size: clamp(0.95rem, 1.5vw, 1.18rem); line-height: 1.25;
-  color: var(--gris); margin-top: 0.55rem; max-width: 24ch;
+  font-family: 'Anton', 'Segoe UI', sans-serif; font-weight: 400;
+  text-transform: uppercase; letter-spacing: 0.01em;
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem); line-height: 1.05;
+  color: var(--acento); margin-top: 0.6rem; max-width: 20ch;
 }
 /* Las dos fechas del registro. El rótulo va en gris y el dato en el gris
    oscuro: son dos hechos distintos y sin ese contraste quedaban con el mismo
@@ -1345,10 +1348,10 @@ a { color: inherit; }
 .portada .ultimo-registro b { font-weight: 600; color: var(--gris-oscuro); }
 
 .portada .seguimiento {
-  font-family: 'Anton', 'Segoe UI', sans-serif; font-weight: 400;
-  text-transform: uppercase; letter-spacing: 0.01em;
-  font-size: clamp(1.6rem, 2.6vw, 2.2rem); line-height: 1.05;
-  color: var(--acento); margin-top: 0.75rem;
+  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.045em;
+  font-size: clamp(0.95rem, 1.5vw, 1.18rem); line-height: 1.25;
+  color: var(--gris); margin-top: 0.55rem;
 }
 
 .instruccion {
