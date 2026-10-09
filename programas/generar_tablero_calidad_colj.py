@@ -2023,31 +2023,41 @@ function pintarConsulta() {
   }).join('');
   selDesde.innerHTML = opciones;
   selHasta.innerHTML = opciones;
-  selOrden.innerHTML = '<option value="localidad">Localidad (A a Z)</option>' +
-    '<option value="fecha">Fecha</option>' +
-    '<option value="asistencias">Asistentes (de más a menos)</option>' +
-    '<option value="jovenes">Jóvenes (de más a menos)</option>' +
-    // Para cuando se ordena desde la tabla con un orden que la lista no
-    // tiene, como asistentes de menos a más. No se puede elegir en la lista.
-    '<option value="tabla" hidden>Elegido en la tabla</option>';
-
   // La tabla se ordena de dos maneras que comparten el mismo estado: con la
   // lista "Ordenar por" o con un clic en el título de una columna (el segundo
-  // clic invierte el orden). Cada una refleja lo que hizo la otra, y "Quitar
-  // filtros" las devuelve a localidad de la A a la Z. Los nombres arrancan de
-  // la A a la Z y las cifras de mayor a menor, que es lo que se busca.
+  // clic invierte el orden). Todo orden que se puede pedir en la tabla está
+  // también en la lista, para quien no sepa que los títulos se pueden tocar,
+  // y cada forma refleja lo que hizo la otra. "Quitar filtros" las devuelve
+  // a localidad de la A a la Z. Los nombres y las fechas arrancan de menor a
+  // mayor y las cifras de mayor a menor, que es lo que se busca.
   var COLUMNAS = [
-    {id: 'localidad', rot: 'Localidad'},
-    {id: 'fecha', rot: 'Fecha'},
-    {id: 'tipo', rot: 'Tipo'},
-    {id: 'asistencias', rot: 'Asistentes', cifra: true},
-    {id: 'jovenes', rot: 'Jóvenes', cifra: true}
+    {id: 'localidad', rot: 'Localidad', asc: 'A a Z', desc: 'Z a A'},
+    {id: 'fecha', rot: 'Fecha', asc: 'más antigua primero',
+     desc: 'más reciente primero'},
+    {id: 'tipo', rot: 'Tipo', asc: 'ordinarias primero',
+     desc: 'extraordinarias primero'},
+    {id: 'asistencias', rot: 'Asistentes', cifra: true,
+     asc: 'de menos a más', desc: 'de más a menos'},
+    {id: 'jovenes', rot: 'Jóvenes', cifra: true,
+     asc: 'de menos a más', desc: 'de más a menos'}
   ];
+  // En la lista, las opciones siguen el orden de las columnas, y en cada
+  // columna va primero el sentido con que arranca al hacer clic
+  selOrden.innerHTML = COLUMNAS.map(function (c) {
+    var sentidos = c.cifra ? ['desc', 'asc'] : ['asc', 'desc'];
+    return sentidos.map(function (s) {
+      return '<option value="' + c.id + '-' + s + '">' + c.rot + ' (' + c[s] +
+        ')</option>';
+    }).join('');
+  }).join('');
   function esCifra(id) {
     return COLUMNAS.some(function (c) { return c.id === id && c.cifra; });
   }
+  var RANGO_TIPO = {'Ordinaria': 0, 'Extraordinaria': 1};
   function comparar(id, a, b) {
-    if (id === 'localidad' || id === 'tipo') return a[id].localeCompare(b[id], 'es');
+    if (id === 'localidad') return a.localidad.localeCompare(b.localidad, 'es');
+    if (id === 'tipo') return (RANGO_TIPO[a.tipo] === undefined ? 2 : RANGO_TIPO[a.tipo]) -
+      (RANGO_TIPO[b.tipo] === undefined ? 2 : RANGO_TIPO[b.tipo]);
     if (id === 'fecha') return (a.mes * 100 + a.dia) - (b.mes * 100 + b.dia);
     return a[id] - b[id];
   }
@@ -2109,12 +2119,11 @@ function pintarConsulta() {
 
     // Orden: si se tocó la lista, manda la lista; después la lista muestra
     // el orden vigente, venga de donde venga
-    if (cambio === selOrden && selOrden.value !== 'tabla') {
-      orden = {id: selOrden.value, asc: !esCifra(selOrden.value)};
+    if (cambio === selOrden) {
+      var partes = selOrden.value.split('-');
+      orden = {id: partes[0], asc: partes[1] === 'asc'};
     }
-    var enLista = orden.asc === !esCifra(orden.id) &&
-      selOrden.querySelector('option[value="' + orden.id + '"]:not([hidden])');
-    selOrden.value = enLista ? orden.id : 'tabla';
+    selOrden.value = orden.id + '-' + (orden.asc ? 'asc' : 'desc');
 
     // El botón de quitar filtros solo aparece si algo cambió: así se sabe de
     // un vistazo si la tabla está completa o filtrada
