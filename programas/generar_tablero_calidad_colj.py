@@ -1650,6 +1650,21 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
 }
 .filtros .quitar:hover { text-decoration: underline; }
 .filtros .quitar:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+/* Los títulos de la tabla también ordenan. Se ven como los demás
+   encabezados; la columna que ordena va en gris oscuro con su flecha, y las
+   otras llevan una flecha doble tenue que avisa que se pueden ordenar. */
+.tabla-consulta th button.ordenar {
+  background: none; border: 0; padding: 0; margin: 0; cursor: pointer;
+  font: inherit; letter-spacing: inherit; text-transform: inherit;
+  color: inherit; white-space: nowrap;
+}
+.tabla-consulta th button.ordenar:hover,
+.tabla-consulta th button.activa { color: var(--gris-oscuro); }
+.tabla-consulta th button.ordenar:focus-visible {
+  outline: 2px solid var(--acento); outline-offset: 2px;
+}
+.tabla-consulta .flecha { margin-left: 4px; font-family: 'Segoe UI', sans-serif; }
+.tabla-consulta th button:not(.activa) .flecha { opacity: 0.5; }
 /* "27 de abril" partido en tres renglones no se lee como fecha */
 .tabla-consulta td.sin-corte { white-space: nowrap; }
 .tabla-consulta .mes-corto { display: none; }
@@ -2011,27 +2026,38 @@ function pintarConsulta() {
   selOrden.innerHTML = '<option value="localidad">Localidad (A a Z)</option>' +
     '<option value="fecha">Fecha</option>' +
     '<option value="asistencias">Asistentes (de más a menos)</option>' +
-    '<option value="jovenes">Jóvenes (de más a menos)</option>';
+    '<option value="jovenes">Jóvenes (de más a menos)</option>' +
+    // Para cuando se ordena desde la tabla con un orden que la lista no
+    // tiene, como asistentes de menos a más. No se puede elegir en la lista.
+    '<option value="tabla" hidden>Elegido en la tabla</option>';
 
-  function porLocalidad(a, b) { return a.localidad.localeCompare(b.localidad, 'es'); }
-  function porFecha(a, b) { return (a.mes * 100 + a.dia) - (b.mes * 100 + b.dia); }
-  // Los empates se resuelven por localidad y fecha
-  var ORDENES = {
-    localidad: function (a, b) { return porLocalidad(a, b) || porFecha(a, b); },
-    fecha: function (a, b) { return porFecha(a, b) || porLocalidad(a, b); },
-    asistencias: function (a, b) {
-      return (b.asistencias - a.asistencias) || porLocalidad(a, b) || porFecha(a, b);
-    },
-    jovenes: function (a, b) {
-      return (b.jovenes - a.jovenes) || porLocalidad(a, b) || porFecha(a, b);
-    }
-  };
+  // La tabla se ordena de dos maneras que comparten el mismo estado: con la
+  // lista "Ordenar por" o con un clic en el título de una columna (el segundo
+  // clic invierte el orden). Cada una refleja lo que hizo la otra, y "Quitar
+  // filtros" las devuelve a localidad de la A a la Z. Los nombres arrancan de
+  // la A a la Z y las cifras de mayor a menor, que es lo que se busca.
+  var COLUMNAS = [
+    {id: 'localidad', rot: 'Localidad'},
+    {id: 'fecha', rot: 'Fecha'},
+    {id: 'tipo', rot: 'Tipo'},
+    {id: 'asistencias', rot: 'Asistentes', cifra: true},
+    {id: 'jovenes', rot: 'Jóvenes', cifra: true}
+  ];
+  function esCifra(id) {
+    return COLUMNAS.some(function (c) { return c.id === id && c.cifra; });
+  }
+  function comparar(id, a, b) {
+    if (id === 'localidad' || id === 'tipo') return a[id].localeCompare(b[id], 'es');
+    if (id === 'fecha') return (a.mes * 100 + a.dia) - (b.mes * 100 + b.dia);
+    return a[id] - b[id];
+  }
+  var orden;
 
   function valoresIniciales() {
     selLoc.value = '';
     selDesde.value = '1';
     selHasta.value = String(nombres.length);
-    selOrden.value = 'localidad';
+    orden = {id: 'localidad', asc: true};
   }
 
   function actualizar(cambio) {
@@ -2081,15 +2107,40 @@ function pintarConsulta() {
     }
     document.getElementById('resumen-consulta').innerHTML = texto;
 
+    // Orden: si se tocó la lista, manda la lista; después la lista muestra
+    // el orden vigente, venga de donde venga
+    if (cambio === selOrden && selOrden.value !== 'tabla') {
+      orden = {id: selOrden.value, asc: !esCifra(selOrden.value)};
+    }
+    var enLista = orden.asc === !esCifra(orden.id) &&
+      selOrden.querySelector('option[value="' + orden.id + '"]:not([hidden])');
+    selOrden.value = enLista ? orden.id : 'tabla';
+
     // El botón de quitar filtros solo aparece si algo cambió: así se sabe de
     // un vistazo si la tabla está completa o filtrada
     var cambiado = loc || desde !== 1 || hasta !== nombres.length ||
-      selOrden.value !== 'localidad';
+      orden.id !== 'localidad' || !orden.asc;
     quitar.style.visibility = cambiado ? 'visible' : 'hidden';
 
     // Con una sola localidad elegida, la columna de localidad sobra
     var conLoc = !loc;
-    lista.sort(ORDENES[selOrden.value]);
+    lista.sort(function (a, b) {
+      var d = comparar(orden.id, a, b);
+      if (!orden.asc) d = -d;
+      // Los empates se resuelven por localidad y fecha
+      return d || comparar('localidad', a, b) || comparar('fecha', a, b);
+    });
+    var cab = COLUMNAS.filter(function (c) {
+      return conLoc || c.id !== 'localidad';
+    }).map(function (c) {
+      var activa = c.id === orden.id;
+      var flecha = activa ? (orden.asc ? '&uarr;' : '&darr;') : '&varr;';
+      return '<th' + (activa ? ' aria-sort="' +
+          (orden.asc ? 'ascending' : 'descending') + '"' : '') + '>' +
+        '<button type="button" class="ordenar' + (activa ? ' activa' : '') +
+        '" data-col="' + c.id + '">' + c.rot +
+        '<span class="flecha">' + flecha + '</span></button></th>';
+    }).join('');
     var filas = lista.map(function (s) {
       return '<tr>' + (conLoc ? '<td>' + s.localidad + '</td>' : '') +
         '<td class="sin-corte">' + s.dia +
@@ -2100,9 +2151,7 @@ function pintarConsulta() {
         '<td>' + miles(s.asistencias) + '</td>' +
         '<td>' + miles(s.jovenes) + '</td></tr>';
     }).join('');
-    tabla.innerHTML = '<thead><tr>' + (conLoc ? '<th>Localidad</th>' : '') +
-      '<th>Fecha</th><th>Tipo</th><th>Asistentes</th><th>Jóvenes</th>' +
-      '</tr></thead><tbody>' + filas +
+    tabla.innerHTML = '<thead><tr>' + cab + '</tr></thead><tbody>' + filas +
       '<tr class="total"><td>Promedio</td>' + (conLoc ? '<td></td>' : '') +
       '<td></td><td>' + (n ? pA : '') + '</td>' +
       '<td>' + (n ? pJ : '') + '</td></tr>' +
@@ -2112,6 +2161,18 @@ function pintarConsulta() {
 
   [selLoc, selDesde, selHasta, selOrden].forEach(function (s) {
     s.addEventListener('change', function () { actualizar(s); });
+  });
+  tabla.addEventListener('click', function (e) {
+    var boton = e.target.closest('button.ordenar');
+    if (!boton) return;
+    var id = boton.getAttribute('data-col');
+    orden = orden.id === id ? {id: id, asc: !orden.asc}
+                            : {id: id, asc: !esCifra(id)};
+    actualizar(null);
+    // La tabla se vuelve a pintar: el foco vuelve al mismo título para quien
+    // ordena con el teclado
+    var nuevo = tabla.querySelector('button[data-col="' + id + '"]');
+    if (nuevo) nuevo.focus();
   });
   quitar.addEventListener('click', function () {
     valoresIniciales();
@@ -2414,8 +2475,9 @@ def pagina_periodicidad():
   <div class="rotulo-seccion">
     <h2>Consulta por mes y localidad</h2>
     <p>Elige una localidad, un rango de meses o las dos cosas, y cómo ordenar
-       la tabla. Las cifras de asistentes son las de la última carga de cada
-       sesión, y el promedio es por sesión.</p>
+       la tabla (también con un clic en el título de cada columna). Las cifras
+       de asistentes son las de la última carga de cada sesión, y el promedio
+       es por sesión.</p>
   </div>
   <div class="filtros">
     <label>Localidad <select id="filtro-localidad"></select></label>
