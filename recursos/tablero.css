@@ -211,10 +211,14 @@ a { color: inherit; }
 
 /* Los accesos de la portada. Cada uno lleva su propia cifra, para que desde
    la portada ya se sepa qué hay adentro sin tener que entrar. */
+/* Seis accesos en dos filas de tres. Con el ancho automático quedaban cinco
+   arriba y uno solo abajo. */
 .accesos {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
+  display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
 }
+@media (max-width: 900px) { .accesos { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .accesos { grid-template-columns: 1fr; } }
 .acceso {
   display: block; text-decoration: none; background: var(--blanco);
   border-radius: 10px; padding: 1.3rem 1.4rem 1.2rem;
@@ -424,7 +428,42 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
    automático de arriba se consume al empujar. */
 .container, .portada { padding-bottom: 2.5rem; }
 
+/* ---------------------------------------------------------- sesiones por mes */
+
+/* Un mes sin sesión va con un cuadro en el neutral, no en rojo: el reglamento
+   pide una sesión ordinaria cada dos meses, así que un mes vacío no es un
+   incumplimiento. Es el mismo cuadro de los bimestres sin sesión en la página
+   de periodicidad, más pequeño para que no compita con las cifras. */
+.vacio {
+  display: inline-block; width: 8px; height: 8px; border-radius: 2px;
+  background: var(--neutral); vertical-align: 1px;
+}
+/* Marca del mes que todavía puede recibir cargas */
+.preliminar {
+  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.68rem;
+  color: var(--gris-oscuro); background: var(--gris-claro);
+  padding: 2px 7px; border-radius: 4px; margin-left: 6px; vertical-align: 1px;
+}
+/* La marca va en gris oscuro: el gris de texto sobre gris claro no llega al
+   contraste mínimo, igual que en .marca-pendiente. Y se pinta en blanco al
+   pasar el mouse por la fila, que se vuelve gris claro. */
+tbody tr:hover .preliminar { background: var(--blanco); }
+/* Sesiones cargadas el mismo mes en que se hicieron: solo peso, sin color,
+   porque el acento del tablero es cromo y nunca estado. */
+td.mismo-mes { font-weight: 600; }
+/* La columna de totales se separa de los meses. El peso va acá y no con <b>,
+   porque Figtree está empaquetada hasta 600. */
+.tabla-meses td.col-total, .tabla-meses th.col-total {
+  border-left: 2px solid var(--gris-claro);
+}
+.tabla-meses td.col-total { font-weight: 600; }
+
 @media (max-width: 700px) {
+  /* En las tablas por mes, el nombre de la localidad queda fijo al desplazar */
+  .tabla-meses td:first-child, .tabla-meses th:first-child {
+    position: sticky; left: 0; background: var(--blanco); z-index: 1;
+  }
   .titulo-zona h1 { font-size: 2rem; }
   .rotulo-seccion h2 { font-size: 1.3rem; }
   .tabla-ancha { overflow-x: auto; }

@@ -24,8 +24,19 @@ Guarda el Excel, cierra el archivo y corre el paso 3.
 2. ACTUALIZAR LAS CIFRAS
 ------------------------
 Las cifras no se editan acá: salen solas de las carpetas de actas y del
-Excel de seguimiento. Basta con correr el paso 3 después de que entren
-actas nuevas o de que los equipos reporten al formulario.
+Excel de seguimiento.
+
+Si entraron actas nuevas a la carpeta 2026, antes del paso 3 hay que correr
+el programa que las lee por dentro, desde la carpeta COLJ:
+
+    python programas/revision_periodica/3_extraer_calidad_actas_2026.py
+
+El generador no abre las actas: lee el resultado de ese programa. Si se
+salta este paso, el tablero se genera sin errores pero con las actas de la
+corrida anterior. El orden completo de la revisión está en
+programas/revision_periodica/LEEME.txt.
+
+Si solo cambió el Excel del formulario, basta con correr el paso 3.
 
 La fecha de corte también se calcula sola: es la última sesión reportada.
 

@@ -52,10 +52,12 @@ import json
 import base64
 import unicodedata
 import collections
+import datetime
 import warnings
 
 warnings.filterwarnings("ignore")
 
+import numpy as np   # viene con pandas; se usa para contar días hábiles
 import pandas as pd
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
@@ -186,6 +188,50 @@ CARGAS_REPETIDAS = {
 # No es una regla del decreto: es el punto donde el silencio del espacio deja
 # de ser una fecha corrida y empieza a ser una ausencia.
 DIAS_SIN_SESIONAR_ALERTA = 61
+
+# Días hábiles que tiene un equipo local para cargar la sesión al formulario,
+# contados desde el día siguiente a la sesión. Son hábiles, no corridos: no
+# cuentan sábados, domingos ni festivos de Colombia (confirmado por Carolina el
+# 6 de octubre de 2026). Falta ubicar el documento donde está escrito.
+PLAZO_CARGA_DIAS = 15
+
+
+def festivos_colombia(anio):
+    """Festivos de Colombia en un año, según la Ley 51 de 1983 (ley Emiliani).
+
+    Se calculan en vez de escribirse a mano para que el tablero no dependa de
+    que alguien actualice una lista cada enero. Seis festivos son fijos; siete
+    se corren al lunes siguiente si no caen en lunes; y cinco dependen de la
+    Pascua, de los cuales tres también se corren al lunes.
+    """
+    from dateutil.easter import easter
+
+    def al_lunes(fecha):
+        return fecha + datetime.timedelta(days=(7 - fecha.weekday()) % 7)
+
+    d = datetime.date
+    pascua = easter(anio)
+    dias = datetime.timedelta
+    fijos = [d(anio, 1, 1), d(anio, 5, 1), d(anio, 7, 20), d(anio, 8, 7),
+             d(anio, 12, 8), d(anio, 12, 25)]
+    trasladables = [al_lunes(d(anio, m, n)) for m, n in
+                    ((1, 6), (3, 19), (6, 29), (8, 15), (10, 12), (11, 1),
+                     (11, 11))]
+    de_pascua = [pascua - dias(days=3), pascua - dias(days=2),   # jueves y viernes santo
+                 al_lunes(pascua + dias(days=39)),   # Ascensión
+                 al_lunes(pascua + dias(days=60)),   # Corpus Christi
+                 al_lunes(pascua + dias(days=68))]   # Sagrado Corazón
+    return sorted(fijos + trasladables + de_pascua)
+
+
+def dias_habiles(desde, hasta):
+    """Días hábiles entre una sesión y su carga, sin contar el día de la
+    sesión y contando el día de la carga. Una carga el mismo día da cero."""
+    anios = range(min(desde.year, hasta.year), max(desde.year, hasta.year) + 1)
+    festivos = [f for a in anios for f in festivos_colombia(a)]
+    inicio = desde + datetime.timedelta(days=1)
+    fin = hasta + datetime.timedelta(days=1)
+    return int(np.busday_count(inicio, fin, holidays=festivos))
 NOMBRE_BIMESTRE = {1: "enero y febrero", 2: "marzo y abril",
                    3: "mayo y junio", 4: "julio y agosto",
                    5: "septiembre y octubre", 6: "noviembre y diciembre"}
@@ -347,8 +393,15 @@ def bimestre_de(mes):
 
 # ------------------------------------------------------- revisión de actas
 
-def revisar_numeracion(acta):
-    """Clasifica cómo quedó el número del acta. Devuelve estado y detalle."""
+def revisar_numeracion(acta, comite_form=None):
+    """Clasifica cómo quedó el número del acta. Devuelve estado y detalle.
+
+    El número de adentro se compara contra el número de comité que quedó en el
+    formulario, que es lo que se reporta. Hasta el 6 de octubre de 2026 se
+    comparaba contra el nombre del archivo, y el tablero y la presentación a
+    los equipos locales daban cifras distintas para lo mismo. Si la sesión no
+    tiene respuesta en el formulario, se usa el número del nombre del archivo.
+    """
     if acta["texto_leido"] < 300:
         return "escaneo", ("el PDF está guardado como imagen, así que no se "
                            "alcanza a leer el número por dentro")
@@ -357,7 +410,12 @@ def revisar_numeracion(acta):
         return "sin_linea", "al documento le falta la línea ACTA N°"
     if estado == "en_blanco":
         return "blanco", "la línea ACTA N° quedó sin número"
-    if acta["num_declarado"] != acta["num_nombre"]:
+    if comite_form is not None:
+        if acta["num_declarado"] != comite_form:
+            return "distinto", ("en el formulario quedó como comité %s y por "
+                                "dentro dice ACTA N° %s"
+                                % (comite_form, acta["num_declarado"]))
+    elif acta["num_declarado"] != acta["num_nombre"]:
         return "distinto", ("el nombre del archivo dice acta %s y por dentro "
                             "dice ACTA N° %s"
                             % (acta["num_nombre"], acta["num_declarado"]))
@@ -544,6 +602,87 @@ def avisar_numeros_repetidos(unicas):
         print("Si es una carga repetida, agrégala a CARGAS_REPETIDAS.\n")
 
 
+def datos_por_mes(f26, unicas, fecha_corte):
+    """Sesiones por mes, según la fecha de la sesión y la fecha de su carga.
+
+    Cada sesión se cuenta en el mes en que se hizo, no en el que se reportó.
+    La fecha de reporte es la primera vez que la sesión entra al formulario:
+    si después se corrige, la corrección no reinicia el reloj. Las cifras de
+    asistentes son las de la última carga, igual que en el resto del tablero.
+
+    El mes del corte queda marcado como preliminar, porque todavía pueden
+    llegar cargas de ese mes. Por la misma razón, el plazo de carga se mide
+    solo sobre los meses anteriores al del corte: en el mes abierto, las
+    sesiones que van a llegar tarde todavía no han llegado y el rezago se
+    vería más corto de lo que es.
+    """
+    def indice(fecha):
+        # Meses contados desde enero de 2026, para que una carga de 2027 no
+        # se confunda con un mes de 2026
+        return (fecha.year - 2026) * 12 + fecha.month
+
+    primera = f26.groupby(["Localidad", "fecha"])["Marca temporal"].min()
+    ses = unicas.set_index(["Localidad", "fecha"]).copy()
+    ses["reporte"] = primera
+    ses = ses.reset_index()
+    ses["mes"] = ses["fecha"].apply(indice)
+    ses["mes_reporte"] = ses["reporte"].apply(indice)
+    # Días hábiles, porque así está fijado el plazo de carga
+    ses["dias"] = [dias_habiles(f.date(), r.date())
+                   for f, r in zip(ses["fecha"], ses["reporte"])]
+    jovenes = pd.to_numeric(ses["Cantidad de asistentes jóvenes"],
+                            errors="coerce").fillna(0)
+    no_juveniles = pd.to_numeric(
+        ses["Cantidad de asistentes (no juveniles)"], errors="coerce").fillna(0)
+    ses["jovenes"] = jovenes
+    ses["asistencias"] = jovenes + no_juveniles
+
+    mes_corte = indice(fecha_corte)
+    meses = list(range(int(ses["mes"].min()), mes_corte + 1))
+    meses_reporte = list(range(meses[0], int(ses["mes_reporte"].max()) + 1))
+
+    def nombre_mes(i):
+        return MESES[(i - 1) % 12]
+
+    filas = []
+    for m in meses:
+        del_mes = ses[ses["mes"] == m]
+        filas.append({
+            "nombre": nombre_mes(m).capitalize(),
+            "abrev": nombre_mes(m)[:3].capitalize(),
+            "preliminar": m == mes_corte,
+            "sesiones": len(del_mes),
+            "localidades": int(del_mes["Localidad"].nunique()),
+            "asistencias": int(del_mes["asistencias"].sum()),
+            "jovenes": int(del_mes["jovenes"].sum()),
+            "en_plazo": int((del_mes["dias"] <= PLAZO_CARGA_DIAS).sum()),
+            # Cuántas de las sesiones del mes se cargaron en cada mes
+            "cargas": [int((del_mes["mes_reporte"] == r).sum())
+                       for r in meses_reporte],
+        })
+
+    por_localidad = [{"localidad": loc,
+                      "meses": [int(((ses["Localidad"] == loc)
+                                     & (ses["mes"] == m)).sum())
+                                for m in meses]}
+                     for loc in ORDEN]
+
+    cerradas = ses[ses["mes"] < mes_corte]
+    return {
+        "meses": filas,
+        "meses_reporte": [nombre_mes(r)[:3].capitalize()
+                          for r in meses_reporte],
+        "por_localidad": por_localidad,
+        "plazo_dias": PLAZO_CARGA_DIAS,
+        "cerradas": len(cerradas),
+        "en_plazo_cerradas": int((cerradas["dias"] <= PLAZO_CARGA_DIAS).sum()),
+        "mediana_dias": (int(round(cerradas["dias"].median()))
+                         if len(cerradas) else None),
+        "primer_mes": nombre_mes(meses[0]),
+        "ultimo_mes_cerrado": nombre_mes(mes_corte - 1),
+    }
+
+
 def construir():
     """Arma el resumen por localidad cruzando actas, carpeta y formulario."""
     with open(JSON_ACTAS, encoding="utf-8") as f:
@@ -573,7 +712,14 @@ def construir():
 
     f26 = f26[~marcas.isin(CARGAS_REPETIDAS)]
 
-    unicas = f26.drop_duplicates(subset=["Localidad", "fecha"])
+    # Una sesión cargada dos veces con la misma fecha queda una sola vez. La
+    # regla, acordada el 6 de octubre de 2026: las cifras son las de la última
+    # carga, porque la segunda suele ser una corrección (Sumapaz volvió a
+    # cargar la sesión del 12 de septiembre con 6 jóvenes en vez de 16, y el
+    # acta le da la razón). La fecha de reporte, en cambio, es la primera
+    # carga, y se calcula aparte en datos_por_mes().
+    f26 = f26.sort_values("Marca temporal")
+    unicas = f26.drop_duplicates(subset=["Localidad", "fecha"], keep="last")
     avisar_numeros_repetidos(unicas)
 
     # El corte es la última sesión reportada, no una fecha escrita a mano: así
@@ -620,6 +766,7 @@ def construir():
     reportado_num = {}
     modalidad_num = {}
     fecha_form_num = {}
+    comite_fecha = {}
     for _, fila in unicas.iterrows():
         clave = (fila["Localidad"], fila["fecha"].strftime("%Y-%m-%d"))
         cifras_fila = (fila["Cantidad de asistentes (no juveniles)"],
@@ -630,6 +777,9 @@ def construir():
             clave_num = (fila["Localidad"], int(fila["Número de comité"]))
         except (TypeError, ValueError):
             continue
+        # El número de comité de cada sesión, para comparar contra el que
+        # trae el acta por dentro
+        comite_fecha[clave] = clave_num[1]
         # Si un número viniera repetido dentro de una localidad no se usa,
         # porque no habría forma de saber a cuál de las dos se refiere.
         if clave_num in reportado_num:
@@ -802,7 +952,12 @@ def construir():
         detalle = []
         pendientes_imagen = []
         for acta in propias:
-            estado_num, nota_num = revisar_numeracion(acta)
+            # El comité del formulario se busca por la fecha del archivo. Si
+            # el acta solo cruza por número, ese número es el mismo del
+            # formulario y no hay nada distinto que señalar en la numeración;
+            # la fecha que no coincide se reporta en su propio campo.
+            comite_form = comite_fecha.get((nombre, acta["fecha_nombre"]))
+            estado_num, nota_num = revisar_numeracion(acta, comite_form)
             estado_rec, nota_rec = revisar_recuadro(acta)
             num[estado_num] += 1
             rec[estado_rec] += 1
@@ -991,6 +1146,7 @@ def construir():
             "bimestres_exigidos": len(BIMESTRES_CERRADOS),
             "resumen": resumen, "localidades": localidades,
             "serie": serie, "totales_serie": totales_serie,
+            "meses": datos_por_mes(f26, unicas, fecha_corte),
             "enlaces": leer_enlaces()}
 
 
@@ -1206,10 +1362,14 @@ a { color: inherit; }
 
 /* Los accesos de la portada. Cada uno lleva su propia cifra, para que desde
    la portada ya se sepa qué hay adentro sin tener que entrar. */
+/* Seis accesos en dos filas de tres. Con el ancho automático quedaban cinco
+   arriba y uno solo abajo. */
 .accesos {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
+  display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
 }
+@media (max-width: 900px) { .accesos { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .accesos { grid-template-columns: 1fr; } }
 .acceso {
   display: block; text-decoration: none; background: var(--blanco);
   border-radius: 10px; padding: 1.3rem 1.4rem 1.2rem;
@@ -1419,7 +1579,42 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
    automático de arriba se consume al empujar. */
 .container, .portada { padding-bottom: 2.5rem; }
 
+/* ---------------------------------------------------------- sesiones por mes */
+
+/* Un mes sin sesión va con un cuadro en el neutral, no en rojo: el reglamento
+   pide una sesión ordinaria cada dos meses, así que un mes vacío no es un
+   incumplimiento. Es el mismo cuadro de los bimestres sin sesión en la página
+   de periodicidad, más pequeño para que no compita con las cifras. */
+.vacio {
+  display: inline-block; width: 8px; height: 8px; border-radius: 2px;
+  background: var(--neutral); vertical-align: 1px;
+}
+/* Marca del mes que todavía puede recibir cargas */
+.preliminar {
+  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.68rem;
+  color: var(--gris-oscuro); background: var(--gris-claro);
+  padding: 2px 7px; border-radius: 4px; margin-left: 6px; vertical-align: 1px;
+}
+/* La marca va en gris oscuro: el gris de texto sobre gris claro no llega al
+   contraste mínimo, igual que en .marca-pendiente. Y se pinta en blanco al
+   pasar el mouse por la fila, que se vuelve gris claro. */
+tbody tr:hover .preliminar { background: var(--blanco); }
+/* Sesiones cargadas el mismo mes en que se hicieron: solo peso, sin color,
+   porque el acento del tablero es cromo y nunca estado. */
+td.mismo-mes { font-weight: 600; }
+/* La columna de totales se separa de los meses. El peso va acá y no con <b>,
+   porque Figtree está empaquetada hasta 600. */
+.tabla-meses td.col-total, .tabla-meses th.col-total {
+  border-left: 2px solid var(--gris-claro);
+}
+.tabla-meses td.col-total { font-weight: 600; }
+
 @media (max-width: 700px) {
+  /* En las tablas por mes, el nombre de la localidad queda fijo al desplazar */
+  .tabla-meses td:first-child, .tabla-meses th:first-child {
+    position: sticky; left: 0; background: var(--blanco); z-index: 1;
+  }
   .titulo-zona h1 { font-size: 2rem; }
   .rotulo-seccion h2 { font-size: 1.3rem; }
   .tabla-ancha { overflow-x: auto; }
@@ -1609,6 +1804,12 @@ function pintarAccesosZoom() {
     {href: 'pendientes.html', cifra: r.con_pendientes,
      nombre: 'Qué queda pendiente de cargar',
      glosa: 'Localidades con alguna sesión o documento por entregar.'},
+    {href: 'meses.html',
+     cifra: D.meses.en_plazo_cerradas + ' de ' + D.meses.cerradas,
+     nombre: 'Sesiones por mes',
+     glosa: 'Sesiones de ' + D.meses.primer_mes + ' a ' +
+            D.meses.ultimo_mes_cerrado + ' cargadas en los ' +
+            D.meses.plazo_dias + ' días hábiles siguientes.'},
     {href: 'detalle.html', cifra: r.actas_con_ajustes,
      nombre: 'Ajustes por acta',
      glosa: 'Actas que necesitan algún ajuste en su registro.'},
@@ -1650,7 +1851,7 @@ function pintarResumenAjustes() {
      glosa: 'De ' + r.actas + '. No necesitan ningún ajuste.'},
     {v: r.num_problema, rot: 'Numeración por ajustar',
      glosa: 'El número que trae el acta por dentro no coincide con el del ' +
-            'archivo o quedó vacío.'},
+            'formulario o quedó vacío.'},
     {v: r.rec_problema, rot: 'Recuadros por completar',
      glosa: 'Al cuadro de participantes le falta algo o sus filas no suman.'},
     {v: r.cifras_difieren, rot: 'Cifras por conciliar',
@@ -1691,6 +1892,101 @@ function pintarPeriodicidad() {
       ? 'Al corte, ' + r.en_silencio + (r.en_silencio === 1 ? ' localidad.' : ' localidades.')
       : 'Al corte, ninguna.';
   }
+}
+
+/* Formato colombiano: miles con punto y decimales con coma */
+function miles(n) {
+  var s = String(n), salida = '';
+  while (s.length > 3) {
+    salida = '.' + s.slice(-3) + salida;
+    s = s.slice(0, -3);
+  }
+  return s + salida;
+}
+function decimal(x) { return x.toFixed(1).replace('.', ','); }
+
+function pintarMeses() {
+  var M = D.meses;
+  var punto = '<i class="vacio" title="Sin sesión"></i>';
+  var marca = '<span class="preliminar">preliminar</span>';
+
+  var ultimo = M.meses[M.meses.length - 1];
+  franja('franja-meses', [
+    {v: D.resumen.sesiones_formulario, rot: 'Sesiones en 2026',
+     glosa: 'De ' + M.primer_mes + ' a ' + ultimo.nombre.toLowerCase() +
+            ', contadas en el mes en que se hizo la sesión.'},
+    {v: ultimo.sesiones, rot: ultimo.nombre,
+     glosa: 'Preliminar: todavía pueden llegar cargas de ese mes.'},
+    {v: M.en_plazo_cerradas + ' de ' + M.cerradas,
+     rot: 'Cargadas en ' + M.plazo_dias + ' días hábiles',
+     glosa: 'Sesiones de ' + M.primer_mes + ' a ' + M.ultimo_mes_cerrado +
+            ', con el plazo ya vencido.'},
+    {v: M.mediana_dias, rot: 'Días hábiles hasta la carga',
+     glosa: 'Mediana entre la sesión y la primera vez que entra al ' +
+            'formulario, ' + M.primer_mes + ' a ' + M.ultimo_mes_cerrado + '.'}
+  ]);
+
+  // 1. La ciudad mes a mes
+  var tS = 0, tA = 0, tJ = 0;
+  var filas = M.meses.map(function (m) {
+    tS += m.sesiones; tA += m.asistencias; tJ += m.jovenes;
+    return '<tr><td>' + m.nombre + (m.preliminar ? marca : '') + '</td>' +
+      '<td>' + m.sesiones + '</td><td>' + m.localidades + '</td>' +
+      '<td>' + miles(m.asistencias) + '</td><td>' + miles(m.jovenes) + '</td>' +
+      '<td>' + (m.sesiones ? decimal(m.jovenes / m.sesiones) : '') + '</td>' +
+      '<td>' + (m.asistencias ? decimal(m.jovenes / m.asistencias * 100) + '%'
+                              : '') + '</td></tr>';
+  }).join('');
+  document.getElementById('tabla-ciudad-mes').innerHTML =
+    '<thead><tr><th>Mes</th><th>Sesiones</th><th>Localidades<br>que ' +
+    'sesionaron</th><th>Asistencias</th><th>Jóvenes</th><th>Jóvenes<br>por ' +
+    'sesión</th><th>Jóvenes sobre<br>asistencias</th></tr></thead><tbody>' +
+    filas + '<tr class="total"><td>Total</td><td>' + tS + '</td><td></td>' +
+    '<td>' + miles(tA) + '</td><td>' + miles(tJ) + '</td>' +
+    '<td>' + decimal(tJ / tS) + '</td>' +
+    '<td>' + decimal(tJ / tA * 100) + '%</td></tr></tbody>';
+
+  // 2. Cada localidad mes a mes
+  var cab = M.meses.map(function (m) {
+    return '<th>' + m.abrev + (m.preliminar ? '*' : '') + '</th>';
+  }).join('');
+  var porMes = M.meses.map(function () { return 0; });
+  var filasLoc = M.por_localidad.map(function (l) {
+    var total = 0;
+    var celdas = l.meses.map(function (n, i) {
+      total += n; porMes[i] += n;
+      return '<td>' + (n ? n : punto) + '</td>';
+    }).join('');
+    return '<tr><td>' + l.localidad + '</td>' + celdas +
+      '<td class="col-total">' + total + '</td></tr>';
+  }).join('');
+  var totalLoc = porMes.reduce(function (a, b) { return a + b; }, 0);
+  document.getElementById('tabla-localidad-mes').innerHTML =
+    '<thead><tr><th>Localidad</th>' + cab +
+    '<th class="col-total">Total</th></tr></thead><tbody>' + filasLoc +
+    '<tr class="total"><td>Total</td>' + porMes.map(function (n) {
+      return '<td>' + n + '</td>'; }).join('') +
+    '<td class="col-total">' + totalLoc + '</td></tr></tbody>';
+
+  // 3. Cuándo llegó cada sesión: filas por mes de la sesión, columnas por
+  // mes de la primera carga. Las celdas anteriores al mes de la sesión van
+  // vacías porque nadie carga una sesión antes de hacerla.
+  var cabRep = M.meses_reporte.map(function (a) {
+    return '<th>' + a + '</th>'; }).join('');
+  var filasRep = M.meses.map(function (m, i) {
+    var celdas = m.cargas.map(function (n, j) {
+      if (j < i) return '<td></td>';
+      if (!n) return '<td>' + punto + '</td>';
+      return '<td' + (j === i ? ' class="mismo-mes"' : '') + '>' + n + '</td>';
+    }).join('');
+    return '<tr><td>' + m.nombre + (m.preliminar ? marca : '') + '</td>' +
+      celdas + '<td class="col-total">' + m.sesiones + '</td>' +
+      '<td>' + m.en_plazo + ' de ' + m.sesiones + '</td></tr>';
+  }).join('');
+  document.getElementById('tabla-cargas-mes').innerHTML =
+    '<thead><tr><th>Mes de la sesión</th>' + cabRep +
+    '<th class="col-total">Total</th><th>En ' + M.plazo_dias +
+    ' días<br>hábiles o menos</th></tr></thead><tbody>' + filasRep + '</tbody>';
 }
 
 function pintarDocumentos() {
@@ -1812,7 +2108,7 @@ def envoltura(pestana, pagina, llamada, es_portada=False, vuelve_a=None,
     con_corte agrega el recordatorio de hasta cuándo llegan los datos. Va en
     las páginas con tablas y no en las que solo tienen enlaces.
 
-    vuelve_a dice a dónde lleva el botón de volver. Las cinco vistas del año
+    vuelve_a dice a dónde lleva el botón de volver. Las seis vistas del año
     en curso regresan a zoom.html, que es de donde se entra a ellas, y no a la
     portada: volver siempre al inicio obligaría a rehacer dos clics.
     """
@@ -1903,14 +2199,14 @@ def pagina_estadisticas():
 
 
 def pagina_zoom(mes_corte):
-    """Página que agrupa las cinco vistas de la vigencia en curso.
+    """Página que agrupa las seis vistas de la vigencia en curso.
 
     Recibe el mes de corte porque el texto de entrada nombra el rango de meses
     que cubre el tablero. Antes esa frase estaba escrita a mano y se quedaba
     con el mes del corte anterior cada vez que entraban sesiones nuevas.
     """
     titulo = """  <h1>Zoom año en curso</h1>
-  <p class="intro">Cómo va cada localidad en 2026, en cinco vistas. La cifra de
+  <p class="intro">Cómo va cada localidad en 2026, en seis vistas. La cifra de
      cada acceso adelanta lo que se va a encontrar adentro.</p>
 """
     cuerpo = """
@@ -1989,6 +2285,58 @@ def pagina_periodicidad():
     </table>
   </div>
 """
+    return {"titulo": titulo, "cuerpo": cuerpo}
+
+
+def pagina_meses():
+    """Página de sesiones por mes: cuándo se hicieron y cuándo se cargaron."""
+    titulo = """  <h1>Sesiones por mes</h1>
+  <p class="intro">Cuántas sesiones hubo cada mes, según la fecha en que se
+     hizo la sesión, y cuándo llegó cada una al formulario. Un mes sin sesión
+     no es un incumplimiento: el reglamento pide una sesión ordinaria cada dos
+     meses, y eso se mide en la página de periodicidad.</p>
+"""
+    cuerpo = """
+  <div class="franja" id="franja-meses"></div>
+
+  <div class="rotulo-seccion">
+    <span class="numero">1</span>
+    <h2>La ciudad mes a mes</h2>
+    <p>Asistencias cuenta participaciones, no personas: quien va a dos
+       sesiones cuenta dos veces. Las cifras son las de la última carga de
+       cada sesión.</p>
+  </div>
+  <div class="tarjeta tabla-ancha"><table id="tabla-ciudad-mes"></table></div>
+
+  <div class="rotulo-seccion">
+    <span class="numero">2</span>
+    <h2>Cada localidad mes a mes</h2>
+    <p>Número de sesiones por mes. El cuadro gris marca un mes sin sesión.
+       El mes con asterisco es preliminar.</p>
+  </div>
+  <div class="tarjeta tabla-ancha tabla-meses">
+    <table id="tabla-localidad-mes"></table>
+  </div>
+
+  <div class="rotulo-seccion">
+    <span class="numero">3</span>
+    <h2>Cuándo llegó cada sesión</h2>
+    <p>Cada fila es el mes en que se hizo la sesión y cada columna el mes en
+       que se cargó por primera vez al formulario. Por eso un mes ya
+       publicado puede crecer en el siguiente corte. El plazo para cargar es
+       de %d días hábiles, sin contar sábados, domingos ni festivos.</p>
+  </div>
+  <div class="leyenda">
+    <div>En negrita, las sesiones que se cargaron el mismo mes en que se
+      hicieron. Eso no equivale a cumplir el plazo, que se cuenta en la última
+      columna.</div>
+    <div><i class="vacio"></i> Mes sin cargas de esa fila. Las celdas en
+      blanco son meses anteriores a la sesión.</div>
+  </div>
+  <div class="tarjeta tabla-ancha tabla-meses">
+    <table id="tabla-cargas-mes"></table>
+  </div>
+""" % PLAZO_CARGA_DIAS
     return {"titulo": titulo, "cuerpo": cuerpo}
 
 
@@ -2075,7 +2423,7 @@ def pagina_ajustes():
     <div><span class="punto bien"></span>Actas ya listas</div>
     <div><span class="punto mal"></span>Actas con algún ajuste</div>
     <div>Numeración: el número que trae el acta por dentro no coincide con el
-      del archivo, quedó vacío o no está.</div>
+      número de comité del formulario, quedó vacío o no está.</div>
     <div>Recuadro: al cuadro de participantes le falta diligenciar algo, se
       cambió respecto al formato o sus filas no suman.</div>
     <div>Fecha: el nombre del archivo del acta dice una fecha de sesión y en
@@ -2180,6 +2528,8 @@ def main():
          pagina_periodicidad(), "pintarPeriodicidad();", False),
         ("documentos.html", "Documentos de cada sesión · COLJ 2026",
          pagina_documentos(), "pintarDocumentos();", False),
+        ("meses.html", "Sesiones por mes · COLJ 2026",
+         pagina_meses(), "pintarMeses();", False),
         ("pendientes.html", "Qué queda pendiente de cargar · COLJ 2026",
          pagina_pendientes(), "pintarPendientes();", False),
         ("ajustes.html", "Ajustes por localidad · COLJ 2026",
@@ -2187,11 +2537,11 @@ def main():
         ("detalle.html", "Ajustes por acta · COLJ 2026",
          pagina_detalle(), "pintarDetalle();", False),
     ]
-    # Las cinco vistas del año en curso vuelven a zoom.html, que es de donde
+    # Las seis vistas del año en curso vuelven a zoom.html, que es de donde
     # se entra a ellas; el resto vuelve a la portada.
     vuelve_a_zoom = ("zoom.html", "Zoom año en curso")
     de_zoom = {"periodicidad.html", "documentos.html", "pendientes.html",
-               "ajustes.html", "detalle.html"}
+               "meses.html", "ajustes.html", "detalle.html"}
     # Todas las páginas con datos llevan el recordatorio del corte. La de
     # enlaces no, porque ahí no hay ninguna cifra que se pueda leer mal.
     con_corte = de_zoom | {"estadisticas.html", "zoom.html"}

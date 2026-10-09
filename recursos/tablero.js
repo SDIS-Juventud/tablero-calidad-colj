@@ -177,6 +177,12 @@ function pintarAccesosZoom() {
     {href: 'pendientes.html', cifra: r.con_pendientes,
      nombre: 'Qué queda pendiente de cargar',
      glosa: 'Localidades con alguna sesión o documento por entregar.'},
+    {href: 'meses.html',
+     cifra: D.meses.en_plazo_cerradas + ' de ' + D.meses.cerradas,
+     nombre: 'Sesiones por mes',
+     glosa: 'Sesiones de ' + D.meses.primer_mes + ' a ' +
+            D.meses.ultimo_mes_cerrado + ' cargadas en los ' +
+            D.meses.plazo_dias + ' días hábiles siguientes.'},
     {href: 'detalle.html', cifra: r.actas_con_ajustes,
      nombre: 'Ajustes por acta',
      glosa: 'Actas que necesitan algún ajuste en su registro.'},
@@ -218,7 +224,7 @@ function pintarResumenAjustes() {
      glosa: 'De ' + r.actas + '. No necesitan ningún ajuste.'},
     {v: r.num_problema, rot: 'Numeración por ajustar',
      glosa: 'El número que trae el acta por dentro no coincide con el del ' +
-            'archivo o quedó vacío.'},
+            'formulario o quedó vacío.'},
     {v: r.rec_problema, rot: 'Recuadros por completar',
      glosa: 'Al cuadro de participantes le falta algo o sus filas no suman.'},
     {v: r.cifras_difieren, rot: 'Cifras por conciliar',
@@ -259,6 +265,101 @@ function pintarPeriodicidad() {
       ? 'Al corte, ' + r.en_silencio + (r.en_silencio === 1 ? ' localidad.' : ' localidades.')
       : 'Al corte, ninguna.';
   }
+}
+
+/* Formato colombiano: miles con punto y decimales con coma */
+function miles(n) {
+  var s = String(n), salida = '';
+  while (s.length > 3) {
+    salida = '.' + s.slice(-3) + salida;
+    s = s.slice(0, -3);
+  }
+  return s + salida;
+}
+function decimal(x) { return x.toFixed(1).replace('.', ','); }
+
+function pintarMeses() {
+  var M = D.meses;
+  var punto = '<i class="vacio" title="Sin sesión"></i>';
+  var marca = '<span class="preliminar">preliminar</span>';
+
+  var ultimo = M.meses[M.meses.length - 1];
+  franja('franja-meses', [
+    {v: D.resumen.sesiones_formulario, rot: 'Sesiones en 2026',
+     glosa: 'De ' + M.primer_mes + ' a ' + ultimo.nombre.toLowerCase() +
+            ', contadas en el mes en que se hizo la sesión.'},
+    {v: ultimo.sesiones, rot: ultimo.nombre,
+     glosa: 'Preliminar: todavía pueden llegar cargas de ese mes.'},
+    {v: M.en_plazo_cerradas + ' de ' + M.cerradas,
+     rot: 'Cargadas en ' + M.plazo_dias + ' días hábiles',
+     glosa: 'Sesiones de ' + M.primer_mes + ' a ' + M.ultimo_mes_cerrado +
+            ', con el plazo ya vencido.'},
+    {v: M.mediana_dias, rot: 'Días hábiles hasta la carga',
+     glosa: 'Mediana entre la sesión y la primera vez que entra al ' +
+            'formulario, ' + M.primer_mes + ' a ' + M.ultimo_mes_cerrado + '.'}
+  ]);
+
+  // 1. La ciudad mes a mes
+  var tS = 0, tA = 0, tJ = 0;
+  var filas = M.meses.map(function (m) {
+    tS += m.sesiones; tA += m.asistencias; tJ += m.jovenes;
+    return '<tr><td>' + m.nombre + (m.preliminar ? marca : '') + '</td>' +
+      '<td>' + m.sesiones + '</td><td>' + m.localidades + '</td>' +
+      '<td>' + miles(m.asistencias) + '</td><td>' + miles(m.jovenes) + '</td>' +
+      '<td>' + (m.sesiones ? decimal(m.jovenes / m.sesiones) : '') + '</td>' +
+      '<td>' + (m.asistencias ? decimal(m.jovenes / m.asistencias * 100) + '%'
+                              : '') + '</td></tr>';
+  }).join('');
+  document.getElementById('tabla-ciudad-mes').innerHTML =
+    '<thead><tr><th>Mes</th><th>Sesiones</th><th>Localidades<br>que ' +
+    'sesionaron</th><th>Asistencias</th><th>Jóvenes</th><th>Jóvenes<br>por ' +
+    'sesión</th><th>Jóvenes sobre<br>asistencias</th></tr></thead><tbody>' +
+    filas + '<tr class="total"><td>Total</td><td>' + tS + '</td><td></td>' +
+    '<td>' + miles(tA) + '</td><td>' + miles(tJ) + '</td>' +
+    '<td>' + decimal(tJ / tS) + '</td>' +
+    '<td>' + decimal(tJ / tA * 100) + '%</td></tr></tbody>';
+
+  // 2. Cada localidad mes a mes
+  var cab = M.meses.map(function (m) {
+    return '<th>' + m.abrev + (m.preliminar ? '*' : '') + '</th>';
+  }).join('');
+  var porMes = M.meses.map(function () { return 0; });
+  var filasLoc = M.por_localidad.map(function (l) {
+    var total = 0;
+    var celdas = l.meses.map(function (n, i) {
+      total += n; porMes[i] += n;
+      return '<td>' + (n ? n : punto) + '</td>';
+    }).join('');
+    return '<tr><td>' + l.localidad + '</td>' + celdas +
+      '<td class="col-total">' + total + '</td></tr>';
+  }).join('');
+  var totalLoc = porMes.reduce(function (a, b) { return a + b; }, 0);
+  document.getElementById('tabla-localidad-mes').innerHTML =
+    '<thead><tr><th>Localidad</th>' + cab +
+    '<th class="col-total">Total</th></tr></thead><tbody>' + filasLoc +
+    '<tr class="total"><td>Total</td>' + porMes.map(function (n) {
+      return '<td>' + n + '</td>'; }).join('') +
+    '<td class="col-total">' + totalLoc + '</td></tr></tbody>';
+
+  // 3. Cuándo llegó cada sesión: filas por mes de la sesión, columnas por
+  // mes de la primera carga. Las celdas anteriores al mes de la sesión van
+  // vacías porque nadie carga una sesión antes de hacerla.
+  var cabRep = M.meses_reporte.map(function (a) {
+    return '<th>' + a + '</th>'; }).join('');
+  var filasRep = M.meses.map(function (m, i) {
+    var celdas = m.cargas.map(function (n, j) {
+      if (j < i) return '<td></td>';
+      if (!n) return '<td>' + punto + '</td>';
+      return '<td' + (j === i ? ' class="mismo-mes"' : '') + '>' + n + '</td>';
+    }).join('');
+    return '<tr><td>' + m.nombre + (m.preliminar ? marca : '') + '</td>' +
+      celdas + '<td class="col-total">' + m.sesiones + '</td>' +
+      '<td>' + m.en_plazo + ' de ' + m.sesiones + '</td></tr>';
+  }).join('');
+  document.getElementById('tabla-cargas-mes').innerHTML =
+    '<thead><tr><th>Mes de la sesión</th>' + cabRep +
+    '<th class="col-total">Total</th><th>En ' + M.plazo_dias +
+    ' días<br>hábiles o menos</th></tr></thead><tbody>' + filasRep + '</tbody>';
 }
 
 function pintarDocumentos() {
