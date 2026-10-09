@@ -461,30 +461,28 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
 /* Con cuatro o cinco columnas, a todo el ancho las cifras quedaban lejos de
    la fecha. Se limita a la medida del texto de arriba. */
 .tarjeta.tabla-consulta { max-width: 880px; }
-/* Los títulos de la tabla son botones para ordenarla. Se ven como los demás
-   encabezados; la columna que ordena va en gris oscuro con su flecha, y las
-   otras llevan una flecha doble tenue que avisa que se pueden ordenar. */
-.tabla-consulta th button.ordenar {
-  background: none; border: 0; padding: 0; margin: 0; cursor: pointer;
-  font: inherit; letter-spacing: inherit; text-transform: inherit;
-  color: inherit; white-space: nowrap;
+/* Quitar filtros: texto en el acento, al pie de las listas. Solo se ve cuando
+   algo está distinto del inicio (lo maneja pintarConsulta), así que su
+   presencia ya dice que la tabla está filtrada. */
+.filtros .quitar {
+  align-self: flex-end; background: none; border: 0; cursor: pointer;
+  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.78rem;
+  color: var(--acento); padding: 10px 4px;
 }
-.tabla-consulta th button.ordenar:hover,
-.tabla-consulta th button.activa { color: var(--gris-oscuro); }
-.tabla-consulta th button.ordenar:focus-visible {
-  outline: 2px solid var(--acento); outline-offset: 2px;
-}
-.tabla-consulta .flecha { margin-left: 4px; font-family: 'Segoe UI', sans-serif; }
-.tabla-consulta th button:not(.activa) .flecha { opacity: 0.5; }
+.filtros .quitar:hover { text-decoration: underline; }
+.filtros .quitar:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
 /* "27 de abril" partido en tres renglones no se lee como fecha */
 .tabla-consulta td.sin-corte { white-space: nowrap; }
 .tabla-consulta .mes-corto { display: none; }
 
 @media (max-width: 700px) {
   /* Localidad arriba a todo el ancho; desde y hasta, que son un par, juntos
-     debajo. Letra de 16 px para que el iPhone no haga zoom al tocar. */
+     debajo; ordenar por a todo el ancho, para que no se corte la opción de
+     asistentes, y el botón de quitar filtros al final. Letra de 16 px para
+     que el iPhone no haga zoom al tocar. */
   .filtros label { flex: 1 1 120px; }
-  .filtros label:first-child { flex-basis: 100%; }
+  .filtros label:first-child, .filtros label:last-of-type { flex-basis: 100%; }
   .filtros select { min-width: 0; width: 100%; font-size: 1rem; }
   /* En el celular el mes va abreviado y la tarjeta con menos margen, para
      que la consulta de una localidad quepa entera en 375 px */

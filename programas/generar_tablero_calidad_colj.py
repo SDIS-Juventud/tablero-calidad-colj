@@ -1639,30 +1639,28 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
 /* Con cuatro o cinco columnas, a todo el ancho las cifras quedaban lejos de
    la fecha. Se limita a la medida del texto de arriba. */
 .tarjeta.tabla-consulta { max-width: 880px; }
-/* Los títulos de la tabla son botones para ordenarla. Se ven como los demás
-   encabezados; la columna que ordena va en gris oscuro con su flecha, y las
-   otras llevan una flecha doble tenue que avisa que se pueden ordenar. */
-.tabla-consulta th button.ordenar {
-  background: none; border: 0; padding: 0; margin: 0; cursor: pointer;
-  font: inherit; letter-spacing: inherit; text-transform: inherit;
-  color: inherit; white-space: nowrap;
+/* Quitar filtros: texto en el acento, al pie de las listas. Solo se ve cuando
+   algo está distinto del inicio (lo maneja pintarConsulta), así que su
+   presencia ya dice que la tabla está filtrada. */
+.filtros .quitar {
+  align-self: flex-end; background: none; border: 0; cursor: pointer;
+  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.78rem;
+  color: var(--acento); padding: 10px 4px;
 }
-.tabla-consulta th button.ordenar:hover,
-.tabla-consulta th button.activa { color: var(--gris-oscuro); }
-.tabla-consulta th button.ordenar:focus-visible {
-  outline: 2px solid var(--acento); outline-offset: 2px;
-}
-.tabla-consulta .flecha { margin-left: 4px; font-family: 'Segoe UI', sans-serif; }
-.tabla-consulta th button:not(.activa) .flecha { opacity: 0.5; }
+.filtros .quitar:hover { text-decoration: underline; }
+.filtros .quitar:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
 /* "27 de abril" partido en tres renglones no se lee como fecha */
 .tabla-consulta td.sin-corte { white-space: nowrap; }
 .tabla-consulta .mes-corto { display: none; }
 
 @media (max-width: 700px) {
   /* Localidad arriba a todo el ancho; desde y hasta, que son un par, juntos
-     debajo. Letra de 16 px para que el iPhone no haga zoom al tocar. */
+     debajo; ordenar por a todo el ancho, para que no se corte la opción de
+     asistentes, y el botón de quitar filtros al final. Letra de 16 px para
+     que el iPhone no haga zoom al tocar. */
   .filtros label { flex: 1 1 120px; }
-  .filtros label:first-child { flex-basis: 100%; }
+  .filtros label:first-child, .filtros label:last-of-type { flex-basis: 100%; }
   .filtros select { min-width: 0; width: 100%; font-size: 1rem; }
   /* En el celular el mes va abreviado y la tarjeta con menos margen, para
      que la consulta de una localidad quepa entera en 375 px */
@@ -1992,9 +1990,16 @@ function pintarConsulta() {
   if (!selLoc) return;
   var selDesde = document.getElementById('filtro-desde');
   var selHasta = document.getElementById('filtro-hasta');
+  var selOrden = document.getElementById('filtro-orden');
+  var quitar = document.getElementById('quitar-filtros');
+  var tabla = document.getElementById('tabla-consulta');
   var M = D.meses;
   var nombres = M.nombres_consulta;
-  var todas = D.localidades.map(function (l) { return l.localidad; });
+  // En la consulta las localidades van en orden alfabético, en la lista y en
+  // la tabla, porque así se buscan. Con el orden oficial de las 20 no se
+  // encontraba Los Mártires sin recorrer la lista entera.
+  var todas = D.localidades.map(function (l) { return l.localidad; })
+    .sort(function (a, b) { return a.localeCompare(b, 'es'); });
 
   selLoc.innerHTML = '<option value="">Todas</option>' +
     todas.map(function (l) { return '<option>' + l + '</option>'; }).join('');
@@ -2003,8 +2008,27 @@ function pintarConsulta() {
   }).join('');
   selDesde.innerHTML = opciones;
   selHasta.innerHTML = opciones;
-  selDesde.value = '1';
-  selHasta.value = String(nombres.length);
+  selOrden.innerHTML = '<option value="localidad">Localidad (A a Z)</option>' +
+    '<option value="fecha">Fecha</option>' +
+    '<option value="asistencias">Asistentes (de más a menos)</option>';
+
+  function porLocalidad(a, b) { return a.localidad.localeCompare(b.localidad, 'es'); }
+  function porFecha(a, b) { return (a.mes * 100 + a.dia) - (b.mes * 100 + b.dia); }
+  // Los empates se resuelven por localidad y fecha
+  var ORDENES = {
+    localidad: function (a, b) { return porLocalidad(a, b) || porFecha(a, b); },
+    fecha: function (a, b) { return porFecha(a, b) || porLocalidad(a, b); },
+    asistencias: function (a, b) {
+      return (b.asistencias - a.asistencias) || porLocalidad(a, b) || porFecha(a, b);
+    }
+  };
+
+  function valoresIniciales() {
+    selLoc.value = '';
+    selDesde.value = '1';
+    selHasta.value = String(nombres.length);
+    selOrden.value = 'localidad';
+  }
 
   function actualizar(cambio) {
     var desde = +selDesde.value, hasta = +selHasta.value;
@@ -2053,27 +2077,15 @@ function pintarConsulta() {
     }
     document.getElementById('resumen-consulta').innerHTML = texto;
 
+    // El botón de quitar filtros solo aparece si algo cambió: así se sabe de
+    // un vistazo si la tabla está completa o filtrada
+    var cambiado = loc || desde !== 1 || hasta !== nombres.length ||
+      selOrden.value !== 'localidad';
+    quitar.style.visibility = cambiado ? 'visible' : 'hidden';
+
     // Con una sola localidad elegida, la columna de localidad sobra
     var conLoc = !loc;
-    var col = COLUMNAS.filter(function (c) { return c.id === orden.id; })[0];
-    lista.sort(function (a, b) {
-      var ka = col.clave(a), kb = col.clave(b);
-      var d = ka < kb ? -1 : (ka > kb ? 1 : 0);
-      if (!orden.asc) d = -d;
-      // Los empates se desempatan por localidad y fecha, siempre en orden
-      return d || (posicion(a) - posicion(b)) || (diaDelAnio(a) - diaDelAnio(b));
-    });
-    var cab = COLUMNAS.filter(function (c) {
-      return conLoc || c.id !== 'localidad';
-    }).map(function (c) {
-      var activa = c.id === orden.id;
-      var flecha = activa ? (orden.asc ? '&uarr;' : '&darr;') : '&varr;';
-      return '<th' + (activa ? ' aria-sort="' +
-          (orden.asc ? 'ascending' : 'descending') + '"' : '') + '>' +
-        '<button type="button" class="ordenar' + (activa ? ' activa' : '') +
-        '" data-col="' + c.id + '">' + c.rot +
-        '<span class="flecha">' + flecha + '</span></button></th>';
-    }).join('');
+    lista.sort(ORDENES[selOrden.value]);
     var filas = lista.map(function (s) {
       return '<tr>' + (conLoc ? '<td>' + s.localidad + '</td>' : '') +
         '<td class="sin-corte">' + s.dia +
@@ -2084,7 +2096,9 @@ function pintarConsulta() {
         '<td>' + miles(s.asistencias) + '</td>' +
         '<td>' + miles(s.jovenes) + '</td></tr>';
     }).join('');
-    tabla.innerHTML = '<thead><tr>' + cab + '</tr></thead><tbody>' + filas +
+    tabla.innerHTML = '<thead><tr>' + (conLoc ? '<th>Localidad</th>' : '') +
+      '<th>Fecha</th><th>Tipo</th><th>Asistentes</th><th>Jóvenes</th>' +
+      '</tr></thead><tbody>' + filas +
       '<tr class="total"><td>Promedio</td>' + (conLoc ? '<td></td>' : '') +
       '<td></td><td>' + (n ? pA : '') + '</td>' +
       '<td>' + (n ? pJ : '') + '</td></tr>' +
@@ -2092,43 +2106,14 @@ function pintarConsulta() {
     tabla.parentNode.style.display = n ? '' : 'none';
   }
 
-  // Orden de la tabla. Arranca por localidad, en el orden oficial de las 20,
-  // y cambia con un clic en el título de una columna; el segundo clic lo
-  // invierte. Las cifras arrancan de mayor a menor, que es lo que se busca
-  // al ordenarlas. La fila de promedio queda siempre al final.
-  function posicion(s) { return todas.indexOf(s.localidad); }
-  function diaDelAnio(s) { return s.mes * 100 + s.dia; }
-  var COLUMNAS = [
-    {id: 'localidad', rot: 'Localidad', clave: posicion},
-    {id: 'fecha', rot: 'Fecha', clave: diaDelAnio},
-    {id: 'tipo', rot: 'Tipo', clave: function (s) { return s.tipo; }},
-    {id: 'asistencias', rot: 'Asistentes', cifra: true,
-     clave: function (s) { return s.asistencias; }},
-    {id: 'jovenes', rot: 'Jóvenes', cifra: true,
-     clave: function (s) { return s.jovenes; }}
-  ];
-  var orden = {id: 'localidad', asc: true};
-  var tabla = document.getElementById('tabla-consulta');
-  tabla.addEventListener('click', function (e) {
-    var boton = e.target.closest('button.ordenar');
-    if (!boton) return;
-    var id = boton.getAttribute('data-col');
-    if (orden.id === id) {
-      orden.asc = !orden.asc;
-    } else {
-      orden.id = id;
-      orden.asc = !COLUMNAS.filter(function (c) { return c.id === id; })[0].cifra;
-    }
-    actualizar(null);
-    // La tabla se vuelve a pintar: el foco vuelve al mismo título para
-    // quien ordena con el teclado
-    var nuevo = tabla.querySelector('button[data-col="' + id + '"]');
-    if (nuevo) nuevo.focus();
-  });
-
-  [selLoc, selDesde, selHasta].forEach(function (s) {
+  [selLoc, selDesde, selHasta, selOrden].forEach(function (s) {
     s.addEventListener('change', function () { actualizar(s); });
   });
+  quitar.addEventListener('click', function () {
+    valoresIniciales();
+    actualizar(null);
+  });
+  valoresIniciales();
   actualizar(null);
 }
 
@@ -2393,12 +2378,11 @@ def pagina_periodicidad():
      adicionales y no cuentan para ese mínimo.</p>
 """ % EN_LETRA.get(ORDINARIAS_EXIGIDAS, ORDINARIAS_EXIGIDAS)
     cuerpo = """
-  <p class="nota-general"><strong>Bimestre fijo o móvil.</strong> El
-     calendario parte el año en bloques, pero el reglamento habla de dos meses
-     entre una sesión y la siguiente. Varias localidades mantuvieron esa
-     distancia y sus fechas cayeron a los lados de un corte. Por eso el
-     cumplimiento se cuenta por número de sesiones ordinarias, y los cuadros
-     solo muestran el ritmo del año.</p>
+  <p class="nota-general"><strong>Bimestre fijo o móvil.</strong> El Decreto
+     647 de 2025 (artículo 137) dice que los COLJ se reúnen de manera
+     ordinaria "una (1) vez cada dos (2) meses", sin partir el año en
+     bimestres de calendario. La columna de sesiones ordinarias muestra si se
+     cumplió; los cuadros, en qué bimestres hubo sesión ordinaria.</p>
 
   <div class="leyenda">
     <div><span class="punto bien"></span>Bimestre con sesión ordinaria</div>
@@ -2425,15 +2409,16 @@ def pagina_periodicidad():
 
   <div class="rotulo-seccion">
     <h2>Consulta por mes y localidad</h2>
-    <p>Elige una localidad, un rango de meses o las dos cosas. Para ordenar la
-       tabla, haz clic en el título de una columna. Las cifras de asistentes
-       son las de la última carga de cada sesión, y el promedio es por
-       sesión.</p>
+    <p>Elige una localidad, un rango de meses o las dos cosas, y cómo ordenar
+       la tabla. Las cifras de asistentes son las de la última carga de cada
+       sesión, y el promedio es por sesión.</p>
   </div>
   <div class="filtros">
     <label>Localidad <select id="filtro-localidad"></select></label>
     <label>Desde <select id="filtro-desde"></select></label>
     <label>Hasta <select id="filtro-hasta"></select></label>
+    <label>Ordenar por <select id="filtro-orden"></select></label>
+    <button type="button" class="quitar" id="quitar-filtros">Quitar filtros</button>
   </div>
   <p class="resumen-consulta" id="resumen-consulta"></p>
   <div class="tarjeta tabla-ancha tabla-consulta">

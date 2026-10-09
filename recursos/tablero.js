@@ -296,9 +296,16 @@ function pintarConsulta() {
   if (!selLoc) return;
   var selDesde = document.getElementById('filtro-desde');
   var selHasta = document.getElementById('filtro-hasta');
+  var selOrden = document.getElementById('filtro-orden');
+  var quitar = document.getElementById('quitar-filtros');
+  var tabla = document.getElementById('tabla-consulta');
   var M = D.meses;
   var nombres = M.nombres_consulta;
-  var todas = D.localidades.map(function (l) { return l.localidad; });
+  // En la consulta las localidades van en orden alfabético, en la lista y en
+  // la tabla, porque así se buscan. Con el orden oficial de las 20 no se
+  // encontraba Los Mártires sin recorrer la lista entera.
+  var todas = D.localidades.map(function (l) { return l.localidad; })
+    .sort(function (a, b) { return a.localeCompare(b, 'es'); });
 
   selLoc.innerHTML = '<option value="">Todas</option>' +
     todas.map(function (l) { return '<option>' + l + '</option>'; }).join('');
@@ -307,8 +314,27 @@ function pintarConsulta() {
   }).join('');
   selDesde.innerHTML = opciones;
   selHasta.innerHTML = opciones;
-  selDesde.value = '1';
-  selHasta.value = String(nombres.length);
+  selOrden.innerHTML = '<option value="localidad">Localidad (A a Z)</option>' +
+    '<option value="fecha">Fecha</option>' +
+    '<option value="asistencias">Asistentes (de más a menos)</option>';
+
+  function porLocalidad(a, b) { return a.localidad.localeCompare(b.localidad, 'es'); }
+  function porFecha(a, b) { return (a.mes * 100 + a.dia) - (b.mes * 100 + b.dia); }
+  // Los empates se resuelven por localidad y fecha
+  var ORDENES = {
+    localidad: function (a, b) { return porLocalidad(a, b) || porFecha(a, b); },
+    fecha: function (a, b) { return porFecha(a, b) || porLocalidad(a, b); },
+    asistencias: function (a, b) {
+      return (b.asistencias - a.asistencias) || porLocalidad(a, b) || porFecha(a, b);
+    }
+  };
+
+  function valoresIniciales() {
+    selLoc.value = '';
+    selDesde.value = '1';
+    selHasta.value = String(nombres.length);
+    selOrden.value = 'localidad';
+  }
 
   function actualizar(cambio) {
     var desde = +selDesde.value, hasta = +selHasta.value;
@@ -357,27 +383,15 @@ function pintarConsulta() {
     }
     document.getElementById('resumen-consulta').innerHTML = texto;
 
+    // El botón de quitar filtros solo aparece si algo cambió: así se sabe de
+    // un vistazo si la tabla está completa o filtrada
+    var cambiado = loc || desde !== 1 || hasta !== nombres.length ||
+      selOrden.value !== 'localidad';
+    quitar.style.visibility = cambiado ? 'visible' : 'hidden';
+
     // Con una sola localidad elegida, la columna de localidad sobra
     var conLoc = !loc;
-    var col = COLUMNAS.filter(function (c) { return c.id === orden.id; })[0];
-    lista.sort(function (a, b) {
-      var ka = col.clave(a), kb = col.clave(b);
-      var d = ka < kb ? -1 : (ka > kb ? 1 : 0);
-      if (!orden.asc) d = -d;
-      // Los empates se desempatan por localidad y fecha, siempre en orden
-      return d || (posicion(a) - posicion(b)) || (diaDelAnio(a) - diaDelAnio(b));
-    });
-    var cab = COLUMNAS.filter(function (c) {
-      return conLoc || c.id !== 'localidad';
-    }).map(function (c) {
-      var activa = c.id === orden.id;
-      var flecha = activa ? (orden.asc ? '&uarr;' : '&darr;') : '&varr;';
-      return '<th' + (activa ? ' aria-sort="' +
-          (orden.asc ? 'ascending' : 'descending') + '"' : '') + '>' +
-        '<button type="button" class="ordenar' + (activa ? ' activa' : '') +
-        '" data-col="' + c.id + '">' + c.rot +
-        '<span class="flecha">' + flecha + '</span></button></th>';
-    }).join('');
+    lista.sort(ORDENES[selOrden.value]);
     var filas = lista.map(function (s) {
       return '<tr>' + (conLoc ? '<td>' + s.localidad + '</td>' : '') +
         '<td class="sin-corte">' + s.dia +
@@ -388,7 +402,9 @@ function pintarConsulta() {
         '<td>' + miles(s.asistencias) + '</td>' +
         '<td>' + miles(s.jovenes) + '</td></tr>';
     }).join('');
-    tabla.innerHTML = '<thead><tr>' + cab + '</tr></thead><tbody>' + filas +
+    tabla.innerHTML = '<thead><tr>' + (conLoc ? '<th>Localidad</th>' : '') +
+      '<th>Fecha</th><th>Tipo</th><th>Asistentes</th><th>Jóvenes</th>' +
+      '</tr></thead><tbody>' + filas +
       '<tr class="total"><td>Promedio</td>' + (conLoc ? '<td></td>' : '') +
       '<td></td><td>' + (n ? pA : '') + '</td>' +
       '<td>' + (n ? pJ : '') + '</td></tr>' +
@@ -396,43 +412,14 @@ function pintarConsulta() {
     tabla.parentNode.style.display = n ? '' : 'none';
   }
 
-  // Orden de la tabla. Arranca por localidad, en el orden oficial de las 20,
-  // y cambia con un clic en el título de una columna; el segundo clic lo
-  // invierte. Las cifras arrancan de mayor a menor, que es lo que se busca
-  // al ordenarlas. La fila de promedio queda siempre al final.
-  function posicion(s) { return todas.indexOf(s.localidad); }
-  function diaDelAnio(s) { return s.mes * 100 + s.dia; }
-  var COLUMNAS = [
-    {id: 'localidad', rot: 'Localidad', clave: posicion},
-    {id: 'fecha', rot: 'Fecha', clave: diaDelAnio},
-    {id: 'tipo', rot: 'Tipo', clave: function (s) { return s.tipo; }},
-    {id: 'asistencias', rot: 'Asistentes', cifra: true,
-     clave: function (s) { return s.asistencias; }},
-    {id: 'jovenes', rot: 'Jóvenes', cifra: true,
-     clave: function (s) { return s.jovenes; }}
-  ];
-  var orden = {id: 'localidad', asc: true};
-  var tabla = document.getElementById('tabla-consulta');
-  tabla.addEventListener('click', function (e) {
-    var boton = e.target.closest('button.ordenar');
-    if (!boton) return;
-    var id = boton.getAttribute('data-col');
-    if (orden.id === id) {
-      orden.asc = !orden.asc;
-    } else {
-      orden.id = id;
-      orden.asc = !COLUMNAS.filter(function (c) { return c.id === id; })[0].cifra;
-    }
-    actualizar(null);
-    // La tabla se vuelve a pintar: el foco vuelve al mismo título para
-    // quien ordena con el teclado
-    var nuevo = tabla.querySelector('button[data-col="' + id + '"]');
-    if (nuevo) nuevo.focus();
-  });
-
-  [selLoc, selDesde, selHasta].forEach(function (s) {
+  [selLoc, selDesde, selHasta, selOrden].forEach(function (s) {
     s.addEventListener('change', function () { actualizar(s); });
   });
+  quitar.addEventListener('click', function () {
+    valoresIniciales();
+    actualizar(null);
+  });
+  valoresIniciales();
   actualizar(null);
 }
 
