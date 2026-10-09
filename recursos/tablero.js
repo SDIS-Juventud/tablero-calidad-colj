@@ -316,7 +316,8 @@ function pintarConsulta() {
   selHasta.innerHTML = opciones;
   selOrden.innerHTML = '<option value="localidad">Localidad (A a Z)</option>' +
     '<option value="fecha">Fecha</option>' +
-    '<option value="asistencias">Asistentes (de más a menos)</option>';
+    '<option value="asistencias">Asistentes (de más a menos)</option>' +
+    '<option value="jovenes">Jóvenes (de más a menos)</option>';
 
   function porLocalidad(a, b) { return a.localidad.localeCompare(b.localidad, 'es'); }
   function porFecha(a, b) { return (a.mes * 100 + a.dia) - (b.mes * 100 + b.dia); }
@@ -326,6 +327,9 @@ function pintarConsulta() {
     fecha: function (a, b) { return porFecha(a, b) || porLocalidad(a, b); },
     asistencias: function (a, b) {
       return (b.asistencias - a.asistencias) || porLocalidad(a, b) || porFecha(a, b);
+    },
+    jovenes: function (a, b) {
+      return (b.jovenes - a.jovenes) || porLocalidad(a, b) || porFecha(a, b);
     }
   };
 
