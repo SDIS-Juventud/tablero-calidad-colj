@@ -50,6 +50,23 @@
       <tbody id="tabla-periodicidad"></tbody>
     </table>
   </div>
+
+  <div class="rotulo-seccion">
+    <h2>Consulta por mes y localidad</h2>
+    <p>Elige una localidad, un rango de meses o las dos cosas. Las cifras de
+       asistentes son las de la última carga de cada sesión. El total suma
+       participaciones, no personas: quien va a dos sesiones cuenta dos
+       veces.</p>
+  </div>
+  <div class="filtros">
+    <label>Localidad <select id="filtro-localidad"></select></label>
+    <label>Desde <select id="filtro-desde"></select></label>
+    <label>Hasta <select id="filtro-hasta"></select></label>
+  </div>
+  <p class="resumen-consulta" id="resumen-consulta"></p>
+  <div class="tarjeta tabla-ancha tabla-consulta">
+    <table id="tabla-consulta"></table>
+  </div>
 </div>
 
 
@@ -58,6 +75,6 @@
 
 <script src="../datos/datos_colj.js"></script>
 <script src="../recursos/tablero.js"></script>
-<script>pintarCorte();pintarPeriodicidad();</script>
+<script>pintarCorte();pintarPeriodicidad();pintarConsulta();</script>
 </body>
 </html>

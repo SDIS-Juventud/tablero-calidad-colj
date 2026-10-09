@@ -211,8 +211,8 @@ a { color: inherit; }
 
 /* Los accesos de la portada. Cada uno lleva su propia cifra, para que desde
    la portada ya se sepa qué hay adentro sin tener que entrar. */
-/* Seis accesos en dos filas de tres. Con el ancho automático quedaban cinco
-   arriba y uno solo abajo. */
+/* Accesos en filas de tres. Con el ancho automático la última fila quedaba
+   con uno solo. */
 .accesos {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
@@ -428,42 +428,68 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
    automático de arriba se consume al empujar. */
 .container, .portada { padding-bottom: 2.5rem; }
 
-/* ---------------------------------------------------------- sesiones por mes */
+/* ------------------------------------------- consulta por mes y localidad */
 
-/* Un mes sin sesión va con un cuadro en el neutral, no en rojo: el reglamento
-   pide una sesión ordinaria cada dos meses, así que un mes vacío no es un
-   incumplimiento. Es el mismo cuadro de los bimestres sin sesión en la página
-   de periodicidad, más pequeño para que no compita con las cifras. */
-.vacio {
-  display: inline-block; width: 8px; height: 8px; border-radius: 2px;
-  background: var(--neutral); vertical-align: 1px;
-}
-/* Marca del mes que todavía puede recibir cargas */
-.preliminar {
+/* Tres listas desplegables en fila. El rótulo va en la misma letra de los
+   encabezados de tabla, pero en gris oscuro: el gris secundario queda en
+   4,4:1 y estos nombran controles, no son bajadas. El borde del select va en
+   el gris de texto y no en --neutral, que en este tablero es color de
+   estado. */
+.filtros { display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; margin-bottom: 1.1rem; }
+.filtros label {
+  display: flex; flex-direction: column; gap: 5px;
   font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.68rem;
-  color: var(--gris-oscuro); background: var(--gris-claro);
-  padding: 2px 7px; border-radius: 4px; margin-left: 6px; vertical-align: 1px;
+  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.72rem;
+  color: var(--gris-oscuro);
 }
-/* La marca va en gris oscuro: el gris de texto sobre gris claro no llega al
-   contraste mínimo, igual que en .marca-pendiente. Y se pinta en blanco al
-   pasar el mouse por la fila, que se vuelve gris claro. */
-tbody tr:hover .preliminar { background: var(--blanco); }
-/* Sesiones cargadas el mismo mes en que se hicieron: solo peso, sin color,
-   porque el acento del tablero es cromo y nunca estado. */
-td.mismo-mes { font-weight: 600; }
-/* La columna de totales se separa de los meses. El peso va acá y no con <b>,
-   porque Figtree está empaquetada hasta 600. */
-.tabla-meses td.col-total, .tabla-meses th.col-total {
-  border-left: 2px solid var(--gris-claro);
+.filtros select {
+  font-family: 'Figtree', 'Segoe UI', sans-serif; font-size: 0.92rem;
+  text-transform: none; letter-spacing: 0; color: var(--gris-oscuro);
+  padding: 7px 10px; min-width: 170px; cursor: pointer;
+  border: 1px solid var(--gris); border-radius: 8px; background: var(--blanco);
 }
-.tabla-meses td.col-total { font-weight: 600; }
+.filtros select:focus { outline: 2px solid var(--acento); outline-offset: 1px; }
+.resumen-consulta {
+  font-size: 0.98rem; max-width: 82ch; margin-bottom: 1rem;
+}
+.resumen-consulta b { font-weight: 600; }
+/* Qué localidades no sesionaron es información, no bajada: gris oscuro */
+.resumen-consulta .sin-sesion {
+  display: block; font-size: 0.88rem; color: var(--gris-oscuro); margin-top: 0.3rem;
+}
+/* Con cuatro o cinco columnas, a todo el ancho las cifras quedaban lejos de
+   la fecha. Se limita a la medida del texto de arriba. */
+.tarjeta.tabla-consulta { max-width: 880px; }
+/* "27 de abril" partido en tres renglones no se lee como fecha */
+.tabla-consulta td.sin-corte { white-space: nowrap; }
+.tabla-consulta .mes-corto { display: none; }
 
 @media (max-width: 700px) {
-  /* En las tablas por mes, el nombre de la localidad queda fijo al desplazar */
-  .tabla-meses td:first-child, .tabla-meses th:first-child {
+  /* Localidad arriba a todo el ancho; desde y hasta, que son un par, juntos
+     debajo. Letra de 16 px para que el iPhone no haga zoom al tocar. */
+  .filtros label { flex: 1 1 120px; }
+  .filtros label:first-child { flex-basis: 100%; }
+  .filtros select { min-width: 0; width: 100%; font-size: 1rem; }
+  /* En el celular el mes va abreviado y la tarjeta con menos margen, para
+     que la consulta de una localidad quepa entera en 375 px */
+  .tabla-consulta .mes-largo { display: none; }
+  .tabla-consulta .mes-corto { display: inline; }
+  .tarjeta.tabla-consulta { padding: 0.8rem 0.4rem; }
+  /* La consulta tiene pocas columnas: no necesita el ancho mínimo de las
+     demás tablas. Si aun así no cabe, la primera columna queda fija al
+     desplazar. */
+  .tabla-consulta table { min-width: 0; }
+  .tabla-consulta td, .tabla-consulta th { padding-left: 6px; padding-right: 6px; }
+  .tabla-consulta td:first-child, .tabla-consulta th:first-child {
     position: sticky; left: 0; background: var(--blanco); z-index: 1;
   }
+  /* La celda fija se pinta con el resto de la fila al pasar por encima */
+  .tabla-consulta tbody tr:not(.total):hover td:first-child {
+    background: var(--gris-claro);
+  }
+}
+
+@media (max-width: 700px) {
   .titulo-zona h1 { font-size: 2rem; }
   .rotulo-seccion h2 { font-size: 1.3rem; }
   .tabla-ancha { overflow-x: auto; }

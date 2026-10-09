@@ -7,7 +7,8 @@ las cifras generales y accesos a las secciones, y cada sección en su propia
 página. Se produce este árbol de archivos:
 
     index.html            portada, con las dos franjas de cifras y los accesos
-    periodicidad.html     si cada localidad sesionó lo que debía
+    periodicidad.html     si cada localidad sesionó lo que debía, y la
+                          consulta de sesiones por mes y localidad
     documentos.html       si cargó acta y planillas de cada sesión
     pendientes.html       qué le falta a cada localidad
     ajustes.html          ajustes del registro por localidad
@@ -610,11 +611,13 @@ def datos_por_mes(f26, unicas, fecha_corte):
     si después se corrige, la corrección no reinicia el reloj. Las cifras de
     asistentes son las de la última carga, igual que en el resto del tablero.
 
-    El mes del corte queda marcado como preliminar, porque todavía pueden
-    llegar cargas de ese mes. Por la misma razón, el plazo de carga se mide
-    solo sobre los meses anteriores al del corte: en el mes abierto, las
-    sesiones que van a llegar tarde todavía no han llegado y el rezago se
-    vería más corto de lo que es.
+    La página solo usa "sesiones" y "nombres_consulta", en la consulta de
+    periodicidad. Los totales por mes y el plazo de carga ya no se muestran
+    desde que se quitó la página por mes (9 de octubre de 2026), pero quedan
+    en datos/calidad_colj_2026.json como cifras de control y para los
+    informes. El plazo se mide solo sobre los meses anteriores al del corte:
+    en el mes abierto, las sesiones que van a llegar tarde todavía no han
+    llegado y el rezago se vería más corto de lo que es.
     """
     def indice(fecha):
         # Meses contados desde enero de 2026, para que una carga de 2027 no
@@ -667,9 +670,33 @@ def datos_por_mes(f26, unicas, fecha_corte):
                                 for m in meses]}
                      for loc in ORDEN]
 
+    # Una fila por sesión para la consulta de la página de periodicidad. Va
+    # ordenada por localidad y fecha, como el anexo del reporte trimestral,
+    # y solo lleva localidad, fecha, tipo y cifras: nada que nombre personas.
+    orden_loc = {loc: i for i, loc in enumerate(ORDEN)}
+    lista = ses.assign(pos=ses["Localidad"].map(orden_loc)) \
+               .sort_values(["pos", "fecha"])
+    # El tipo se rotula con la misma regla que cuenta ordinarias en la tabla
+    # de periodicidad: un valor vacío o escrito distinto no se vuelve
+    # ordinaria en silencio, sale tal cual para que se vea.
+    tipos = {"Ordinario": "Ordinaria", "Extraordinario": "Extraordinaria"}
+    sesiones = [{"localidad": loc,
+                 "dia": int(f.day),
+                 "mes": int(m),
+                 "tipo": tipos.get(t, t or "Sin dato"),
+                 "asistencias": int(a),
+                 "jovenes": int(j)}
+                for loc, f, m, t, a, j in zip(
+                    lista["Localidad"], lista["fecha"], lista["mes"],
+                    lista["Tipo"], lista["asistencias"], lista["jovenes"])]
+
     cerradas = ses[ses["mes"] < mes_corte]
     return {
         "meses": filas,
+        "sesiones": sesiones,
+        # La consulta arranca en enero aunque ese mes no haya tenido sesión:
+        # quien pregunta "de enero a marzo" tiene que encontrar enero
+        "nombres_consulta": [nombre_mes(m) for m in range(1, mes_corte + 1)],
         "meses_reporte": [nombre_mes(r)[:3].capitalize()
                           for r in meses_reporte],
         "por_localidad": por_localidad,
@@ -1362,8 +1389,8 @@ a { color: inherit; }
 
 /* Los accesos de la portada. Cada uno lleva su propia cifra, para que desde
    la portada ya se sepa qué hay adentro sin tener que entrar. */
-/* Seis accesos en dos filas de tres. Con el ancho automático quedaban cinco
-   arriba y uno solo abajo. */
+/* Accesos en filas de tres. Con el ancho automático la última fila quedaba
+   con uno solo. */
 .accesos {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
@@ -1579,42 +1606,68 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
    automático de arriba se consume al empujar. */
 .container, .portada { padding-bottom: 2.5rem; }
 
-/* ---------------------------------------------------------- sesiones por mes */
+/* ------------------------------------------- consulta por mes y localidad */
 
-/* Un mes sin sesión va con un cuadro en el neutral, no en rojo: el reglamento
-   pide una sesión ordinaria cada dos meses, así que un mes vacío no es un
-   incumplimiento. Es el mismo cuadro de los bimestres sin sesión en la página
-   de periodicidad, más pequeño para que no compita con las cifras. */
-.vacio {
-  display: inline-block; width: 8px; height: 8px; border-radius: 2px;
-  background: var(--neutral); vertical-align: 1px;
-}
-/* Marca del mes que todavía puede recibir cargas */
-.preliminar {
+/* Tres listas desplegables en fila. El rótulo va en la misma letra de los
+   encabezados de tabla, pero en gris oscuro: el gris secundario queda en
+   4,4:1 y estos nombran controles, no son bajadas. El borde del select va en
+   el gris de texto y no en --neutral, que en este tablero es color de
+   estado. */
+.filtros { display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; margin-bottom: 1.1rem; }
+.filtros label {
+  display: flex; flex-direction: column; gap: 5px;
   font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.68rem;
-  color: var(--gris-oscuro); background: var(--gris-claro);
-  padding: 2px 7px; border-radius: 4px; margin-left: 6px; vertical-align: 1px;
+  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.72rem;
+  color: var(--gris-oscuro);
 }
-/* La marca va en gris oscuro: el gris de texto sobre gris claro no llega al
-   contraste mínimo, igual que en .marca-pendiente. Y se pinta en blanco al
-   pasar el mouse por la fila, que se vuelve gris claro. */
-tbody tr:hover .preliminar { background: var(--blanco); }
-/* Sesiones cargadas el mismo mes en que se hicieron: solo peso, sin color,
-   porque el acento del tablero es cromo y nunca estado. */
-td.mismo-mes { font-weight: 600; }
-/* La columna de totales se separa de los meses. El peso va acá y no con <b>,
-   porque Figtree está empaquetada hasta 600. */
-.tabla-meses td.col-total, .tabla-meses th.col-total {
-  border-left: 2px solid var(--gris-claro);
+.filtros select {
+  font-family: 'Figtree', 'Segoe UI', sans-serif; font-size: 0.92rem;
+  text-transform: none; letter-spacing: 0; color: var(--gris-oscuro);
+  padding: 7px 10px; min-width: 170px; cursor: pointer;
+  border: 1px solid var(--gris); border-radius: 8px; background: var(--blanco);
 }
-.tabla-meses td.col-total { font-weight: 600; }
+.filtros select:focus { outline: 2px solid var(--acento); outline-offset: 1px; }
+.resumen-consulta {
+  font-size: 0.98rem; max-width: 82ch; margin-bottom: 1rem;
+}
+.resumen-consulta b { font-weight: 600; }
+/* Qué localidades no sesionaron es información, no bajada: gris oscuro */
+.resumen-consulta .sin-sesion {
+  display: block; font-size: 0.88rem; color: var(--gris-oscuro); margin-top: 0.3rem;
+}
+/* Con cuatro o cinco columnas, a todo el ancho las cifras quedaban lejos de
+   la fecha. Se limita a la medida del texto de arriba. */
+.tarjeta.tabla-consulta { max-width: 880px; }
+/* "27 de abril" partido en tres renglones no se lee como fecha */
+.tabla-consulta td.sin-corte { white-space: nowrap; }
+.tabla-consulta .mes-corto { display: none; }
 
 @media (max-width: 700px) {
-  /* En las tablas por mes, el nombre de la localidad queda fijo al desplazar */
-  .tabla-meses td:first-child, .tabla-meses th:first-child {
+  /* Localidad arriba a todo el ancho; desde y hasta, que son un par, juntos
+     debajo. Letra de 16 px para que el iPhone no haga zoom al tocar. */
+  .filtros label { flex: 1 1 120px; }
+  .filtros label:first-child { flex-basis: 100%; }
+  .filtros select { min-width: 0; width: 100%; font-size: 1rem; }
+  /* En el celular el mes va abreviado y la tarjeta con menos margen, para
+     que la consulta de una localidad quepa entera en 375 px */
+  .tabla-consulta .mes-largo { display: none; }
+  .tabla-consulta .mes-corto { display: inline; }
+  .tarjeta.tabla-consulta { padding: 0.8rem 0.4rem; }
+  /* La consulta tiene pocas columnas: no necesita el ancho mínimo de las
+     demás tablas. Si aun así no cabe, la primera columna queda fija al
+     desplazar. */
+  .tabla-consulta table { min-width: 0; }
+  .tabla-consulta td, .tabla-consulta th { padding-left: 6px; padding-right: 6px; }
+  .tabla-consulta td:first-child, .tabla-consulta th:first-child {
     position: sticky; left: 0; background: var(--blanco); z-index: 1;
   }
+  /* La celda fija se pinta con el resto de la fila al pasar por encima */
+  .tabla-consulta tbody tr:not(.total):hover td:first-child {
+    background: var(--gris-claro);
+  }
+}
+
+@media (max-width: 700px) {
   .titulo-zona h1 { font-size: 2rem; }
   .rotulo-seccion h2 { font-size: 1.3rem; }
   .tabla-ancha { overflow-x: auto; }
@@ -1716,7 +1769,7 @@ function pintarCorte() {
   var nodo = document.getElementById('corte-aviso');
   if (!nodo) return;
   nodo.innerHTML = 'La fecha de corte es el <b>' + D.corte + '</b>: el día ' +
-    'en que sesionó el último COLJ registrado, no el día de consulta.';
+    'en que sesionó el último COLJ registrado.';
 }
 
 function pintarCampos() {
@@ -1796,7 +1849,8 @@ function pintarAccesosZoom() {
     {href: 'periodicidad.html', cifra: r.al_dia_sesiones + ' de 20',
      nombre: 'Periodicidad de las sesiones',
      glosa: 'Localidades con las ' + r.ordinarias_exigidas +
-            ' sesiones ordinarias que se esperan al corte.'},
+            ' sesiones ordinarias que se esperan al corte, y consulta de ' +
+            'sesiones por mes y localidad.'},
     {href: 'documentos.html',
      cifra: r.sesiones_completas + ' de ' + r.sesiones_formulario,
      nombre: 'Documentos de cada sesión',
@@ -1804,12 +1858,6 @@ function pintarAccesosZoom() {
     {href: 'pendientes.html', cifra: r.con_pendientes,
      nombre: 'Qué queda pendiente de cargar',
      glosa: 'Localidades con alguna sesión o documento por entregar.'},
-    {href: 'meses.html',
-     cifra: D.meses.en_plazo_cerradas + ' de ' + D.meses.cerradas,
-     nombre: 'Sesiones por mes',
-     glosa: 'Sesiones de ' + D.meses.primer_mes + ' a ' +
-            D.meses.ultimo_mes_cerrado + ' cargadas en los ' +
-            D.meses.plazo_dias + ' días hábiles siguientes.'},
     {href: 'detalle.html', cifra: r.actas_con_ajustes,
      nombre: 'Ajustes por acta',
      glosa: 'Actas que necesitan algún ajuste en su registro.'},
@@ -1904,89 +1952,104 @@ function miles(n) {
   return s + salida;
 }
 function decimal(x) { return x.toFixed(1).replace('.', ','); }
+function mayuscula(t) { return t.charAt(0).toUpperCase() + t.slice(1); }
+/* "Bosa, Usme y Sumapaz" */
+function enumerar(lista) {
+  if (lista.length < 2) return lista.join('');
+  return lista.slice(0, -1).join(', ') + ' y ' + lista[lista.length - 1];
+}
 
-function pintarMeses() {
+/* Consulta bajo la tabla de periodicidad. Responde dos preguntas: qué
+   sesiones tuvo una localidad, cuándo y con cuántos asistentes, y cuántos
+   COLJ hubo en un rango de meses y en qué localidades. */
+function pintarConsulta() {
+  var selLoc = document.getElementById('filtro-localidad');
+  if (!selLoc) return;
+  var selDesde = document.getElementById('filtro-desde');
+  var selHasta = document.getElementById('filtro-hasta');
   var M = D.meses;
-  var punto = '<i class="vacio" title="Sin sesión"></i>';
-  var marca = '<span class="preliminar">preliminar</span>';
+  var nombres = M.nombres_consulta;
+  var todas = D.localidades.map(function (l) { return l.localidad; });
 
-  var ultimo = M.meses[M.meses.length - 1];
-  franja('franja-meses', [
-    {v: D.resumen.sesiones_formulario, rot: 'Sesiones en 2026',
-     glosa: 'De ' + M.primer_mes + ' a ' + ultimo.nombre.toLowerCase() +
-            ', contadas en el mes en que se hizo la sesión.'},
-    {v: ultimo.sesiones, rot: ultimo.nombre,
-     glosa: 'Preliminar: todavía pueden llegar cargas de ese mes.'},
-    {v: M.en_plazo_cerradas + ' de ' + M.cerradas,
-     rot: 'Cargadas en ' + M.plazo_dias + ' días hábiles',
-     glosa: 'Sesiones de ' + M.primer_mes + ' a ' + M.ultimo_mes_cerrado +
-            ', con el plazo ya vencido.'},
-    {v: M.mediana_dias, rot: 'Días hábiles hasta la carga',
-     glosa: 'Mediana entre la sesión y la primera vez que entra al ' +
-            'formulario, ' + M.primer_mes + ' a ' + M.ultimo_mes_cerrado + '.'}
-  ]);
-
-  // 1. La ciudad mes a mes
-  var tS = 0, tA = 0, tJ = 0;
-  var filas = M.meses.map(function (m) {
-    tS += m.sesiones; tA += m.asistencias; tJ += m.jovenes;
-    return '<tr><td>' + m.nombre + (m.preliminar ? marca : '') + '</td>' +
-      '<td>' + m.sesiones + '</td><td>' + m.localidades + '</td>' +
-      '<td>' + miles(m.asistencias) + '</td><td>' + miles(m.jovenes) + '</td>' +
-      '<td>' + (m.sesiones ? decimal(m.jovenes / m.sesiones) : '') + '</td>' +
-      '<td>' + (m.asistencias ? decimal(m.jovenes / m.asistencias * 100) + '%'
-                              : '') + '</td></tr>';
+  selLoc.innerHTML = '<option value="">Todas</option>' +
+    todas.map(function (l) { return '<option>' + l + '</option>'; }).join('');
+  var opciones = nombres.map(function (n, i) {
+    return '<option value="' + (i + 1) + '">' + mayuscula(n) + '</option>';
   }).join('');
-  document.getElementById('tabla-ciudad-mes').innerHTML =
-    '<thead><tr><th>Mes</th><th>Sesiones</th><th>Localidades<br>que ' +
-    'sesionaron</th><th>Asistencias</th><th>Jóvenes</th><th>Jóvenes<br>por ' +
-    'sesión</th><th>Jóvenes sobre<br>asistencias</th></tr></thead><tbody>' +
-    filas + '<tr class="total"><td>Total</td><td>' + tS + '</td><td></td>' +
-    '<td>' + miles(tA) + '</td><td>' + miles(tJ) + '</td>' +
-    '<td>' + decimal(tJ / tS) + '</td>' +
-    '<td>' + decimal(tJ / tA * 100) + '%</td></tr></tbody>';
+  selDesde.innerHTML = opciones;
+  selHasta.innerHTML = opciones;
+  selDesde.value = '1';
+  selHasta.value = String(nombres.length);
 
-  // 2. Cada localidad mes a mes
-  var cab = M.meses.map(function (m) {
-    return '<th>' + m.abrev + (m.preliminar ? '*' : '') + '</th>';
-  }).join('');
-  var porMes = M.meses.map(function () { return 0; });
-  var filasLoc = M.por_localidad.map(function (l) {
-    var total = 0;
-    var celdas = l.meses.map(function (n, i) {
-      total += n; porMes[i] += n;
-      return '<td>' + (n ? n : punto) + '</td>';
+  function actualizar(cambio) {
+    var desde = +selDesde.value, hasta = +selHasta.value;
+    // Si el rango queda al revés, se mueve el extremo que no se tocó
+    if (desde > hasta) {
+      if (cambio === selHasta) { desde = hasta; selDesde.value = desde; }
+      else { hasta = desde; selHasta.value = hasta; }
+    }
+    var loc = selLoc.value;
+    var lista = M.sesiones.filter(function (s) {
+      return s.mes >= desde && s.mes <= hasta && (!loc || s.localidad === loc);
+    });
+
+    var tA = 0, tJ = 0, conSesion = {};
+    lista.forEach(function (s) {
+      tA += s.asistencias; tJ += s.jovenes; conSesion[s.localidad] = true;
+    });
+    var n = lista.length;
+    var periodo = desde === hasta ? 'en ' + nombres[desde - 1]
+      : 'de ' + nombres[desde - 1] + ' a ' + nombres[hasta - 1];
+    var sesiones = '<b>' + n + (n === 1 ? ' sesión' : ' sesiones') + '</b>';
+    // "210 de ellas de jóvenes" y no "210 jóvenes": es una suma de
+    // participaciones y no un conteo de personas distintas
+    var cifras = ', con ' + miles(tA) + (tA === 1 ? ' asistencia, ' : ' asistencias, ') +
+      (tJ ? miles(tJ) + (tA === 1 ? ' de ella' : ' de ellas') + ' de jóvenes.'
+          : 'ninguna de jóvenes.');
+    var texto;
+    if (loc) {
+      texto = n ? loc + ' tuvo ' + sesiones + ' ' + periodo + cifras
+                : loc + ' no tuvo sesiones ' + periodo + '.';
+    } else if (!n) {
+      texto = mayuscula(periodo) + ' no hubo sesiones.';
+    } else {
+      var nLoc = Object.keys(conSesion).length;
+      var faltan = todas.filter(function (l) { return !conSesion[l]; });
+      texto = mayuscula(periodo) + ' hubo ' + sesiones + ' en <b>' + nLoc +
+        (nLoc === 1 ? ' localidad' : ' localidades') + '</b>' + cifras +
+        '<span class="sin-sesion">' + (faltan.length
+          ? 'Sin sesión en ese periodo: ' + enumerar(faltan) + '.'
+          : 'Las ' + todas.length + ' localidades sesionaron en ese periodo.') +
+        '</span>';
+    }
+    document.getElementById('resumen-consulta').innerHTML = texto;
+
+    // Con una sola localidad elegida, la columna de localidad sobra
+    var conLoc = !loc;
+    var filas = lista.map(function (s) {
+      return '<tr>' + (conLoc ? '<td>' + s.localidad + '</td>' : '') +
+        '<td class="sin-corte">' + s.dia +
+        '<span class="mes-largo"> de ' + nombres[s.mes - 1] + '</span>' +
+        '<span class="mes-corto"> ' + nombres[s.mes - 1].slice(0, 3) +
+        '</span></td>' +
+        '<td class="sin-corte">' + s.tipo + '</td>' +
+        '<td>' + miles(s.asistencias) + '</td>' +
+        '<td>' + miles(s.jovenes) + '</td></tr>';
     }).join('');
-    return '<tr><td>' + l.localidad + '</td>' + celdas +
-      '<td class="col-total">' + total + '</td></tr>';
-  }).join('');
-  var totalLoc = porMes.reduce(function (a, b) { return a + b; }, 0);
-  document.getElementById('tabla-localidad-mes').innerHTML =
-    '<thead><tr><th>Localidad</th>' + cab +
-    '<th class="col-total">Total</th></tr></thead><tbody>' + filasLoc +
-    '<tr class="total"><td>Total</td>' + porMes.map(function (n) {
-      return '<td>' + n + '</td>'; }).join('') +
-    '<td class="col-total">' + totalLoc + '</td></tr></tbody>';
+    var tabla = document.getElementById('tabla-consulta');
+    tabla.innerHTML = '<thead><tr>' + (conLoc ? '<th>Localidad</th>' : '') +
+      '<th>Fecha</th><th>Tipo</th><th>Asistentes</th><th>Jóvenes</th>' +
+      '</tr></thead><tbody>' + filas +
+      '<tr class="total"><td>Total</td>' + (conLoc ? '<td></td>' : '') +
+      '<td></td><td>' + miles(tA) + '</td><td>' + miles(tJ) + '</td></tr>' +
+      '</tbody>';
+    tabla.parentNode.style.display = n ? '' : 'none';
+  }
 
-  // 3. Cuándo llegó cada sesión: filas por mes de la sesión, columnas por
-  // mes de la primera carga. Las celdas anteriores al mes de la sesión van
-  // vacías porque nadie carga una sesión antes de hacerla.
-  var cabRep = M.meses_reporte.map(function (a) {
-    return '<th>' + a + '</th>'; }).join('');
-  var filasRep = M.meses.map(function (m, i) {
-    var celdas = m.cargas.map(function (n, j) {
-      if (j < i) return '<td></td>';
-      if (!n) return '<td>' + punto + '</td>';
-      return '<td' + (j === i ? ' class="mismo-mes"' : '') + '>' + n + '</td>';
-    }).join('');
-    return '<tr><td>' + m.nombre + (m.preliminar ? marca : '') + '</td>' +
-      celdas + '<td class="col-total">' + m.sesiones + '</td>' +
-      '<td>' + m.en_plazo + ' de ' + m.sesiones + '</td></tr>';
-  }).join('');
-  document.getElementById('tabla-cargas-mes').innerHTML =
-    '<thead><tr><th>Mes de la sesión</th>' + cabRep +
-    '<th class="col-total">Total</th><th>En ' + M.plazo_dias +
-    ' días<br>hábiles o menos</th></tr></thead><tbody>' + filasRep + '</tbody>';
+  [selLoc, selDesde, selHasta].forEach(function (s) {
+    s.addEventListener('change', function () { actualizar(s); });
+  });
+  actualizar(null);
 }
 
 function pintarDocumentos() {
@@ -2108,7 +2171,7 @@ def envoltura(pestana, pagina, llamada, es_portada=False, vuelve_a=None,
     con_corte agrega el recordatorio de hasta cuándo llegan los datos. Va en
     las páginas con tablas y no en las que solo tienen enlaces.
 
-    vuelve_a dice a dónde lleva el botón de volver. Las seis vistas del año
+    vuelve_a dice a dónde lleva el botón de volver. Las cinco vistas del año
     en curso regresan a zoom.html, que es de donde se entra a ellas, y no a la
     portada: volver siempre al inicio obligaría a rehacer dos clics.
     """
@@ -2199,14 +2262,14 @@ def pagina_estadisticas():
 
 
 def pagina_zoom(mes_corte):
-    """Página que agrupa las seis vistas de la vigencia en curso.
+    """Página que agrupa las cinco vistas de la vigencia en curso.
 
     Recibe el mes de corte porque el texto de entrada nombra el rango de meses
     que cubre el tablero. Antes esa frase estaba escrita a mano y se quedaba
     con el mes del corte anterior cada vez que entraban sesiones nuevas.
     """
     titulo = """  <h1>Zoom año en curso</h1>
-  <p class="intro">Cómo va cada localidad en 2026, en seis vistas. La cifra de
+  <p class="intro">Cómo va cada localidad en 2026, en cinco vistas. La cifra de
      cada acceso adelanta lo que se va a encontrar adentro.</p>
 """
     cuerpo = """
@@ -2284,59 +2347,24 @@ def pagina_periodicidad():
       <tbody id="tabla-periodicidad"></tbody>
     </table>
   </div>
+
+  <div class="rotulo-seccion">
+    <h2>Consulta por mes y localidad</h2>
+    <p>Elige una localidad, un rango de meses o las dos cosas. Las cifras de
+       asistentes son las de la última carga de cada sesión. El total suma
+       participaciones, no personas: quien va a dos sesiones cuenta dos
+       veces.</p>
+  </div>
+  <div class="filtros">
+    <label>Localidad <select id="filtro-localidad"></select></label>
+    <label>Desde <select id="filtro-desde"></select></label>
+    <label>Hasta <select id="filtro-hasta"></select></label>
+  </div>
+  <p class="resumen-consulta" id="resumen-consulta"></p>
+  <div class="tarjeta tabla-ancha tabla-consulta">
+    <table id="tabla-consulta"></table>
+  </div>
 """
-    return {"titulo": titulo, "cuerpo": cuerpo}
-
-
-def pagina_meses():
-    """Página de sesiones por mes: cuándo se hicieron y cuándo se cargaron."""
-    titulo = """  <h1>Sesiones por mes</h1>
-  <p class="intro">Cuántas sesiones hubo cada mes, según la fecha en que se
-     hizo la sesión, y cuándo llegó cada una al formulario. Un mes sin sesión
-     no es un incumplimiento: el reglamento pide una sesión ordinaria cada dos
-     meses, y eso se mide en la página de periodicidad.</p>
-"""
-    cuerpo = """
-  <div class="franja" id="franja-meses"></div>
-
-  <div class="rotulo-seccion">
-    <span class="numero">1</span>
-    <h2>La ciudad mes a mes</h2>
-    <p>Asistencias cuenta participaciones, no personas: quien va a dos
-       sesiones cuenta dos veces. Las cifras son las de la última carga de
-       cada sesión.</p>
-  </div>
-  <div class="tarjeta tabla-ancha"><table id="tabla-ciudad-mes"></table></div>
-
-  <div class="rotulo-seccion">
-    <span class="numero">2</span>
-    <h2>Cada localidad mes a mes</h2>
-    <p>Número de sesiones por mes. El cuadro gris marca un mes sin sesión.
-       El mes con asterisco es preliminar.</p>
-  </div>
-  <div class="tarjeta tabla-ancha tabla-meses">
-    <table id="tabla-localidad-mes"></table>
-  </div>
-
-  <div class="rotulo-seccion">
-    <span class="numero">3</span>
-    <h2>Cuándo llegó cada sesión</h2>
-    <p>Cada fila es el mes en que se hizo la sesión y cada columna el mes en
-       que se cargó por primera vez al formulario. Por eso un mes ya
-       publicado puede crecer en el siguiente corte. El plazo para cargar es
-       de %d días hábiles, sin contar sábados, domingos ni festivos.</p>
-  </div>
-  <div class="leyenda">
-    <div>En negrita, las sesiones que se cargaron el mismo mes en que se
-      hicieron. Eso no equivale a cumplir el plazo, que se cuenta en la última
-      columna.</div>
-    <div><i class="vacio"></i> Mes sin cargas de esa fila. Las celdas en
-      blanco son meses anteriores a la sesión.</div>
-  </div>
-  <div class="tarjeta tabla-ancha tabla-meses">
-    <table id="tabla-cargas-mes"></table>
-  </div>
-""" % PLAZO_CARGA_DIAS
     return {"titulo": titulo, "cuerpo": cuerpo}
 
 
@@ -2525,11 +2553,10 @@ def main():
         ("enlaces.html", "Enlaces · COLJ", pagina_enlaces(),
          "pintarEnlaces();", False),
         ("periodicidad.html", "Periodicidad de las sesiones · COLJ 2026",
-         pagina_periodicidad(), "pintarPeriodicidad();", False),
+         pagina_periodicidad(), "pintarPeriodicidad();pintarConsulta();",
+         False),
         ("documentos.html", "Documentos de cada sesión · COLJ 2026",
          pagina_documentos(), "pintarDocumentos();", False),
-        ("meses.html", "Sesiones por mes · COLJ 2026",
-         pagina_meses(), "pintarMeses();", False),
         ("pendientes.html", "Qué queda pendiente de cargar · COLJ 2026",
          pagina_pendientes(), "pintarPendientes();", False),
         ("ajustes.html", "Ajustes por localidad · COLJ 2026",
@@ -2537,11 +2564,11 @@ def main():
         ("detalle.html", "Ajustes por acta · COLJ 2026",
          pagina_detalle(), "pintarDetalle();", False),
     ]
-    # Las seis vistas del año en curso vuelven a zoom.html, que es de donde
+    # Las cinco vistas del año en curso vuelven a zoom.html, que es de donde
     # se entra a ellas; el resto vuelve a la portada.
     vuelve_a_zoom = ("zoom.html", "Zoom año en curso")
     de_zoom = {"periodicidad.html", "documentos.html", "pendientes.html",
-               "meses.html", "ajustes.html", "detalle.html"}
+               "ajustes.html", "detalle.html"}
     # Todas las páginas con datos llevan el recordatorio del corte. La de
     # enlaces no, porque ahí no hay ninguna cifra que se pueda leer mal.
     con_corte = de_zoom | {"estadisticas.html", "zoom.html"}
