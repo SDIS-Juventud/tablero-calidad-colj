@@ -2001,11 +2001,13 @@ function pintarConsulta() {
     var periodo = desde === hasta ? 'en ' + nombres[desde - 1]
       : 'de ' + nombres[desde - 1] + ' a ' + nombres[hasta - 1];
     var sesiones = '<b>' + n + (n === 1 ? ' sesión' : ' sesiones') + '</b>';
-    // "210 de ellas de jóvenes" y no "210 jóvenes": es una suma de
-    // participaciones y no un conteo de personas distintas
-    var cifras = ', con ' + miles(tA) + (tA === 1 ? ' asistencia, ' : ' asistencias, ') +
-      (tJ ? miles(tJ) + (tA === 1 ? ' de ella' : ' de ellas') + ' de jóvenes.'
-          : 'ninguna de jóvenes.');
+    // Promedio por sesión y no total: el total sumaba participaciones y se
+    // leía como personas distintas. Con una sola sesión van sus cifras.
+    var cifras = n === 1
+      ? ', con ' + tA + ' asistentes, ' +
+        (tJ ? tJ + ' de ellos jóvenes.' : 'ninguno joven.')
+      : ', con un promedio de ' + decimal(tA / n) + ' asistentes por sesión, ' +
+        (tJ ? decimal(tJ / n) + ' de ellos jóvenes.' : 'ninguno joven.');
     var texto;
     if (loc) {
       texto = n ? loc + ' tuvo ' + sesiones + ' ' + periodo + cifras
@@ -2040,8 +2042,9 @@ function pintarConsulta() {
     tabla.innerHTML = '<thead><tr>' + (conLoc ? '<th>Localidad</th>' : '') +
       '<th>Fecha</th><th>Tipo</th><th>Asistentes</th><th>Jóvenes</th>' +
       '</tr></thead><tbody>' + filas +
-      '<tr class="total"><td>Total</td>' + (conLoc ? '<td></td>' : '') +
-      '<td></td><td>' + miles(tA) + '</td><td>' + miles(tJ) + '</td></tr>' +
+      '<tr class="total"><td>Promedio</td>' + (conLoc ? '<td></td>' : '') +
+      '<td></td><td>' + (n ? decimal(tA / n) : '') + '</td>' +
+      '<td>' + (n ? decimal(tJ / n) : '') + '</td></tr>' +
       '</tbody>';
     tabla.parentNode.style.display = n ? '' : 'none';
   }
@@ -2351,9 +2354,8 @@ def pagina_periodicidad():
   <div class="rotulo-seccion">
     <h2>Consulta por mes y localidad</h2>
     <p>Elige una localidad, un rango de meses o las dos cosas. Las cifras de
-       asistentes son las de la última carga de cada sesión. El total suma
-       participaciones, no personas: quien va a dos sesiones cuenta dos
-       veces.</p>
+       asistentes son las de la última carga de cada sesión, y el promedio es
+       por sesión.</p>
   </div>
   <div class="filtros">
     <label>Localidad <select id="filtro-localidad"></select></label>
