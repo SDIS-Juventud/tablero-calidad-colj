@@ -209,12 +209,13 @@ a { color: inherit; }
 
 /* --------------------------------------------------------------- accesos */
 
-/* Los accesos de la portada. Cada uno lleva su propia cifra, para que desde
-   la portada ya se sepa qué hay adentro sin tener que entrar. */
-/* Accesos en filas de tres. Con el ancho automático la última fila quedaba
-   con uno solo. */
+/* Los accesos de la página de zoom. Cada uno lleva su propia cifra, para que
+   ya se sepa qué hay adentro sin tener que entrar. Van debajo de la franja de
+   su bloque, en cuatro columnas como las cuatro casillas de la franja: así el
+   bloque de revisión cabe en una fila y Periodicidad queda bajo la primera
+   cifra del panorama. */
 .accesos {
-  display: grid; grid-template-columns: repeat(3, 1fr);
+  display: grid; grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
 }
 @media (max-width: 900px) { .accesos { grid-template-columns: repeat(2, 1fr); } }

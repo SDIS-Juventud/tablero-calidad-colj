@@ -1387,12 +1387,13 @@ a { color: inherit; }
 
 /* --------------------------------------------------------------- accesos */
 
-/* Los accesos de la portada. Cada uno lleva su propia cifra, para que desde
-   la portada ya se sepa qué hay adentro sin tener que entrar. */
-/* Accesos en filas de tres. Con el ancho automático la última fila quedaba
-   con uno solo. */
+/* Los accesos de la página de zoom. Cada uno lleva su propia cifra, para que
+   ya se sepa qué hay adentro sin tener que entrar. Van debajo de la franja de
+   su bloque, en cuatro columnas como las cuatro casillas de la franja: así el
+   bloque de revisión cabe en una fila y Periodicidad queda bajo la primera
+   cifra del panorama. */
 .accesos {
-  display: grid; grid-template-columns: repeat(3, 1fr);
+  display: grid; grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
 }
 @media (max-width: 900px) { .accesos { grid-template-columns: repeat(2, 1fr); } }
@@ -1865,15 +1866,24 @@ function pintarAccesosZoom() {
      nombre: 'Ajustes por localidad',
      glosa: 'Localidades con alguna acta por ajustar.'}
   ];
-  var nodo = document.getElementById('accesos');
-  if (!nodo) return;
-  nodo.innerHTML = fichas.map(function (f) {
-    return '<a class="acceso" href="' + f.href + '">' +
-      '<div class="cifra">' + f.cifra + '</div>' +
-      '<div class="nombre">' + f.nombre + '</div>' +
-      '<div class="glosa">' + f.glosa + '</div>' +
-      '<span class="entrar">Ver la página &rarr;</span></a>';
-  }).join('');
+  // Lo que se hizo y cómo se revisa van separados: Periodicidad queda bajo
+  // el panorama general y el resto bajo el resumen de ajustes.
+  var bloques = {'accesos-sesiones': ['periodicidad.html'],
+                 'accesos-revision': ['documentos.html', 'pendientes.html',
+                                      'detalle.html', 'ajustes.html']};
+  Object.keys(bloques).forEach(function (id) {
+    var nodo = document.getElementById(id);
+    if (!nodo) return;
+    nodo.innerHTML = fichas.filter(function (f) {
+      return bloques[id].indexOf(f.href) >= 0;
+    }).map(function (f) {
+      return '<a class="acceso" href="' + f.href + '">' +
+        '<div class="cifra">' + f.cifra + '</div>' +
+        '<div class="nombre">' + f.nombre + '</div>' +
+        '<div class="glosa">' + f.glosa + '</div>' +
+        '<span class="entrar">Ver la página &rarr;</span></a>';
+    }).join('');
+  });
 }
 
 function pintarPanorama() {
@@ -2283,6 +2293,7 @@ def pagina_zoom(mes_corte):
        antes de mirar localidad por localidad.</p>
   </div>
   <div class="franja" id="franja-general"></div>
+  <div class="accesos" id="accesos-sesiones"></div>
 
   <div class="rotulo-seccion">
     <span class="numero">2</span>
@@ -2291,13 +2302,7 @@ def pagina_zoom(mes_corte):
        adjuntos con lo que se diligenció en el formulario.</p>
   </div>
   <div class="franja" id="franja-ajustes"></div>
-
-  <div class="rotulo-seccion">
-    <span class="numero">3</span>
-    <h2>Explora el detalle</h2>
-    <p>Cada página abre una parte del seguimiento.</p>
-  </div>
-  <div class="accesos" id="accesos"></div>
+  <div class="accesos" id="accesos-revision"></div>
 """
     cuerpo = cuerpo.replace("MES_CORTE", mes_corte)
     return {"titulo": titulo, "cuerpo": cuerpo}

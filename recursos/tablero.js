@@ -185,15 +185,24 @@ function pintarAccesosZoom() {
      nombre: 'Ajustes por localidad',
      glosa: 'Localidades con alguna acta por ajustar.'}
   ];
-  var nodo = document.getElementById('accesos');
-  if (!nodo) return;
-  nodo.innerHTML = fichas.map(function (f) {
-    return '<a class="acceso" href="' + f.href + '">' +
-      '<div class="cifra">' + f.cifra + '</div>' +
-      '<div class="nombre">' + f.nombre + '</div>' +
-      '<div class="glosa">' + f.glosa + '</div>' +
-      '<span class="entrar">Ver la página &rarr;</span></a>';
-  }).join('');
+  // Lo que se hizo y cómo se revisa van separados: Periodicidad queda bajo
+  // el panorama general y el resto bajo el resumen de ajustes.
+  var bloques = {'accesos-sesiones': ['periodicidad.html'],
+                 'accesos-revision': ['documentos.html', 'pendientes.html',
+                                      'detalle.html', 'ajustes.html']};
+  Object.keys(bloques).forEach(function (id) {
+    var nodo = document.getElementById(id);
+    if (!nodo) return;
+    nodo.innerHTML = fichas.filter(function (f) {
+      return bloques[id].indexOf(f.href) >= 0;
+    }).map(function (f) {
+      return '<a class="acceso" href="' + f.href + '">' +
+        '<div class="cifra">' + f.cifra + '</div>' +
+        '<div class="nombre">' + f.nombre + '</div>' +
+        '<div class="glosa">' + f.glosa + '</div>' +
+        '<span class="entrar">Ver la página &rarr;</span></a>';
+    }).join('');
+  });
 }
 
 function pintarPanorama() {
