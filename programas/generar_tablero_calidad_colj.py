@@ -1639,6 +1639,21 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
 /* Con cuatro o cinco columnas, a todo el ancho las cifras quedaban lejos de
    la fecha. Se limita a la medida del texto de arriba. */
 .tarjeta.tabla-consulta { max-width: 880px; }
+/* Los títulos de la tabla son botones para ordenarla. Se ven como los demás
+   encabezados; la columna que ordena va en gris oscuro con su flecha, y las
+   otras llevan una flecha doble tenue que avisa que se pueden ordenar. */
+.tabla-consulta th button.ordenar {
+  background: none; border: 0; padding: 0; margin: 0; cursor: pointer;
+  font: inherit; letter-spacing: inherit; text-transform: inherit;
+  color: inherit; white-space: nowrap;
+}
+.tabla-consulta th button.ordenar:hover,
+.tabla-consulta th button.activa { color: var(--gris-oscuro); }
+.tabla-consulta th button.ordenar:focus-visible {
+  outline: 2px solid var(--acento); outline-offset: 2px;
+}
+.tabla-consulta .flecha { margin-left: 4px; font-family: 'Segoe UI', sans-serif; }
+.tabla-consulta th button:not(.activa) .flecha { opacity: 0.5; }
 /* "27 de abril" partido en tres renglones no se lee como fecha */
 .tabla-consulta td.sin-corte { white-space: nowrap; }
 .tabla-consulta .mes-corto { display: none; }
@@ -1952,7 +1967,8 @@ function pintarPeriodicidad() {
   }
 }
 
-/* Formato colombiano: miles con punto y decimales con coma */
+/* Formato colombiano: miles con punto. Si algún día hace falta un decimal,
+   va con coma. */
 function miles(n) {
   var s = String(n), salida = '';
   while (s.length > 3) {
@@ -1961,7 +1977,6 @@ function miles(n) {
   }
   return s + salida;
 }
-function decimal(x) { return x.toFixed(1).replace('.', ','); }
 function mayuscula(t) { return t.charAt(0).toUpperCase() + t.slice(1); }
 /* "Bosa, Usme y Sumapaz" */
 function enumerar(lista) {
@@ -2012,12 +2027,14 @@ function pintarConsulta() {
       : 'de ' + nombres[desde - 1] + ' a ' + nombres[hasta - 1];
     var sesiones = '<b>' + n + (n === 1 ? ' sesión' : ' sesiones') + '</b>';
     // Promedio por sesión y no total: el total sumaba participaciones y se
-    // leía como personas distintas. Con una sola sesión van sus cifras.
+    // leía como personas distintas. Va redondeado a entero porque cuenta
+    // personas. Con una sola sesión van sus cifras.
+    var pA = n ? Math.round(tA / n) : 0, pJ = n ? Math.round(tJ / n) : 0;
+    var deJovenes = pJ ? pJ + (pJ === 1 ? ' de ellos joven.' : ' de ellos jóvenes.')
+      : (tJ ? 'menos de uno de ellos joven.' : 'ninguno joven.');
     var cifras = n === 1
-      ? ', con ' + tA + ' asistentes, ' +
-        (tJ ? tJ + ' de ellos jóvenes.' : 'ninguno joven.')
-      : ', con un promedio de ' + decimal(tA / n) + ' asistentes por sesión, ' +
-        (tJ ? decimal(tJ / n) + ' de ellos jóvenes.' : 'ninguno joven.');
+      ? ', con ' + tA + ' asistentes, ' + deJovenes
+      : ', con un promedio de ' + pA + ' asistentes por sesión, ' + deJovenes;
     var texto;
     if (loc) {
       texto = n ? loc + ' tuvo ' + sesiones + ' ' + periodo + cifras
@@ -2038,6 +2055,25 @@ function pintarConsulta() {
 
     // Con una sola localidad elegida, la columna de localidad sobra
     var conLoc = !loc;
+    var col = COLUMNAS.filter(function (c) { return c.id === orden.id; })[0];
+    lista.sort(function (a, b) {
+      var ka = col.clave(a), kb = col.clave(b);
+      var d = ka < kb ? -1 : (ka > kb ? 1 : 0);
+      if (!orden.asc) d = -d;
+      // Los empates se desempatan por localidad y fecha, siempre en orden
+      return d || (posicion(a) - posicion(b)) || (diaDelAnio(a) - diaDelAnio(b));
+    });
+    var cab = COLUMNAS.filter(function (c) {
+      return conLoc || c.id !== 'localidad';
+    }).map(function (c) {
+      var activa = c.id === orden.id;
+      var flecha = activa ? (orden.asc ? '&uarr;' : '&darr;') : '&varr;';
+      return '<th' + (activa ? ' aria-sort="' +
+          (orden.asc ? 'ascending' : 'descending') + '"' : '') + '>' +
+        '<button type="button" class="ordenar' + (activa ? ' activa' : '') +
+        '" data-col="' + c.id + '">' + c.rot +
+        '<span class="flecha">' + flecha + '</span></button></th>';
+    }).join('');
     var filas = lista.map(function (s) {
       return '<tr>' + (conLoc ? '<td>' + s.localidad + '</td>' : '') +
         '<td class="sin-corte">' + s.dia +
@@ -2048,16 +2084,47 @@ function pintarConsulta() {
         '<td>' + miles(s.asistencias) + '</td>' +
         '<td>' + miles(s.jovenes) + '</td></tr>';
     }).join('');
-    var tabla = document.getElementById('tabla-consulta');
-    tabla.innerHTML = '<thead><tr>' + (conLoc ? '<th>Localidad</th>' : '') +
-      '<th>Fecha</th><th>Tipo</th><th>Asistentes</th><th>Jóvenes</th>' +
-      '</tr></thead><tbody>' + filas +
+    tabla.innerHTML = '<thead><tr>' + cab + '</tr></thead><tbody>' + filas +
       '<tr class="total"><td>Promedio</td>' + (conLoc ? '<td></td>' : '') +
-      '<td></td><td>' + (n ? decimal(tA / n) : '') + '</td>' +
-      '<td>' + (n ? decimal(tJ / n) : '') + '</td></tr>' +
+      '<td></td><td>' + (n ? pA : '') + '</td>' +
+      '<td>' + (n ? pJ : '') + '</td></tr>' +
       '</tbody>';
     tabla.parentNode.style.display = n ? '' : 'none';
   }
+
+  // Orden de la tabla. Arranca por localidad, en el orden oficial de las 20,
+  // y cambia con un clic en el título de una columna; el segundo clic lo
+  // invierte. Las cifras arrancan de mayor a menor, que es lo que se busca
+  // al ordenarlas. La fila de promedio queda siempre al final.
+  function posicion(s) { return todas.indexOf(s.localidad); }
+  function diaDelAnio(s) { return s.mes * 100 + s.dia; }
+  var COLUMNAS = [
+    {id: 'localidad', rot: 'Localidad', clave: posicion},
+    {id: 'fecha', rot: 'Fecha', clave: diaDelAnio},
+    {id: 'tipo', rot: 'Tipo', clave: function (s) { return s.tipo; }},
+    {id: 'asistencias', rot: 'Asistentes', cifra: true,
+     clave: function (s) { return s.asistencias; }},
+    {id: 'jovenes', rot: 'Jóvenes', cifra: true,
+     clave: function (s) { return s.jovenes; }}
+  ];
+  var orden = {id: 'localidad', asc: true};
+  var tabla = document.getElementById('tabla-consulta');
+  tabla.addEventListener('click', function (e) {
+    var boton = e.target.closest('button.ordenar');
+    if (!boton) return;
+    var id = boton.getAttribute('data-col');
+    if (orden.id === id) {
+      orden.asc = !orden.asc;
+    } else {
+      orden.id = id;
+      orden.asc = !COLUMNAS.filter(function (c) { return c.id === id; })[0].cifra;
+    }
+    actualizar(null);
+    // La tabla se vuelve a pintar: el foco vuelve al mismo título para
+    // quien ordena con el teclado
+    var nuevo = tabla.querySelector('button[data-col="' + id + '"]');
+    if (nuevo) nuevo.focus();
+  });
 
   [selLoc, selDesde, selHasta].forEach(function (s) {
     s.addEventListener('change', function () { actualizar(s); });
@@ -2358,9 +2425,10 @@ def pagina_periodicidad():
 
   <div class="rotulo-seccion">
     <h2>Consulta por mes y localidad</h2>
-    <p>Elige una localidad, un rango de meses o las dos cosas. Las cifras de
-       asistentes son las de la última carga de cada sesión, y el promedio es
-       por sesión.</p>
+    <p>Elige una localidad, un rango de meses o las dos cosas. Para ordenar la
+       tabla, haz clic en el título de una columna. Las cifras de asistentes
+       son las de la última carga de cada sesión, y el promedio es por
+       sesión.</p>
   </div>
   <div class="filtros">
     <label>Localidad <select id="filtro-localidad"></select></label>
