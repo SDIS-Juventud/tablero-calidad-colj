@@ -352,6 +352,21 @@ function pintarConsulta() {
     if (id === 'fecha') return (a.mes * 100 + a.dia) - (b.mes * 100 + b.dia);
     return a[id] - b[id];
   }
+  // Las flechas de los títulos se dibujan en SVG y no con caracteres: el
+  // iPhone pinta la flecha doble como un emoji de cuadrito azul, y cada
+  // teléfono dibuja las flechas de texto a su manera. Con un trazo propio
+  // las tres se ven iguales en cualquier pantalla.
+  var TRAZOS_FLECHA = {
+    asc: 'M4 11V1.5M1 4.5l3-3 3 3',
+    desc: 'M4 1v9.5M1 7.5l3 3 3-3',
+    ambas: 'M4 1.5v9M1.5 4l2.5-2.5L6.5 4M1.5 8l2.5 2.5L6.5 8'
+  };
+  function flechaOrden(sentido) {
+    return '<svg class="flecha" viewBox="0 0 8 12" aria-hidden="true">' +
+      '<path d="' + TRAZOS_FLECHA[sentido] + '" fill="none"' +
+      ' stroke="currentColor" stroke-width="1.5" stroke-linecap="round"' +
+      ' stroke-linejoin="round"/></svg>';
+  }
   var orden;
 
   function valoresIniciales() {
@@ -434,12 +449,11 @@ function pintarConsulta() {
       return conLoc || c.id !== 'localidad';
     }).map(function (c) {
       var activa = c.id === orden.id;
-      var flecha = activa ? (orden.asc ? '&uarr;' : '&darr;') : '&varr;';
+      var flecha = flechaOrden(activa ? (orden.asc ? 'asc' : 'desc') : 'ambas');
       return '<th' + (activa ? ' aria-sort="' +
           (orden.asc ? 'ascending' : 'descending') + '"' : '') + '>' +
         '<button type="button" class="ordenar' + (activa ? ' activa' : '') +
-        '" data-col="' + c.id + '">' + c.rot +
-        '<span class="flecha">' + flecha + '</span></button></th>';
+        '" data-col="' + c.id + '">' + c.rot + flecha + '</button></th>';
     }).join('');
     var filas = lista.map(function (s) {
       return '<tr>' + (conLoc ? '<td>' + s.localidad + '</td>' : '') +

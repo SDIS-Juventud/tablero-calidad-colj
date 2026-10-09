@@ -488,7 +488,10 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
 .tabla-consulta th button.ordenar:focus-visible {
   outline: 2px solid var(--acento); outline-offset: 2px;
 }
-.tabla-consulta .flecha { margin-left: 4px; font-family: 'Segoe UI', sans-serif; }
+.tabla-consulta .flecha {
+  width: 0.5em; height: 0.75em; margin-left: 4px; vertical-align: -0.05em;
+  overflow: visible;
+}
 .tabla-consulta th button:not(.activa) .flecha { opacity: 0.5; }
 /* "27 de abril" partido en tres renglones no se lee como fecha */
 .tabla-consulta td.sin-corte { white-space: nowrap; }
