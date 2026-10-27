@@ -1,49 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-Genera el tablero de seguimiento de los COLJ para la vigencia 2026.
+2026
 
-El tablero sigue la estructura de tablero-cij y tablero-ppdj: una portada con
-las cifras generales y accesos a las secciones, y cada sección en su propia
-página. Se produce este árbol de archivos:
+USO:
+Genera el tablero de seguimiento de los COLJ 2026, con la portada, las cinco
+páginas de sección, recursos/ y datos/. Lee las actas que dejó el paso 3 de la
+revisión periódica, la carpeta 2026/ y el Excel del formulario, así que va
+después de los pasos 2 y 3.
 
-    index.html            portada, con las dos franjas de cifras y los accesos
-    periodicidad.html     si cada localidad sesionó lo que debía, y la
-                          consulta de sesiones por mes y localidad
-    documentos.html       si cargó acta y planillas de cada sesión
-    pendientes.html       qué le falta a cada localidad
-    ajustes.html          ajustes del registro por localidad
-    detalle.html          qué habría que corregir en cada acta
-    recursos/tablero.css  estilos comunes, con las tipográficas embebidas
-    recursos/tablero.js   funciones de pintado comunes
-    datos/datos_colj.js   los datos, para que los lean todas las páginas
-    datos/calidad_colj_2026.json  los mismos datos en formato legible
+    python programas/generar_tablero_calidad_colj.py   desde tablero-calidad-colj
+    python 4_generar_tablero.py                        desde revision_periodica
 
-Dos decisiones que conviene conocer antes de tocar esto:
-
-Los datos se entregan como un .js que asigna window.DATOS_COLJ, no como un
-.json que se pida con fetch. La razón es que el tablero se abre con doble clic
-desde el disco y el navegador bloquea fetch sobre file://, mientras que una
-etiqueta script sí carga. Es el mismo mecanismo que usa tablero-ppdj.
-
-Las tipográficas van embebidas en base64 dentro del CSS y no como archivos
-sueltos, porque el navegador sí bloquea la carga de fuentes sobre file:// por
-CORS. Las imágenes en cambio se referencian con ruta relativa, que funciona
-sin problema y evita repetir el mismo PNG en seis páginas.
-
-Se alimenta de:
-  - ../../programas/calidad_actas_2026.json, que produce
-    ../../programas/revision_periodica/3_extraer_calidad_actas_2026.py al
-    abrir una por una las actas archivadas. Antes de correr este generador
-    conviene correr 2_validar_nombres_2026.py, de esa misma carpeta: un acta
-    cuyo nombre no traiga la fecha se cae del conteo sin avisar y el tablero
-    queda con una cifra corta.
-  - La carpeta ../../2026/, para saber qué documentos se cargaron.
-  - El Excel de seguimiento con las respuestas del formulario.
-
-Se corre desde la carpeta tablero-calidad-colj:
-    python programas/generar_tablero_calidad_colj.py
-o, dentro de la revisión periódica, desde ../../programas/revision_periodica/:
-    python 4_generar_tablero.py
 """
 
 import os
@@ -978,6 +945,19 @@ def construir():
         limpias = 0
         detalle = []
         pendientes_imagen = []
+
+        # Dos actas de la localidad que dicen el mismo número por dentro. Si
+        # el formulario repite el mismo número, la comparación contra él da
+        # bien y el error no se ve: Suba escribió ACTA N° 6 en la sesión del
+        # 10 de septiembre y en la del 8 de octubre, y en el formulario cargó
+        # las dos como comité 6 (26 de octubre de 2026). Se marca la segunda,
+        # porque la primera con ese número es la que sigue el orden.
+        primera_con_numero = {}
+        for acta in sorted(propias, key=lambda a: a["fecha_nombre"] or ""):
+            if acta["estado_num_declarado"] == "numero" \
+                    and acta["texto_leido"] >= 300:
+                primera_con_numero.setdefault(acta["num_declarado"], acta)
+
         for acta in propias:
             # El comité del formulario se busca por la fecha del archivo. Si
             # el acta solo cruza por número, ese número es el mismo del
@@ -985,6 +965,15 @@ def construir():
             # la fecha que no coincide se reporta en su propio campo.
             comite_form = comite_fecha.get((nombre, acta["fecha_nombre"]))
             estado_num, nota_num = revisar_numeracion(acta, comite_form)
+            primera = primera_con_numero.get(acta["num_declarado"])
+            if estado_num == "ok" and primera is not None \
+                    and primera["fecha_nombre"] != acta["fecha_nombre"]:
+                estado_num = "repetido"
+                nota_num = ("por dentro dice ACTA N° %s, el mismo número del "
+                            "acta del %s; la numeración tiene que seguir el "
+                            "orden de las sesiones"
+                            % (acta["num_declarado"],
+                               texto_fecha(primera["fecha_nombre"])))
             estado_rec, nota_rec = revisar_recuadro(acta)
             num[estado_num] += 1
             rec[estado_rec] += 1
@@ -1088,6 +1077,7 @@ def construir():
             "estado": estado,
             "limpias": limpias,
             "numeracion": {"ok": num["ok"], "distinto": num["distinto"],
+                           "repetido": num["repetido"],
                            "blanco": num["blanco"],
                            "sin_linea": num["sin_linea"],
                            "escaneo": num["escaneo"]},
@@ -1141,6 +1131,7 @@ def construir():
         "localidades_con_ajustes": sum(1 for l in localidades if l["detalle"]),
         "limpias": suma("limpias"),
         "num_problema": (suma("numeracion", "distinto")
+                         + suma("numeracion", "repetido")
                          + suma("numeracion", "blanco")
                          + suma("numeracion", "sin_linea")),
         "rec_problema": (suma("recuadro", "sin_recuadro")
@@ -1943,7 +1934,7 @@ function pintarResumenAjustes() {
      glosa: 'De ' + r.actas + '. No necesitan ningún ajuste.'},
     {v: r.num_problema, rot: 'Numeración por ajustar',
      glosa: 'El número que trae el acta por dentro no coincide con el del ' +
-            'formulario o quedó vacío.'},
+            'formulario, repite el de otra acta o quedó vacío.'},
     {v: r.rec_problema, rot: 'Recuadros por completar',
      glosa: 'Al cuadro de participantes le falta algo o sus filas no suman.'},
     {v: r.cifras_difieren, rot: 'Cifras por conciliar',
@@ -2254,7 +2245,8 @@ function pintarAjustes() {
     return '<tr>' +
       '<td>' + l.localidad + '</td>' +
       '<td>' + l.actas + '</td>' +
-      '<td>' + pastilla(n.distinto + n.blanco + n.sin_linea) + '</td>' +
+      '<td>' + pastilla(n.distinto + n.repetido + n.blanco + n.sin_linea) +
+      '</td>' +
       '<td>' + pastilla(c.sin_recuadro + c.modificado + c.no_cuadra) + '</td>' +
       '<td>' + pastilla(l.cifras.difieren) + '</td>' +
       '<td>' + pastilla(l.fechas.difieren) + '</td>' +

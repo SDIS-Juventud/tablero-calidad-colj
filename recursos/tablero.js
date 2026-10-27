@@ -228,7 +228,7 @@ function pintarResumenAjustes() {
      glosa: 'De ' + r.actas + '. No necesitan ningún ajuste.'},
     {v: r.num_problema, rot: 'Numeración por ajustar',
      glosa: 'El número que trae el acta por dentro no coincide con el del ' +
-            'formulario o quedó vacío.'},
+            'formulario, repite el de otra acta o quedó vacío.'},
     {v: r.rec_problema, rot: 'Recuadros por completar',
      glosa: 'Al cuadro de participantes le falta algo o sus filas no suman.'},
     {v: r.cifras_difieren, rot: 'Cifras por conciliar',
@@ -539,7 +539,8 @@ function pintarAjustes() {
     return '<tr>' +
       '<td>' + l.localidad + '</td>' +
       '<td>' + l.actas + '</td>' +
-      '<td>' + pastilla(n.distinto + n.blanco + n.sin_linea) + '</td>' +
+      '<td>' + pastilla(n.distinto + n.repetido + n.blanco + n.sin_linea) +
+      '</td>' +
       '<td>' + pastilla(c.sin_recuadro + c.modificado + c.no_cuadra) + '</td>' +
       '<td>' + pastilla(l.cifras.difieren) + '</td>' +
       '<td>' + pastilla(l.fechas.difieren) + '</td>' +
