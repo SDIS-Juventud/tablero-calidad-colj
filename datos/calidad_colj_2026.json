@@ -1,34 +1,34 @@
 {
   "corte": "22 de octubre de 2026",
-  "ultima_carga": "26 de octubre de 2026",
+  "ultima_carga": "28 de octubre de 2026",
   "ultima_sesion": "Rafael Uribe Uribe, 22 de octubre de 2026",
   "bimestres_exigidos": 4,
   "resumen": {
-    "actas": 124,
-    "respuestas_formulario": 127,
-    "sesiones_formulario": 125,
-    "ordinarias": 85,
-    "extraordinarias": 40,
-    "planillas": 122,
-    "digitales": 36,
-    "piden_digital": 39,
-    "sesiones_completas": 118,
+    "actas": 128,
+    "respuestas_formulario": 131,
+    "sesiones_formulario": 129,
+    "ordinarias": 88,
+    "extraordinarias": 41,
+    "planillas": 126,
+    "digitales": 37,
+    "piden_digital": 40,
+    "sesiones_completas": 122,
     "actas_faltantes": 1,
-    "al_dia_sesiones": 18,
-    "en_silencio": 3,
+    "al_dia_sesiones": 19,
+    "en_silencio": 2,
     "dias_alerta": 61,
     "ordinarias_exigidas": 4,
     "carga_completa": 15,
     "sin_pendientes": 2,
-    "con_pendientes": 7,
-    "actas_con_ajustes": 78,
+    "con_pendientes": 6,
+    "actas_con_ajustes": 77,
     "localidades_con_ajustes": 18,
-    "limpias": 46,
-    "num_problema": 30,
+    "limpias": 51,
+    "num_problema": 29,
     "rec_problema": 41,
     "cifras_difieren": 37,
     "fechas_difieren": 3,
-    "cifras_comparables": 106,
+    "cifras_comparables": 110,
     "escaneadas": 2
   },
   "localidades": [
@@ -1166,11 +1166,11 @@
       "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
-      "limpias": 3,
+      "limpias": 4,
       "numeracion": {
-        "ok": 6,
+        "ok": 7,
         "distinto": 1,
-        "repetido": 1,
+        "repetido": 0,
         "blanco": 0,
         "sin_linea": 0,
         "escaneo": 0
@@ -1208,13 +1208,6 @@
           ]
         },
         {
-          "archivo": "20260522_TEUSAQUILLO_ACTA_4.pdf",
-          "fecha": "2026-05-22",
-          "ajustes": [
-            "por dentro dice ACTA N° 4, el mismo número del acta del 24 de abril de 2026; la numeración tiene que seguir el orden de las sesiones"
-          ]
-        },
-        {
           "archivo": "20260626_TEUSAQUILLO_ACTA_5.pdf",
           "fecha": "2026-06-26",
           "ajustes": [
@@ -1232,39 +1225,35 @@
     },
     {
       "localidad": "Los Mártires",
-      "actas": 4,
-      "respuestas_formulario": 4,
-      "sesiones_formulario": 4,
-      "ordinarias": 3,
+      "actas": 6,
+      "respuestas_formulario": 6,
+      "sesiones_formulario": 6,
+      "ordinarias": 5,
       "extraordinarias": 1,
-      "bimestres_cubiertos": 3,
+      "bimestres_cubiertos": 4,
       "bimestres_con_ordinaria": [
         1,
         2,
-        3
+        3,
+        4
       ],
       "bimestres_exigidos": 4,
-      "bimestres_faltantes": [
-        "julio y agosto"
-      ],
+      "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
-      "faltan_ordinarias": 1,
-      "dias_sin_sesionar": 126,
-      "planillas": 4,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 7,
+      "planillas": 6,
       "digitales": 1,
       "piden_digital": 1,
-      "sesiones_completas": 4,
+      "sesiones_completas": 6,
       "actas_faltantes": 0,
       "pendientes_carga": [],
       "pendientes_imagen": [],
-      "pendientes_sesion": [
-        "queda pendiente una sesión ordinaria para llegar a las 4 que se esperan al corte",
-        "lleva 126 días sin reunirse"
-      ],
-      "estado": "falta sesionar",
-      "limpias": 1,
+      "pendientes_sesion": [],
+      "estado": "revisar forma",
+      "limpias": 3,
       "numeracion": {
-        "ok": 2,
+        "ok": 4,
         "distinto": 1,
         "repetido": 0,
         "blanco": 1,
@@ -1272,15 +1261,15 @@
         "escaneo": 0
       },
       "recuadro": {
-        "ok": 3,
+        "ok": 5,
         "sin_recuadro": 0,
         "modificado": 0,
         "no_cuadra": 1,
         "escaneo": 0
       },
       "cifras": {
-        "comparables": 4,
-        "coinciden": 3,
+        "comparables": 6,
+        "coinciden": 5,
         "difieren": 1
       },
       "fechas": {
@@ -1368,11 +1357,11 @@
     },
     {
       "localidad": "Puente Aranda",
-      "actas": 6,
-      "respuestas_formulario": 6,
-      "sesiones_formulario": 6,
-      "ordinarias": 4,
-      "extraordinarias": 2,
+      "actas": 8,
+      "respuestas_formulario": 8,
+      "sesiones_formulario": 8,
+      "ordinarias": 5,
+      "extraordinarias": 3,
       "bimestres_cubiertos": 4,
       "bimestres_con_ordinaria": [
         1,
@@ -1384,19 +1373,19 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 56,
-      "planillas": 6,
-      "digitales": 4,
-      "piden_digital": 4,
-      "sesiones_completas": 6,
+      "dias_sin_sesionar": 8,
+      "planillas": 8,
+      "digitales": 5,
+      "piden_digital": 5,
+      "sesiones_completas": 8,
       "actas_faltantes": 0,
       "pendientes_carga": [],
       "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "al día",
-      "limpias": 6,
+      "limpias": 8,
       "numeracion": {
-        "ok": 6,
+        "ok": 8,
         "distinto": 0,
         "repetido": 0,
         "blanco": 0,
@@ -1404,15 +1393,15 @@
         "escaneo": 0
       },
       "recuadro": {
-        "ok": 6,
+        "ok": 8,
         "sin_recuadro": 0,
         "modificado": 0,
         "no_cuadra": 0,
         "escaneo": 0
       },
       "cifras": {
-        "comparables": 6,
-        "coinciden": 6,
+        "comparables": 8,
+        "coinciden": 8,
         "difieren": 0
       },
       "fechas": {
@@ -1828,7 +1817,7 @@
       "localidad": "Los Mártires",
       "a2024": 10,
       "a2025": 11,
-      "a2026": 4
+      "a2026": 6
     },
     {
       "localidad": "Antonio Nariño",
@@ -1840,7 +1829,7 @@
       "localidad": "Puente Aranda",
       "a2024": 12,
       "a2025": 10,
-      "a2026": 6
+      "a2026": 8
     },
     {
       "localidad": "La Candelaria",
@@ -1870,7 +1859,7 @@
   "totales_serie": {
     "a2024": 222,
     "a2025": 173,
-    "a2026": 124,
+    "a2026": 128,
     "sesiones_matriz_2024": 234
   },
   "meses": {
@@ -2005,10 +1994,10 @@
         "nombre": "Agosto",
         "abrev": "Ago",
         "preliminar": false,
-        "sesiones": 14,
-        "localidades": 14,
-        "asistencias": 273,
-        "jovenes": 82,
+        "sesiones": 15,
+        "localidades": 15,
+        "asistencias": 290,
+        "jovenes": 85,
         "en_plazo": 14,
         "cargas": [
           0,
@@ -2019,17 +2008,17 @@
           0,
           8,
           6,
-          0
+          1
         ]
       },
       {
         "nombre": "Septiembre",
         "abrev": "Sep",
         "preliminar": false,
-        "sesiones": 11,
-        "localidades": 11,
-        "asistencias": 219,
-        "jovenes": 68,
+        "sesiones": 12,
+        "localidades": 12,
+        "asistencias": 235,
+        "jovenes": 70,
         "en_plazo": 10,
         "cargas": [
           0,
@@ -2040,18 +2029,18 @@
           0,
           0,
           8,
-          3
+          4
         ]
       },
       {
         "nombre": "Octubre",
         "abrev": "Oct",
         "preliminar": true,
-        "sesiones": 8,
-        "localidades": 8,
-        "asistencias": 147,
-        "jovenes": 45,
-        "en_plazo": 8,
+        "sesiones": 10,
+        "localidades": 10,
+        "asistencias": 182,
+        "jovenes": 55,
+        "en_plazo": 10,
         "cargas": [
           0,
           0,
@@ -2061,7 +2050,7 @@
           0,
           0,
           0,
-          8
+          10
         ]
       }
     ],
@@ -2803,6 +2792,22 @@
         "jovenes": 6
       },
       {
+        "localidad": "Los Mártires",
+        "dia": 20,
+        "mes": 8,
+        "tipo": "Ordinaria",
+        "asistencias": 17,
+        "jovenes": 3
+      },
+      {
+        "localidad": "Los Mártires",
+        "dia": 15,
+        "mes": 10,
+        "tipo": "Ordinaria",
+        "asistencias": 17,
+        "jovenes": 5
+      },
+      {
         "localidad": "Antonio Nariño",
         "dia": 17,
         "mes": 2,
@@ -2904,6 +2909,22 @@
         "mes": 8,
         "tipo": "Ordinaria",
         "asistencias": 17,
+        "jovenes": 5
+      },
+      {
+        "localidad": "Puente Aranda",
+        "dia": 26,
+        "mes": 9,
+        "tipo": "Extraordinaria",
+        "asistencias": 16,
+        "jovenes": 2
+      },
+      {
+        "localidad": "Puente Aranda",
+        "dia": 14,
+        "mes": 10,
+        "tipo": "Ordinaria",
+        "asistencias": 18,
         "jovenes": 5
       },
       {
@@ -3282,9 +3303,9 @@
           0,
           1,
           0,
+          1,
           0,
-          0,
-          0
+          1
         ]
       },
       {
@@ -3311,8 +3332,8 @@
           1,
           1,
           1,
-          0,
-          0
+          1,
+          1
         ]
       },
       {
@@ -3373,7 +3394,7 @@
       }
     ],
     "plazo_dias": 15,
-    "cerradas": 117,
+    "cerradas": 119,
     "en_plazo_cerradas": 83,
     "mediana_dias": 8,
     "primer_mes": "febrero",

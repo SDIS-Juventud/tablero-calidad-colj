@@ -951,11 +951,14 @@ def construir():
         # bien y el error no se ve: Suba escribió ACTA N° 6 en la sesión del
         # 10 de septiembre y en la del 8 de octubre, y en el formulario cargó
         # las dos como comité 6 (26 de octubre de 2026). Se marca la segunda,
-        # porque la primera con ese número es la que sigue el orden.
+        # porque la primera con ese número es la que sigue el orden. Solo
+        # cuenta como primera un acta cuyo número coincide con el formulario:
+        # en Teusaquillo el acta del 24 de abril dice N° 4 siendo el comité 3,
+        # y por eso la del 22 de mayo, que sí es la 4, salía como repetida.
         primera_con_numero = {}
         for acta in sorted(propias, key=lambda a: a["fecha_nombre"] or ""):
-            if acta["estado_num_declarado"] == "numero" \
-                    and acta["texto_leido"] >= 300:
+            comite_form = comite_fecha.get((nombre, acta["fecha_nombre"]))
+            if revisar_numeracion(acta, comite_form)[0] == "ok":
                 primera_con_numero.setdefault(acta["num_declarado"], acta)
 
         for acta in propias:
@@ -2598,7 +2601,8 @@ def pagina_ajustes():
     <div><span class="punto bien"></span>Actas ya listas</div>
     <div><span class="punto mal"></span>Actas con algún ajuste</div>
     <div>Numeración: el número que trae el acta por dentro no coincide con el
-      número de comité del formulario, quedó vacío o no está.</div>
+      número de comité del formulario, repite el de otra acta, quedó vacío o
+      no está.</div>
     <div>Recuadro: al cuadro de participantes le falta diligenciar algo, se
       cambió respecto al formato o sus filas no suman.</div>
     <div>Fecha: el nombre del archivo del acta dice una fecha de sesión y en
