@@ -1,4 +1,11 @@
 {
+  "anio": 2026,
+  "abierto": true,
+  "anios_serie": [
+    2024,
+    2025,
+    2026
+  ],
   "corte": "22 de octubre de 2026",
   "ultima_carga": "28 de octubre de 2026",
   "ultima_sesion": "Rafael Uribe Uribe, 22 de octubre de 2026",
@@ -86,6 +93,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 5,
+      "cifras_invertidas": 0,
       "detalle": [
         {
           "archivo": "20260224_USAQUEN_ACTA_1.pdf",
@@ -184,6 +193,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
       "detalle": [
         {
           "archivo": "20260211_CHAPINERO_ACTA_1.pdf",
@@ -263,6 +274,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
       "detalle": [
         {
           "archivo": "20260216_SANTAFE_ACTA_1.pdf",
@@ -346,6 +359,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
       "detalle": [
         {
           "archivo": "20260218_SANCRISTOBAL_ACTA_1.pdf",
@@ -434,6 +449,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
       "detalle": [
         {
           "archivo": "20260320_USME_ACTA_2.pdf",
@@ -516,6 +533,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
       "detalle": [
         {
           "archivo": "20260421_TUNJUELITO_ACTA_3.pdf",
@@ -579,6 +598,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 1,
+      "cifras_invertidas": 0,
       "detalle": [
         {
           "archivo": "20260213_BOSA_ACTA_1.pdf",
@@ -699,6 +720,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 1,
       "detalle": [
         {
           "archivo": "20260227_KENNEDY_ACTA_1.pdf",
@@ -808,6 +831,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
       "detalle": [
         {
           "archivo": "20260326_FONTIBON_ACTA_2.pdf",
@@ -877,6 +902,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
       "detalle": [
         {
           "archivo": "20260225_ENGATIVA_ACTA_1.pdf",
@@ -984,6 +1011,8 @@
       "fechas": {
         "difieren": 1
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
       "detalle": [
         {
           "archivo": "20260212_SUBA_ACTA_1.pdf",
@@ -1085,6 +1114,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
       "detalle": [
         {
           "archivo": "20260226_BARRIOS_UNIDOS_ACTA_1.pdf",
@@ -1190,6 +1221,8 @@
       "fechas": {
         "difieren": 1
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 1,
       "detalle": [
         {
           "archivo": "20260327_TEUSAQUILLO_ACTA_2.pdf",
@@ -1275,6 +1308,8 @@
       "fechas": {
         "difieren": 1
       },
+      "acta_uno": 1,
+      "cifras_invertidas": 0,
       "detalle": [
         {
           "archivo": "20260119_MARTIRES_ACTA_1.pdf",
@@ -1353,6 +1388,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
       "detalle": []
     },
     {
@@ -1407,6 +1444,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
       "detalle": []
     },
     {
@@ -1464,6 +1503,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
       "detalle": [
         {
           "archivo": "20260209_LA_CANDELARIA_ACTA_1.pdf",
@@ -1540,6 +1581,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
       "detalle": [
         {
           "archivo": "20260319_RAFAEL_URIBE_URIBE_ACTA_2.pdf",
@@ -1623,6 +1666,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
       "detalle": [
         {
           "archivo": "20260211_CIUDAD_BOLIVAR_ACTA_1.pdf",
@@ -1723,6 +1768,8 @@
       "fechas": {
         "difieren": 0
       },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
       "detalle": [
         {
           "archivo": "20260224_SUMAPAZ_ACTA_1.pdf",
@@ -3397,8 +3444,27 @@
     "cerradas": 119,
     "en_plazo_cerradas": 83,
     "mediana_dias": 8,
+    "entre_plazo_30": 24,
+    "entre_31_60": 7,
+    "mas_60": 5,
     "primer_mes": "febrero",
-    "ultimo_mes_cerrado": "septiembre"
+    "ultimo_mes_cerrado": "septiembre",
+    "mes_abierto": "octubre"
+  },
+  "presentacion": {
+    "hora_madrugada": 39,
+    "hora_madrugada_cierre_manana": 36,
+    "hora_termina_antes": 0,
+    "sin_lugar": 13,
+    "sesiones_recargadas": 2,
+    "localidades_numero_repetido": 5,
+    "max_veces_numero_repetido": 3,
+    "localidades_con_sesion": 20,
+    "localidades_arrancan_en_1": 20,
+    "acta_uno": 7,
+    "acta_uno_max": 5,
+    "acta_uno_max_actas": 7,
+    "cifras_invertidas": 2
   },
   "enlaces": [
     {

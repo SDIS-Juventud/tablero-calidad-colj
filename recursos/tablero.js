@@ -92,13 +92,26 @@ function pintarCorte() {
     'en que sesionó el último COLJ registrado.';
 }
 
+/* Une los años como se escribe: «2024, 2025 y 2026». */
+function listaAnios(anios) {
+  if (anios.length < 2) return String(anios[0]);
+  return anios.slice(0, -1).join(', ') + ' y ' + anios[anios.length - 1];
+}
+
+/* El año abierto es el «año en curso»; uno ya cerrado se nombra por su número. */
+function tituloZoom() {
+  return D.abierto ? 'Zoom año en curso' : 'Zoom ' + D.anio;
+}
+
 function pintarCampos() {
   var r = D.resumen;
   var campos = [
     {href: 'html/estadisticas.html', num: '1', titulo: 'Estadísticas generales',
-     glosa: 'Las sesiones de 2024, 2025 y 2026 en las veinte localidades.'},
-    {href: 'html/zoom.html', num: '2', titulo: 'Zoom año en curso',
-     glosa: 'Cómo va cada localidad en 2026 y qué ajustes tiene su registro.'},
+     glosa: 'Las sesiones de ' + listaAnios(D.anios_serie) +
+            ' en las veinte localidades.'},
+    {href: 'html/zoom.html', num: '2', titulo: tituloZoom(),
+     glosa: 'Cómo va cada localidad en ' + D.anio +
+            ' y qué ajustes tiene su registro.'},
     {href: 'html/enlaces.html', num: '3',
      titulo: 'Enlaces generales para el análisis de los COLJ', glosa: ''}
   ];
@@ -112,30 +125,36 @@ function pintarCampos() {
   }).join('');
 }
 
+/* Una casilla por año. El asterisco marca el año abierto, que todavía
+   puede recibir actas; un año cerrado va sin él. */
 function pintarFranjaAnios() {
   var t = D.totales_serie;
-  franja('franja-anios', [
-    {v: t.a2024, rot: 'Actas 2024', glosa: 'Año completo, con sesiones ' +
-     'mensuales.'},
-    {v: t.a2025, rot: 'Actas 2025', glosa: 'Año completo, ya con sesiones ' +
-     'ordinarias bimensuales.'},
-    {v: t.a2026 + '*', rot: 'Actas 2026', glosa: 'Año en curso, con corte ' +
-     'al ' + D.corte + '.'}
-  ]);
+  var glosas = {2024: 'Año completo, con sesiones mensuales.',
+                2025: 'Año completo, ya con sesiones ordinarias bimensuales.'};
+  franja('franja-anios', D.anios_serie.map(function (a) {
+    var delTablero = a === D.anio;
+    return {
+      v: t['a' + a] + (delTablero && D.abierto ? '*' : ''),
+      rot: 'Actas ' + a,
+      glosa: !delTablero ? (glosas[a] || 'Año completo.') :
+        (D.abierto ? 'Año en curso' : 'Año completo') +
+        ', con corte al ' + D.corte + '.'
+    };
+  }));
 }
 
 function pintarSerie() {
+  var anios = D.anios_serie;
+  var celdas = function (fila) {
+    return anios.map(function (a) {
+      return '<td>' + fila['a' + a] + '</td>';
+    }).join('');
+  };
   var filas = D.serie.map(function (l) {
-    return '<tr><td>' + l.localidad + '</td>' +
-      '<td>' + l.a2024 + '</td>' +
-      '<td>' + l.a2025 + '</td>' +
-      '<td>' + l.a2026 + '</td></tr>';
+    return '<tr><td>' + l.localidad + '</td>' + celdas(l) + '</tr>';
   }).join('');
-  var t = D.totales_serie;
   document.getElementById('tabla-serie').innerHTML = filas +
-    '<tr class="total"><td>Total</td>' +
-    '<td>' + t.a2024 + '</td><td>' + t.a2025 + '</td>' +
-    '<td>' + t.a2026 + '</td></tr>';
+    '<tr class="total"><td>Total</td>' + celdas(D.totales_serie) + '</tr>';
 }
 
 /* Las direcciones se arman dentro de innerHTML, asi que el & de cada

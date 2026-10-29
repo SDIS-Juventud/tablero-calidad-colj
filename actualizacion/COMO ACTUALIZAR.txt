@@ -26,10 +26,10 @@ Guarda el Excel, cierra el archivo y corre el paso 3.
 Las cifras no se editan acá: salen solas de las carpetas de actas y del
 Excel de seguimiento.
 
-Si entraron actas nuevas a la carpeta 2026, antes del paso 3 hay que correr
-el programa que las lee por dentro, desde la carpeta COLJ:
+Si entraron actas nuevas a la carpeta del año, antes del paso 3 hay que
+correr el programa que las lee por dentro, desde la carpeta COLJ:
 
-    python programas/revision_periodica/3_extraer_calidad_actas_2026.py
+    python programas/revision_periodica/3_extraer_calidad_actas.py
 
 El generador no abre las actas: lee el resultado de ese programa. Si se
 salta este paso, el tablero se genera sin errores pero con las actas de la
@@ -39,6 +39,12 @@ programas/revision_periodica/LEEME.txt.
 Si solo cambió el Excel del formulario, basta con correr el paso 3.
 
 La fecha de corte también se calcula sola: es la última sesión reportada.
+
+El año también sale solo: es el de la sesión más reciente del formulario.
+Con la primera sesión de un año nuevo, el generador guarda el tablero del
+año que cerró en su propia carpeta (por ejemplo 2026/), lo deja como año
+completo y lo enlaza desde la portada en "Años anteriores". Para regenerar
+un año anterior se agrega --anio y el año al final del comando.
 
 Para traer respuestas nuevas del formulario, descarga el Excel y déjalo en la
 carpeta Drive/. No importa cómo lo llame el navegador: el programa toma el más

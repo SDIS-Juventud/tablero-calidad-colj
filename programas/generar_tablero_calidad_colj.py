@@ -3,10 +3,15 @@
 2026
 
 USO:
-Genera el tablero de seguimiento de los COLJ 2026, con la portada, las cinco
-páginas de sección, recursos/ y datos/. Lee las actas que dejó el paso 3 de la
-revisión periódica, la carpeta 2026/ y el Excel del formulario, así que va
-después de los pasos 2 y 3.
+Genera el tablero de seguimiento de los COLJ del año, con la portada, las
+cinco páginas de sección, recursos/ y datos/. Lee las actas que dejó el paso 3
+de la revisión periódica, la carpeta del año y el Excel del formulario, así
+que va después de los pasos 2 y 3.
+
+El año es el de la sesión más reciente del formulario. Cuando llega la primera
+sesión de un año nuevo, guarda el tablero del año que cerró en su propia
+carpeta (por ejemplo 2026/) y lo enlaza desde la portada. Con --anio AAAA
+regenera un año anterior dentro de esa carpeta.
 
     python programas/generar_tablero_calidad_colj.py   desde tablero-calidad-colj
     python 4_generar_tablero.py                        desde revision_periodica
@@ -18,6 +23,8 @@ import re
 import sys
 import json
 import base64
+import shutil
+import subprocess
 import unicodedata
 import collections
 import datetime
@@ -32,8 +39,6 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 RAIZ_TABLERO = os.path.dirname(AQUI)
 RAIZ_COLJ = os.path.dirname(RAIZ_TABLERO)
 
-JSON_ACTAS = os.path.join(RAIZ_COLJ, "programas", "calidad_actas_2026.json")
-CARPETA_2026 = os.path.join(RAIZ_COLJ, "2026")
 CARPETA_DRIVE = os.path.join(RAIZ_COLJ, "Drive")
 
 
@@ -62,10 +67,57 @@ def buscar_excel_seguimiento():
 
 
 EXCEL_SEGUIMIENTO = buscar_excel_seguimiento()
-CARPETA_DATOS = os.path.join(RAIZ_TABLERO, "datos")
-CARPETA_RECURSOS = os.path.join(RAIZ_TABLERO, "recursos")
+
+# Primer año que se trabaja con estas carpetas y estos programas
+PRIMER_ANIO = 2026
+
+
+def anio_mas_reciente():
+    """El año de la sesión más reciente del formulario.
+
+    Se descartan los años que todavía no han llegado: una fecha mal
+    digitada, como 2062, no puede cambiar el año del tablero.
+    """
+    fechas = pd.read_excel(EXCEL_SEGUIMIENTO,
+                           sheet_name="Respuestas de formulario 1",
+                           usecols=["Fecha del comité"])["Fecha del comité"]
+    anios = pd.to_datetime(fechas, errors="coerce",
+                           dayfirst=True).dt.year.dropna().astype(int)
+    anios = anios[(anios >= PRIMER_ANIO)
+                  & (anios <= datetime.date.today().year)]
+    if anios.empty:
+        sys.exit("El Excel del formulario no trae sesiones desde %d."
+                 % PRIMER_ANIO)
+    return int(anios.max())
+
+
+def anio_pedido():
+    """El año que se pidió con --anio, o None si no se pidió ninguno."""
+    if "--anio" not in sys.argv:
+        return None
+    try:
+        return int(sys.argv[sys.argv.index("--anio") + 1])
+    except (IndexError, ValueError):
+        sys.exit("--anio va seguido del año, por ejemplo --anio 2026")
+
+
+# El año del tablero sale de los datos y no del código. El año más reciente
+# es el abierto y se publica en la raíz; uno anterior ya cerró y vive en su
+# propia carpeta, por ejemplo tablero-calidad-colj/2026/.
+ANIO_RECIENTE = anio_mas_reciente()
+ANIO = anio_pedido() or ANIO_RECIENTE
+# --cerrado lo pone el mismo generador cuando guarda el año que cerró
+ABIERTO = ANIO >= ANIO_RECIENTE and "--cerrado" not in sys.argv
+ANIOS_SERIE = list(range(2024, ANIO + 1))
+RAIZ_SITIO = RAIZ_TABLERO if ABIERTO else os.path.join(RAIZ_TABLERO, str(ANIO))
+TITULO_ZOOM = "Zoom año en curso" if ABIERTO else "Zoom %d" % ANIO
+
+JSON_ACTAS = os.path.join(RAIZ_COLJ, "programas", "calidad_actas_%d.json" % ANIO)
+CARPETA_ANIO = os.path.join(RAIZ_COLJ, str(ANIO))
+CARPETA_DATOS = os.path.join(RAIZ_SITIO, "datos")
+CARPETA_RECURSOS = os.path.join(RAIZ_SITIO, "recursos")
 CARPETA_FUENTES = os.path.join(RAIZ_TABLERO, "fuentes")
-CARPETA_HTML = os.path.join(RAIZ_TABLERO, "html")
+CARPETA_HTML = os.path.join(RAIZ_SITIO, "html")
 CARPETA_ACTUALIZACION = os.path.join(RAIZ_TABLERO, "actualizacion")
 EXCEL_ENLACES = os.path.join(CARPETA_ACTUALIZACION, "enlaces.xlsx")
 
@@ -490,13 +542,29 @@ def contar_actas_2025():
     return {loc: conteo.get(loc, 0) for loc in ORDEN}
 
 
+def contar_actas_de(anio):
+    """Cuenta las actas de un año ya cerrado desde 2026 en adelante, por
+    localidad, con lo que leyó el paso 3 ese año. Es el mismo conteo que el
+    tablero mostraba mientras el año estaba abierto."""
+    ruta = os.path.join(RAIZ_COLJ, "programas", "calidad_actas_%d.json" % anio)
+    conteo = collections.Counter()
+    if not os.path.exists(ruta):
+        print("  aviso: falta %s, así que las actas de %d salen en cero"
+              % (os.path.basename(ruta), anio), file=sys.stderr)
+        return conteo
+    with open(ruta, encoding="utf-8") as f:
+        for acta in json.load(f):
+            conteo[acta["localidad"]] += 1
+    return conteo
+
+
 def inventario_carpeta():
-    """Lista todos los archivos de la carpeta 2026, por localidad."""
+    """Lista todos los archivos de la carpeta del año, por localidad."""
     inventario = collections.defaultdict(list)
-    if not os.path.isdir(CARPETA_2026):
+    if not os.path.isdir(CARPETA_ANIO):
         return inventario
-    for carpeta in sorted(os.listdir(CARPETA_2026)):
-        ruta = os.path.join(CARPETA_2026, carpeta)
+    for carpeta in sorted(os.listdir(CARPETA_ANIO)):
+        ruta = os.path.join(CARPETA_ANIO, carpeta)
         if not os.path.isdir(ruta):
             continue
         nombre = re.sub(r"^\d+[\.\s]*", "", carpeta).strip()
@@ -570,7 +638,7 @@ def avisar_numeros_repetidos(unicas):
         print("Si es una carga repetida, agrégala a CARGAS_REPETIDAS.\n")
 
 
-def datos_por_mes(f26, unicas, fecha_corte):
+def datos_por_mes(del_anio, unicas, fecha_corte):
     """Sesiones por mes, según la fecha de la sesión y la fecha de su carga.
 
     Cada sesión se cuenta en el mes en que se hizo, no en el que se reportó.
@@ -587,11 +655,11 @@ def datos_por_mes(f26, unicas, fecha_corte):
     llegado y el rezago se vería más corto de lo que es.
     """
     def indice(fecha):
-        # Meses contados desde enero de 2026, para que una carga de 2027 no
-        # se confunda con un mes de 2026
-        return (fecha.year - 2026) * 12 + fecha.month
+        # Meses contados desde enero del año del tablero, para que una carga
+        # de enero del año siguiente no se confunda con enero de este
+        return (fecha.year - ANIO) * 12 + fecha.month
 
-    primera = f26.groupby(["Localidad", "fecha"])["Marca temporal"].min()
+    primera = del_anio.groupby(["Localidad", "fecha"])["Marca temporal"].min()
     ses = unicas.set_index(["Localidad", "fecha"]).copy()
     ses["reporte"] = primera
     ses = ses.reset_index()
@@ -672,8 +740,77 @@ def datos_por_mes(f26, unicas, fecha_corte):
         "en_plazo_cerradas": int((cerradas["dias"] <= PLAZO_CARGA_DIAS).sum()),
         "mediana_dias": (int(round(cerradas["dias"].median()))
                          if len(cerradas) else None),
+        # Cuánto tardaron las que no entraron en el plazo. Van en las notas de
+        # la presentación a los equipos locales (paso 6 de la revisión).
+        "entre_plazo_30": int(((cerradas["dias"] > PLAZO_CARGA_DIAS)
+                               & (cerradas["dias"] <= 30)).sum()),
+        "entre_31_60": int(((cerradas["dias"] > 30)
+                            & (cerradas["dias"] <= 60)).sum()),
+        "mas_60": int((cerradas["dias"] > 60).sum()),
         "primer_mes": nombre_mes(meses[0]),
         "ultimo_mes_cerrado": nombre_mes(mes_corte - 1),
+        "mes_abierto": nombre_mes(mes_corte),
+    }
+
+
+def cifras_del_formulario(del_anio, unicas):
+    """Cifras del formulario que van en la presentación a los equipos locales
+    (paso 6 de la revisión periódica) y que el tablero no muestra.
+
+    Se calculan aquí para que la presentación y el tablero salgan de las
+    mismas sesiones. Con las respuestas que había el 6 de octubre de 2026,
+    estas definiciones dan las cifras de la presentación de ese día: 35 de 116
+    sesiones con hora de madrugada, 32 de ellas con cierre antes del mediodía,
+    9 sin lugar y 2 sesiones cargadas dos veces.
+    """
+    def hora(valor):
+        if isinstance(valor, datetime.datetime):
+            return valor.time()
+        return valor if isinstance(valor, datetime.time) else None
+
+    inicio = [hora(v) for v in unicas["Hora de inicio"]]
+    fin = [hora(v) for v in unicas["Hora de finalización"]]
+    # Entre la 1:00 y las 6:00 de la mañana nadie convoca un comité: casi
+    # seguro son sesiones de la tarde escritas sin el p. m.
+    madrugada = [t is not None and (1 <= t.hour < 6
+                                    or (t.hour == 6 and t.minute == 0))
+                 for t in inicio]
+    cierre_manana = sum(1 for f, m in zip(fin, madrugada)
+                        if m and f is not None and f.hour < 12)
+    termina_antes = sum(1 for i, f, m in zip(inicio, fin, madrugada)
+                        if m and f is not None and f < i)
+
+    # Pandas ya lee «NA» y «N/A» como vacío; queda el «no» escrito a mano
+    lugar = unicas["Lugar"].fillna("").astype(str).str.strip().str.lower()
+    sin_lugar = int(lugar.isin(["", "na", "n/a", "no"]).sum())
+
+    # Las cargas que se repiten con la misma fecha; el tablero toma la última
+    recargadas = int((del_anio.groupby(["Localidad", "fecha"]).size() > 1).sum())
+
+    # El mismo número de comité en el formulario para sesiones de fechas
+    # distintas, con la misma regla de avisar_numeros_repetidos()
+    veces = collections.Counter()
+    for (loc, _), grupo in unicas.groupby(["Localidad", "Número de comité"]):
+        n = grupo["fecha"].nunique()
+        if n > 1:
+            veces[loc] = max(veces[loc], n)
+
+    # Cuántas localidades arrancaron el año en el comité 1
+    arrancan_en_1 = 0
+    for _, grupo in unicas.groupby("Localidad"):
+        primero = grupo.sort_values("fecha").iloc[0]["Número de comité"]
+        arrancan_en_1 += int(pd.notna(primero) and int(primero) == 1)
+
+    return {
+        "hora_madrugada": sum(madrugada),
+        "hora_madrugada_cierre_manana": cierre_manana,
+        "hora_termina_antes": termina_antes,
+        "sin_lugar": sin_lugar,
+        "sesiones_recargadas": recargadas,
+        "localidades_numero_repetido": len(veces),
+        "max_veces_numero_repetido": max(veces.values()) if veces else 0,
+        "localidades_con_sesion": int(unicas["Localidad"].nunique()),
+        "localidades_arrancan_en_1": arrancan_en_1,
     }
 
 
@@ -687,15 +824,18 @@ def construir():
                        sheet_name="Respuestas de formulario 1")
     df["fecha"] = pd.to_datetime(df["Fecha del comité"], errors="coerce",
                                  dayfirst=True)
-    f26 = df[df["fecha"].dt.year == 2026]
+    del_anio = df[df["fecha"].dt.year == ANIO]
 
     # Fuera las cargas que repiten una sesión ya registrada con otra fecha.
-    marcas = f26["Marca temporal"].dt.strftime("%Y-%m-%d %H:%M:%S")
+    marcas = del_anio["Marca temporal"].dt.strftime("%Y-%m-%d %H:%M:%S")
     # Si una marca temporal de la lista ya no encuentra fila, es que esa
     # respuesta se corrigio o se borro del formulario. Conviene saberlo: una
     # exclusion que dejo de aplicar es una regla que quedo escrita sin efecto,
     # y la siguiente persona que lea la lista va a creer que sigue actuando.
-    huerfanas = [m for m in CARGAS_REPETIDAS if m not in set(marcas)]
+    # Se busca en todo el Excel y no solo en el año: una marca de 2026 no está
+    # entre las respuestas de 2027, pero eso no quiere decir que se borró.
+    todas = set(df["Marca temporal"].dt.strftime("%Y-%m-%d %H:%M:%S"))
+    huerfanas = [m for m in CARGAS_REPETIDAS if m not in todas]
     if huerfanas:
         print("\nOJO: %d entrada(s) de CARGAS_REPETIDAS ya no encuentran fila "
               "en el Excel." % len(huerfanas))
@@ -704,7 +844,7 @@ def construir():
         print("Esa respuesta se corrigio o se borro. Si ya no hace falta, "
               "quitala de la lista.\n")
 
-    f26 = f26[~marcas.isin(CARGAS_REPETIDAS)]
+    del_anio = del_anio[~marcas.isin(CARGAS_REPETIDAS)]
 
     # Una sesión cargada dos veces con la misma fecha queda una sola vez. La
     # regla, acordada el 6 de octubre de 2026: las cifras son las de la última
@@ -712,13 +852,13 @@ def construir():
     # cargar la sesión del 12 de septiembre con 6 jóvenes en vez de 16, y el
     # acta le da la razón). La fecha de reporte, en cambio, es la primera
     # carga, y se calcula aparte en datos_por_mes().
-    f26 = f26.sort_values("Marca temporal")
-    unicas = f26.drop_duplicates(subset=["Localidad", "fecha"], keep="last")
+    del_anio = del_anio.sort_values("Marca temporal")
+    unicas = del_anio.drop_duplicates(subset=["Localidad", "fecha"], keep="last")
     avisar_numeros_repetidos(unicas)
 
     # El corte es la última sesión reportada, no una fecha escrita a mano: así
     # se mueve solo cuando entren sesiones nuevas al formulario.
-    fecha_corte = f26["fecha"].max()
+    fecha_corte = del_anio["fecha"].max()
     corte = fecha_larga(fecha_corte)
 
     # Cuántos bimestres cerraron a esa fecha. Se recalcula acá, y las páginas
@@ -731,7 +871,7 @@ def construir():
     # La última vez que alguien subió un acta: es la primera columna del Excel
     # de respuestas, "Marca temporal", que el formulario llena solo. Sirve para
     # saber si el registro está fresco o lleva semanas quieto.
-    ultima_carga = fecha_larga(f26["Marca temporal"].max())
+    ultima_carga = fecha_larga(del_anio["Marca temporal"].max())
 
     # El último comité que quedó registrado, con su localidad. No siempre es el
     # de la carga más reciente: las actas no entran en el mismo orden en que se
@@ -741,8 +881,8 @@ def construir():
     # una sola con idxmax(), que desempata por orden de fila, y el tablero
     # anunciaba como "ultimo comite" a una localidad elegida al azar entre las
     # empatadas. Se nombran todas.
-    fecha_ultima = f26["fecha"].max()
-    locs_ultima = sorted(set(f26[f26["fecha"] == fecha_ultima]["Localidad"]))
+    fecha_ultima = del_anio["fecha"].max()
+    locs_ultima = sorted(set(del_anio[del_anio["fecha"] == fecha_ultima]["Localidad"]))
     if len(locs_ultima) == 1:
         quienes = locs_ultima[0]
     elif len(locs_ultima) == 2:
@@ -943,6 +1083,7 @@ def construir():
         cifras = {"comparables": 0, "coinciden": 0, "difieren": 0}
         fechas = {"difieren": 0}
         limpias = 0
+        acta_uno = invertidas = 0
         detalle = []
         pendientes_imagen = []
 
@@ -980,6 +1121,10 @@ def construir():
             estado_rec, nota_rec = revisar_recuadro(acta)
             num[estado_num] += 1
             rec[estado_rec] += 1
+            # Para la presentación: el error de numeración más común es dejar
+            # «Acta 1» en todas las actas del año
+            if estado_num == "distinto" and acta["num_declarado"] == 1:
+                acta_uno += 1
 
             # El acta escaneada no tiene nada por ajustar: no se puede leer.
             # Se resuelve volviéndola a cargar, así que es un pendiente de
@@ -1023,6 +1168,10 @@ def construir():
                     cifras["coinciden"] += 1
                 else:
                     cifras["difieren"] += 1
+                    # Jóvenes y no jóvenes escritos en la fila del otro
+                    if int(rep_nj) == caja["juveniles"] \
+                            and int(rep_j) == caja["no_juveniles"]:
+                        invertidas += 1
                     nota_cif = (
                         "el formulario reporta %s y %s; el acta dice %s y "
                         "%s, hay que definir cuál queda"
@@ -1058,7 +1207,7 @@ def construir():
         localidades.append({
             "localidad": nombre,
             "actas": len(propias),
-            "respuestas_formulario": int((f26["Localidad"] == nombre).sum()),
+            "respuestas_formulario": int((del_anio["Localidad"] == nombre).sum()),
             "sesiones_formulario": len(del_form),
             "ordinarias": len(ordinarias),
             "extraordinarias": len(extraordinarias),
@@ -1090,6 +1239,8 @@ def construir():
                          "escaneo": rec["escaneo"]},
             "cifras": cifras,
             "fechas": fechas,
+            "acta_uno": acta_uno,
+            "cifras_invertidas": invertidas,
             "detalle": detalle,
         })
 
@@ -1147,27 +1298,38 @@ def construir():
     }
     # Serie por año, para la página de estadísticas generales. Es un croquis:
     # 2024 y 2025 traen el conteo de actas archivadas que ya estaba
-    # documentado, y todavía no se recalcularon con el método de 2026.
-    actas25 = contar_actas_2025()
-    serie = []
-    for i, loc in enumerate(ORDEN):
-        serie.append({"localidad": loc,
-                      "a2024": ACTAS_2024[i],
-                      "a2025": actas25[loc],
-                      "a2026": localidades[i]["actas"]})
-    totales_serie = {
-        "a2024": sum(x["a2024"] for x in serie),
-        "a2025": sum(x["a2025"] for x in serie),
-        "a2026": sum(x["a2026"] for x in serie),
-        "sesiones_matriz_2024": SESIONES_MATRIZ_2024,
-    }
+    # documentado, y todavía no se recalcularon con el método de 2026. Desde
+    # 2026, cada año cerrado sale de lo que leyó el paso 3 ese año, y el año
+    # del tablero, de las actas que se acaban de revisar.
+    conteos = {2024: dict(zip(ORDEN, ACTAS_2024)), 2025: contar_actas_2025()}
+    for anio in range(PRIMER_ANIO, ANIO):
+        conteos[anio] = contar_actas_de(anio)
+    conteos[ANIO] = {l["localidad"]: l["actas"] for l in localidades}
+    serie = [dict([("localidad", loc)]
+                  + [("a%d" % a, conteos[a].get(loc, 0)) for a in ANIOS_SERIE])
+             for loc in ORDEN]
+    totales_serie = {"a%d" % a: sum(x["a%d" % a] for x in serie)
+                     for a in ANIOS_SERIE}
+    totales_serie["sesiones_matriz_2024"] = SESIONES_MATRIZ_2024
 
-    return {"corte": corte, "ultima_carga": ultima_carga,
+    # Cifras que solo usa la presentación a los equipos locales
+    presentacion = cifras_del_formulario(del_anio, unicas)
+    con_mas_uno = max(localidades, key=lambda l: l["acta_uno"])
+    presentacion.update({
+        "acta_uno": suma("acta_uno"),
+        "acta_uno_max": con_mas_uno["acta_uno"],
+        "acta_uno_max_actas": con_mas_uno["actas"],
+        "cifras_invertidas": suma("cifras_invertidas"),
+    })
+
+    return {"anio": ANIO, "abierto": ABIERTO, "anios_serie": ANIOS_SERIE,
+            "corte": corte, "ultima_carga": ultima_carga,
             "ultima_sesion": ultima_sesion,
             "bimestres_exigidos": len(BIMESTRES_CERRADOS),
             "resumen": resumen, "localidades": localidades,
             "serie": serie, "totales_serie": totales_serie,
-            "meses": datos_por_mes(f26, unicas, fecha_corte),
+            "meses": datos_por_mes(del_anio, unicas, fecha_corte),
+            "presentacion": presentacion,
             "enlaces": leer_enlaces()}
 
 
@@ -1340,6 +1502,9 @@ a { color: inherit; }
 }
 .portada .ultimo-registro span { display: block; }
 .portada .ultimo-registro b { font-weight: 600; color: var(--gris-oscuro); }
+.portada .ultimo-registro a {
+  font-weight: 600; color: var(--acento); text-underline-offset: 2px;
+}
 
 .portada .seguimiento {
   font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
@@ -1801,13 +1966,26 @@ function pintarCorte() {
     'en que sesionó el último COLJ registrado.';
 }
 
+/* Une los años como se escribe: «2024, 2025 y 2026». */
+function listaAnios(anios) {
+  if (anios.length < 2) return String(anios[0]);
+  return anios.slice(0, -1).join(', ') + ' y ' + anios[anios.length - 1];
+}
+
+/* El año abierto es el «año en curso»; uno ya cerrado se nombra por su número. */
+function tituloZoom() {
+  return D.abierto ? 'Zoom año en curso' : 'Zoom ' + D.anio;
+}
+
 function pintarCampos() {
   var r = D.resumen;
   var campos = [
     {href: 'html/estadisticas.html', num: '1', titulo: 'Estadísticas generales',
-     glosa: 'Las sesiones de 2024, 2025 y 2026 en las veinte localidades.'},
-    {href: 'html/zoom.html', num: '2', titulo: 'Zoom año en curso',
-     glosa: 'Cómo va cada localidad en 2026 y qué ajustes tiene su registro.'},
+     glosa: 'Las sesiones de ' + listaAnios(D.anios_serie) +
+            ' en las veinte localidades.'},
+    {href: 'html/zoom.html', num: '2', titulo: tituloZoom(),
+     glosa: 'Cómo va cada localidad en ' + D.anio +
+            ' y qué ajustes tiene su registro.'},
     {href: 'html/enlaces.html', num: '3',
      titulo: 'Enlaces generales para el análisis de los COLJ', glosa: ''}
   ];
@@ -1821,30 +1999,36 @@ function pintarCampos() {
   }).join('');
 }
 
+/* Una casilla por año. El asterisco marca el año abierto, que todavía
+   puede recibir actas; un año cerrado va sin él. */
 function pintarFranjaAnios() {
   var t = D.totales_serie;
-  franja('franja-anios', [
-    {v: t.a2024, rot: 'Actas 2024', glosa: 'Año completo, con sesiones ' +
-     'mensuales.'},
-    {v: t.a2025, rot: 'Actas 2025', glosa: 'Año completo, ya con sesiones ' +
-     'ordinarias bimensuales.'},
-    {v: t.a2026 + '*', rot: 'Actas 2026', glosa: 'Año en curso, con corte ' +
-     'al ' + D.corte + '.'}
-  ]);
+  var glosas = {2024: 'Año completo, con sesiones mensuales.',
+                2025: 'Año completo, ya con sesiones ordinarias bimensuales.'};
+  franja('franja-anios', D.anios_serie.map(function (a) {
+    var delTablero = a === D.anio;
+    return {
+      v: t['a' + a] + (delTablero && D.abierto ? '*' : ''),
+      rot: 'Actas ' + a,
+      glosa: !delTablero ? (glosas[a] || 'Año completo.') :
+        (D.abierto ? 'Año en curso' : 'Año completo') +
+        ', con corte al ' + D.corte + '.'
+    };
+  }));
 }
 
 function pintarSerie() {
+  var anios = D.anios_serie;
+  var celdas = function (fila) {
+    return anios.map(function (a) {
+      return '<td>' + fila['a' + a] + '</td>';
+    }).join('');
+  };
   var filas = D.serie.map(function (l) {
-    return '<tr><td>' + l.localidad + '</td>' +
-      '<td>' + l.a2024 + '</td>' +
-      '<td>' + l.a2025 + '</td>' +
-      '<td>' + l.a2026 + '</td></tr>';
+    return '<tr><td>' + l.localidad + '</td>' + celdas(l) + '</tr>';
   }).join('');
-  var t = D.totales_serie;
   document.getElementById('tabla-serie').innerHTML = filas +
-    '<tr class="total"><td>Total</td>' +
-    '<td>' + t.a2024 + '</td><td>' + t.a2025 + '</td>' +
-    '<td>' + t.a2026 + '</td></tr>';
+    '<tr class="total"><td>Total</td>' + celdas(D.totales_serie) + '</tr>';
 }
 
 /* Las direcciones se arman dentro de innerHTML, asi que el & de cada
@@ -2353,8 +2537,25 @@ def envoltura(pestana, pagina, llamada, es_portada=False, vuelve_a=None,
                         "contenedor": contenedor, "llamada": llamada}
 
 
+def anios_guardados():
+    """Años anteriores cuyo tablero quedó guardado en su propia carpeta. Solo
+    la portada del año abierto los enlaza."""
+    if not ABIERTO:
+        return []
+    return sorted(int(n) for n in os.listdir(RAIZ_TABLERO)
+                  if re.fullmatch(r"20\d\d", n) and int(n) < ANIO
+                  and os.path.exists(os.path.join(RAIZ_TABLERO, n,
+                                                  "index.html")))
+
+
 def pagina_portada(ultima_carga, ultima_sesion):
-    """La portada: el título, las fechas del registro y los tres campos."""
+    """La portada: el título, las fechas del registro y los tres campos. Si hay
+    tableros de años anteriores guardados, los enlaza debajo de las fechas."""
+    anteriores = anios_guardados()
+    enlaces = ("" if not anteriores else
+               "\n      <span>Años anteriores: %s</span>"
+               % ", ".join('<a href="%d/index.html">%d</a>' % (a, a)
+                           for a in anteriores))
     titulo = """<div class="portada">
   <div class="col-izq">
     <h1>COLJ</h1>
@@ -2362,7 +2563,7 @@ def pagina_portada(ultima_carga, ultima_sesion):
     <p class="seguimiento">Seguimiento</p>
     <p class="ultimo-registro">
       <span>Última acta cargada al formulario: <b>%s</b></span>
-      <span>Último comité registrado: <b>%s</b></span>
+      <span>Último comité registrado: <b>%s</b></span>%s
     </p>
   </div>
 
@@ -2371,7 +2572,7 @@ def pagina_portada(ultima_carga, ultima_sesion):
     <div class="campos" id="campos"></div>
   </div>
 </div>
-""" % (ultima_carga, ultima_sesion)
+""" % (ultima_carga, ultima_sesion, enlaces)
     return {"titulo": titulo, "cuerpo": ""}
 
 
@@ -2382,11 +2583,15 @@ def mes_de(corte):
 
 
 def pagina_estadisticas():
-    """Página de estadísticas generales: la serie 2024, 2025 y 2026."""
+    """Página de estadísticas generales: la serie de años desde 2024."""
     titulo = """  <h1>Estadísticas generales</h1>
-  <p class="intro">Actas archivadas en las tres vigencias. Sirve para ver cómo
+  <p class="intro">Actas archivadas en las %s vigencias. Sirve para ver cómo
      se mueve el ritmo del espacio de un año a otro.</p>
-"""
+""" % EN_LETRA.get(len(ANIOS_SERIE), str(len(ANIOS_SERIE)))
+    # Una columna por año; el asterisco marca el año abierto
+    cabecera = "".join("\n          <th>Actas %d%s</th>"
+                       % (a, "*" if a == ANIO and ABIERTO else "")
+                       for a in ANIOS_SERIE)
     cuerpo = """
   <div class="franja" id="franja-anios"></div>
 
@@ -2402,16 +2607,14 @@ def pagina_estadisticas():
     <table>
       <thead>
         <tr>
-          <th>Localidad</th>
-          <th>Actas 2024</th>
-          <th>Actas 2025</th>
-          <th>Actas 2026*</th>
+          <th>Localidad</th>CABECERA_ANIOS
         </tr>
       </thead>
       <tbody id="tabla-serie"></tbody>
     </table>
   </div>
 """
+    cuerpo = cuerpo.replace("CABECERA_ANIOS", cabecera)
     return {"titulo": titulo, "cuerpo": cuerpo}
 
 
@@ -2422,15 +2625,15 @@ def pagina_zoom(mes_corte):
     que cubre el tablero. Antes esa frase estaba escrita a mano y se quedaba
     con el mes del corte anterior cada vez que entraban sesiones nuevas.
     """
-    titulo = """  <h1>Zoom año en curso</h1>
-  <p class="intro">Cómo va cada localidad en 2026, en cinco vistas. La cifra de
+    titulo = """  <h1>%s</h1>
+  <p class="intro">Cómo va cada localidad en %d, en cinco vistas. La cifra de
      cada acceso adelanta lo que se va a encontrar adentro.</p>
-"""
+""" % (TITULO_ZOOM, ANIO)
     cuerpo = """
   <div class="rotulo-seccion">
     <span class="numero">1</span>
     <h2>El panorama general</h2>
-    <p>Lo que pasó en las veinte localidades entre enero y MES_CORTE de 2026,
+    <p>Lo que pasó en las veinte localidades entre enero y MES_CORTE de ANIO_ZOOM,
        antes de mirar localidad por localidad.</p>
   </div>
   <div class="franja" id="franja-general"></div>
@@ -2445,7 +2648,8 @@ def pagina_zoom(mes_corte):
   <div class="franja" id="franja-ajustes"></div>
   <div class="accesos" id="accesos-revision"></div>
 """
-    cuerpo = cuerpo.replace("MES_CORTE", mes_corte)
+    cuerpo = cuerpo.replace("MES_CORTE", mes_corte).replace("ANIO_ZOOM",
+                                                            str(ANIO))
     return {"titulo": titulo, "cuerpo": cuerpo}
 
 
@@ -2657,8 +2861,60 @@ def css_de_fuentes():
     return "\n".join(reglas)
 
 
+SITIO = ["index.html", "html", "recursos", "datos", "imagenes"]
+
+
+def copiar_sitio(destino, sin=()):
+    """Copia las páginas, los recursos, los datos y las imágenes del tablero
+    de la raíz a otra carpeta. Los programas, el histórico y lo que se edita a
+    mano no se copian: son uno solo para todos los años."""
+    os.makedirs(destino, exist_ok=True)
+    ignorar = shutil.ignore_patterns(*sin) if sin else None
+    for nombre in SITIO:
+        origen = os.path.join(RAIZ_TABLERO, nombre)
+        if os.path.isdir(origen):
+            shutil.copytree(origen, os.path.join(destino, nombre),
+                            ignore=ignorar, dirs_exist_ok=True)
+        elif os.path.exists(origen):
+            shutil.copy2(origen, os.path.join(destino, nombre))
+
+
+def guardar_anios_cerrados():
+    """Cuando el tablero pasa a un año nuevo, guarda el del año que cerró.
+
+    Lo copia a su propia carpeta (por ejemplo tablero-calidad-colj/2026/) y lo
+    vuelve a generar ahí como año completo, para que deje de decir «año en
+    curso». Así la dirección de siempre muestra el año abierto y el anterior
+    sigue en línea. Solo pasa una vez por año: si la carpeta ya existe, no se
+    toca.
+    """
+    for anio in range(PRIMER_ANIO, ANIO):
+        nombre = "calidad_colj_%d.json" % anio
+        datos_viejos = os.path.join(RAIZ_TABLERO, "datos", nombre)
+        carpeta = os.path.join(RAIZ_TABLERO, str(anio))
+        if not os.path.exists(datos_viejos) or os.path.isdir(carpeta):
+            continue
+        print("El tablero pasa a %d. Se guarda el de %d en %s\n"
+              % (ANIO, anio, carpeta))
+        copiar_sitio(carpeta, sin=[nombre])
+        shutil.move(datos_viejos, os.path.join(carpeta, "datos", nombre))
+        sys.stdout.flush()
+        subprocess.run([sys.executable, os.path.abspath(__file__),
+                        "--anio", str(anio), "--cerrado"], cwd=RAIZ_TABLERO,
+                       check=True)
+        print("\nSigue el tablero de %d.\n" % ANIO)
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
+    print("Año del tablero: %d (%s)\n"
+          % (ANIO, "pedido con --anio" if anio_pedido() else
+             "el de la sesión más reciente del formulario"))
+    if ABIERTO:
+        guardar_anios_cerrados()
+    elif not os.path.isdir(RAIZ_SITIO):
+        # Un año anterior que todavía no tenía su carpeta: parte de la raíz
+        copiar_sitio(RAIZ_SITIO)
     datos = construir()
     r = datos["resumen"]
 
@@ -2666,13 +2922,14 @@ def main():
         os.makedirs(carpeta, exist_ok=True)
 
     # ---- datos, en dos formatos: uno para el navegador y otro legible
-    with open(os.path.join(CARPETA_DATOS, "calidad_colj_2026.json"),
+    with open(os.path.join(CARPETA_DATOS, "calidad_colj_%d.json" % ANIO),
               "w", encoding="utf-8") as f:
         json.dump(datos, f, ensure_ascii=False, indent=2)
     with open(os.path.join(CARPETA_DATOS, "datos_colj.js"),
               "w", encoding="utf-8") as f:
-        f.write("/* Datos del tablero COLJ 2026. Se entrega como .js y no como\n"
-                "   .json porque el navegador bloquea fetch sobre file://, y\n"
+        f.write("/* Datos del tablero COLJ %d. Se entrega como .js y no como\n"
+                % ANIO)
+        f.write("   .json porque el navegador bloquea fetch sobre file://, y\n"
                 "   este tablero se abre con doble clic desde el disco.\n"
                 "   Lo genera programas/generar_tablero_calidad_colj.py:\n"
                 "   no editar a mano. */\n")
@@ -2692,32 +2949,32 @@ def main():
 
     # ---- las seis páginas
     paginas = [
-        ("index.html", "Revisión COLJ 2026",
+        ("index.html", "Revisión COLJ %d" % ANIO,
          pagina_portada(datos["ultima_carga"], datos["ultima_sesion"]),
          "pintarCampos();", True),
         ("estadisticas.html", "Estadísticas generales · COLJ",
          pagina_estadisticas(),
          "pintarFranjaAnios();pintarSerie();", False),
-        ("zoom.html", "Zoom año en curso · COLJ 2026",
+        ("zoom.html", "%s · COLJ %d" % (TITULO_ZOOM, ANIO),
          pagina_zoom(mes_de(datos["corte"])),
          "pintarPanorama();pintarResumenAjustes();pintarAccesosZoom();", False),
         ("enlaces.html", "Enlaces · COLJ", pagina_enlaces(),
          "pintarEnlaces();", False),
-        ("periodicidad.html", "Periodicidad de las sesiones · COLJ 2026",
+        ("periodicidad.html", "Periodicidad de las sesiones · COLJ %d" % ANIO,
          pagina_periodicidad(), "pintarPeriodicidad();pintarConsulta();",
          False),
-        ("documentos.html", "Documentos de cada sesión · COLJ 2026",
+        ("documentos.html", "Documentos de cada sesión · COLJ %d" % ANIO,
          pagina_documentos(), "pintarDocumentos();", False),
-        ("pendientes.html", "Qué queda pendiente de cargar · COLJ 2026",
+        ("pendientes.html", "Qué queda pendiente de cargar · COLJ %d" % ANIO,
          pagina_pendientes(), "pintarPendientes();", False),
-        ("ajustes.html", "Ajustes por localidad · COLJ 2026",
+        ("ajustes.html", "Ajustes por localidad · COLJ %d" % ANIO,
          pagina_ajustes(), "pintarAjustes();", False),
-        ("detalle.html", "Ajustes por acta · COLJ 2026",
+        ("detalle.html", "Ajustes por acta · COLJ %d" % ANIO,
          pagina_detalle(), "pintarDetalle();", False),
     ]
-    # Las cinco vistas del año en curso vuelven a zoom.html, que es de donde
-    # se entra a ellas; el resto vuelve a la portada.
-    vuelve_a_zoom = ("zoom.html", "Zoom año en curso")
+    # Las cinco vistas del año vuelven a zoom.html, que es de donde se entra
+    # a ellas; el resto vuelve a la portada.
+    vuelve_a_zoom = ("zoom.html", TITULO_ZOOM)
     de_zoom = {"periodicidad.html", "documentos.html", "pendientes.html",
                "ajustes.html", "detalle.html"}
     # Todas las páginas con datos llevan el recordatorio del corte. La de
@@ -2726,8 +2983,8 @@ def main():
     os.makedirs(CARPETA_HTML, exist_ok=True)
     for archivo, pestana, pagina, llamada, portada in paginas:
         vuelve = vuelve_a_zoom if archivo in de_zoom else None
-        # La portada queda en la raíz; las demás páginas dentro de html/
-        destino = RAIZ_TABLERO if portada else CARPETA_HTML
+        # La portada queda en la raíz del sitio; las demás dentro de html/
+        destino = RAIZ_SITIO if portada else CARPETA_HTML
         with open(os.path.join(destino, archivo), "w", encoding="utf-8") as f:
             f.write(envoltura(pestana, pagina, llamada, portada, vuelve,
                               archivo in con_corte))
@@ -2736,13 +2993,13 @@ def main():
     for archivo, _, _, _, portada in paginas:
         if portada:
             continue
-        sobrante = os.path.join(RAIZ_TABLERO, archivo)
+        sobrante = os.path.join(RAIZ_SITIO, archivo)
         if os.path.exists(sobrante):
             os.remove(sobrante)
 
-    print("Tablero generado en %s" % RAIZ_TABLERO)
+    print("Tablero %d generado en %s" % (ANIO, RAIZ_SITIO))
     for archivo, _, _, _, portada in paginas:
-        ruta = os.path.join(RAIZ_TABLERO if portada else CARPETA_HTML, archivo)
+        ruta = os.path.join(RAIZ_SITIO if portada else CARPETA_HTML, archivo)
         etiqueta = archivo if portada else "html/" + archivo
         print("  %-26s %4d KB"
               % (etiqueta, max(1, os.path.getsize(ruta) // 1024)))

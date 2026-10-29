@@ -168,6 +168,9 @@ a { color: inherit; }
 }
 .portada .ultimo-registro span { display: block; }
 .portada .ultimo-registro b { font-weight: 600; color: var(--gris-oscuro); }
+.portada .ultimo-registro a {
+  font-weight: 600; color: var(--acento); text-underline-offset: 2px;
+}
 
 .portada .seguimiento {
   font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
