@@ -7,19 +7,19 @@
     2026
   ],
   "corte": "22 de octubre de 2026",
-  "ultima_carga": "28 de octubre de 2026",
-  "ultima_sesion": "Rafael Uribe Uribe, 22 de octubre de 2026",
+  "ultima_carga": "29 de octubre de 2026",
+  "ultima_sesion": "Barrios Unidos, Rafael Uribe Uribe y Teusaquillo, 22 de octubre de 2026",
   "bimestres_exigidos": 4,
   "resumen": {
-    "actas": 128,
-    "respuestas_formulario": 131,
-    "sesiones_formulario": 129,
-    "ordinarias": 88,
-    "extraordinarias": 41,
-    "planillas": 126,
-    "digitales": 37,
-    "piden_digital": 40,
-    "sesiones_completas": 122,
+    "actas": 130,
+    "respuestas_formulario": 133,
+    "sesiones_formulario": 131,
+    "ordinarias": 89,
+    "extraordinarias": 42,
+    "planillas": 128,
+    "digitales": 38,
+    "piden_digital": 41,
+    "sesiones_completas": 124,
     "actas_faltantes": 1,
     "al_dia_sesiones": 19,
     "en_silencio": 2,
@@ -28,14 +28,14 @@
     "carga_completa": 15,
     "sin_pendientes": 2,
     "con_pendientes": 6,
-    "actas_con_ajustes": 77,
+    "actas_con_ajustes": 78,
     "localidades_con_ajustes": 18,
-    "limpias": 51,
-    "num_problema": 29,
-    "rec_problema": 41,
-    "cifras_difieren": 37,
+    "limpias": 52,
+    "num_problema": 30,
+    "rec_problema": 42,
+    "cifras_difieren": 38,
     "fechas_difieren": 3,
-    "cifras_comparables": 110,
+    "cifras_comparables": 112,
     "escaneadas": 2
   },
   "localidades": [
@@ -1064,10 +1064,10 @@
     },
     {
       "localidad": "Barrios Unidos",
-      "actas": 8,
-      "respuestas_formulario": 8,
-      "sesiones_formulario": 8,
-      "ordinarias": 4,
+      "actas": 9,
+      "respuestas_formulario": 9,
+      "sesiones_formulario": 9,
+      "ordinarias": 5,
       "extraordinarias": 4,
       "bimestres_cubiertos": 4,
       "bimestres_con_ordinaria": [
@@ -1080,11 +1080,11 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 28,
-      "planillas": 8,
-      "digitales": 2,
-      "piden_digital": 2,
-      "sesiones_completas": 8,
+      "dias_sin_sesionar": 0,
+      "planillas": 9,
+      "digitales": 3,
+      "piden_digital": 3,
+      "sesiones_completas": 9,
       "actas_faltantes": 0,
       "pendientes_carga": [],
       "pendientes_imagen": [],
@@ -1094,7 +1094,7 @@
       "numeracion": {
         "ok": 6,
         "distinto": 0,
-        "repetido": 2,
+        "repetido": 3,
         "blanco": 0,
         "sin_linea": 0,
         "escaneo": 0
@@ -1103,13 +1103,13 @@
         "ok": 7,
         "sin_recuadro": 0,
         "modificado": 0,
-        "no_cuadra": 1,
+        "no_cuadra": 2,
         "escaneo": 0
       },
       "cifras": {
-        "comparables": 8,
+        "comparables": 9,
         "coinciden": 3,
-        "difieren": 5
+        "difieren": 6
       },
       "fechas": {
         "difieren": 0
@@ -1166,16 +1166,25 @@
           "ajustes": [
             "por dentro dice ACTA N° 4, el mismo número del acta del 23 de abril de 2026; la numeración tiene que seguir el orden de las sesiones"
           ]
+        },
+        {
+          "archivo": "20261022_BARRIOS_UNIDOS_ACTA_5.pdf",
+          "fecha": "2026-10-22",
+          "ajustes": [
+            "por dentro dice ACTA N° 5, el mismo número del acta del 25 de junio de 2026; la numeración tiene que seguir el orden de las sesiones",
+            "el total de jóvenes dice 9 jóvenes y las tres filas de abajo suman 4",
+            "el formulario reporta 13 asistentes no juveniles y 9 asistentes jóvenes; el acta dice 10 asistentes no juveniles y 9 asistentes jóvenes, hay que definir cuál queda"
+          ]
         }
       ]
     },
     {
       "localidad": "Teusaquillo",
-      "actas": 8,
-      "respuestas_formulario": 8,
-      "sesiones_formulario": 8,
+      "actas": 9,
+      "respuestas_formulario": 9,
+      "sesiones_formulario": 9,
       "ordinarias": 4,
-      "extraordinarias": 4,
+      "extraordinarias": 5,
       "bimestres_cubiertos": 4,
       "bimestres_con_ordinaria": [
         1,
@@ -1187,19 +1196,19 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 42,
-      "planillas": 8,
+      "dias_sin_sesionar": 0,
+      "planillas": 9,
       "digitales": 2,
       "piden_digital": 2,
-      "sesiones_completas": 8,
+      "sesiones_completas": 9,
       "actas_faltantes": 0,
       "pendientes_carga": [],
       "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
-      "limpias": 4,
+      "limpias": 5,
       "numeracion": {
-        "ok": 7,
+        "ok": 8,
         "distinto": 1,
         "repetido": 0,
         "blanco": 0,
@@ -1207,15 +1216,15 @@
         "escaneo": 0
       },
       "recuadro": {
-        "ok": 6,
+        "ok": 7,
         "sin_recuadro": 0,
         "modificado": 0,
         "no_cuadra": 2,
         "escaneo": 0
       },
       "cifras": {
-        "comparables": 8,
-        "coinciden": 6,
+        "comparables": 9,
+        "coinciden": 7,
         "difieren": 2
       },
       "fechas": {
@@ -1852,13 +1861,13 @@
       "localidad": "Barrios Unidos",
       "a2024": 6,
       "a2025": 9,
-      "a2026": 8
+      "a2026": 9
     },
     {
       "localidad": "Teusaquillo",
       "a2024": 10,
       "a2025": 8,
-      "a2026": 8
+      "a2026": 9
     },
     {
       "localidad": "Los Mártires",
@@ -1906,7 +1915,7 @@
   "totales_serie": {
     "a2024": 222,
     "a2025": 173,
-    "a2026": 128,
+    "a2026": 130,
     "sesiones_matriz_2024": 234
   },
   "meses": {
@@ -2083,11 +2092,11 @@
         "nombre": "Octubre",
         "abrev": "Oct",
         "preliminar": true,
-        "sesiones": 10,
-        "localidades": 10,
-        "asistencias": 182,
-        "jovenes": 55,
-        "en_plazo": 10,
+        "sesiones": 12,
+        "localidades": 12,
+        "asistencias": 213,
+        "jovenes": 65,
+        "en_plazo": 12,
         "cargas": [
           0,
           0,
@@ -2097,7 +2106,7 @@
           0,
           0,
           0,
-          10
+          12
         ]
       }
     ],
@@ -2743,6 +2752,14 @@
         "jovenes": 4
       },
       {
+        "localidad": "Barrios Unidos",
+        "dia": 22,
+        "mes": 10,
+        "tipo": "Ordinaria",
+        "asistencias": 22,
+        "jovenes": 9
+      },
+      {
         "localidad": "Teusaquillo",
         "dia": 27,
         "mes": 2,
@@ -2805,6 +2822,14 @@
         "tipo": "Extraordinaria",
         "asistencias": 25,
         "jovenes": 11
+      },
+      {
+        "localidad": "Teusaquillo",
+        "dia": 22,
+        "mes": 10,
+        "tipo": "Extraordinaria",
+        "asistencias": 9,
+        "jovenes": 1
       },
       {
         "localidad": "Los Mártires",
@@ -3324,7 +3349,7 @@
           1,
           1,
           1,
-          0
+          1
         ]
       },
       {
@@ -3338,7 +3363,7 @@
           1,
           1,
           1,
-          0
+          1
         ]
       },
       {
@@ -3452,8 +3477,8 @@
     "mes_abierto": "octubre"
   },
   "presentacion": {
-    "hora_madrugada": 39,
-    "hora_madrugada_cierre_manana": 36,
+    "hora_madrugada": 41,
+    "hora_madrugada_cierre_manana": 38,
     "hora_termina_antes": 0,
     "sin_lugar": 13,
     "sesiones_recargadas": 2,
