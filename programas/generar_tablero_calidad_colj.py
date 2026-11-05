@@ -32,7 +32,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-import numpy as np   # viene con pandas; se usa para contar días hábiles
+import numpy as np   
 import pandas as pd
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
@@ -707,23 +707,28 @@ def datos_por_mes(del_anio, unicas, fecha_corte):
 
     # Una fila por sesión para la consulta de la página de periodicidad. Va
     # ordenada por localidad y fecha, como el anexo del reporte trimestral,
-    # y solo lleva localidad, fecha, tipo y cifras: nada que nombre personas.
+    # y solo lleva localidad, número, fecha, tipo y cifras: nada que nombre
+    # personas. El número se cuenta por fecha dentro de cada localidad y no se
+    # toma del formulario, porque las localidades a veces lo escriben mal.
     orden_loc = {loc: i for i, loc in enumerate(ORDEN)}
     lista = ses.assign(pos=ses["Localidad"].map(orden_loc)) \
                .sort_values(["pos", "fecha"])
+    lista["numero"] = lista.groupby("Localidad").cumcount() + 1
     # El tipo se rotula con la misma regla que cuenta ordinarias en la tabla
     # de periodicidad: un valor vacío o escrito distinto no se vuelve
     # ordinaria en silencio, sale tal cual para que se vea.
     tipos = {"Ordinario": "Ordinaria", "Extraordinario": "Extraordinaria"}
     sesiones = [{"localidad": loc,
+                 "numero": int(n),
                  "dia": int(f.day),
                  "mes": int(m),
                  "tipo": tipos.get(t, t or "Sin dato"),
                  "asistencias": int(a),
                  "jovenes": int(j)}
-                for loc, f, m, t, a, j in zip(
-                    lista["Localidad"], lista["fecha"], lista["mes"],
-                    lista["Tipo"], lista["asistencias"], lista["jovenes"])]
+                for loc, n, f, m, t, a, j in zip(
+                    lista["Localidad"], lista["numero"], lista["fecha"],
+                    lista["mes"], lista["Tipo"], lista["asistencias"],
+                    lista["jovenes"])]
 
     cerradas = ses[ses["mes"] < mes_corte]
     return {
@@ -1798,9 +1803,13 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
 .resumen-consulta .sin-sesion {
   display: block; font-size: 0.88rem; color: var(--gris-oscuro); margin-top: 0.3rem;
 }
-/* Con cuatro o cinco columnas, a todo el ancho las cifras quedaban lejos de
+/* Con cinco o seis columnas, a todo el ancho las cifras quedaban lejos de
    la fecha. Se limita a la medida del texto de arriba. */
 .tarjeta.tabla-consulta { max-width: 880px; }
+/* Con una sola localidad, la primera columna es el número de sesión: se angosta
+   para que no quede lejos de su fecha. */
+.tabla-consulta .una-localidad th:first-child,
+.tabla-consulta .una-localidad td:first-child { width: 1%; white-space: nowrap; }
 /* Quitar filtros: texto en el acento, al pie de las listas. Solo se ve cuando
    algo está distinto del inicio (lo maneja pintarConsulta), así que su
    presencia ya dice que la tabla está filtrada. */
@@ -1832,7 +1841,7 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
 .tabla-consulta th button:not(.activa) .flecha { opacity: 0.5; }
 /* "27 de abril" partido en tres renglones no se lee como fecha */
 .tabla-consulta td.sin-corte { white-space: nowrap; }
-.tabla-consulta .mes-corto { display: none; }
+.tabla-consulta .corto { display: none; }
 
 @media (max-width: 700px) {
   /* Localidad arriba a todo el ancho; desde y hasta, que son un par, juntos
@@ -1842,10 +1851,11 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
   .filtros label { flex: 1 1 120px; }
   .filtros label:first-child, .filtros label:last-of-type { flex-basis: 100%; }
   .filtros select { min-width: 0; width: 100%; font-size: 1rem; }
-  /* En el celular el mes va abreviado y la tarjeta con menos margen, para
-     que la consulta de una localidad quepa entera en 375 px */
-  .tabla-consulta .mes-largo { display: none; }
-  .tabla-consulta .mes-corto { display: inline; }
+  /* En el celular el mes, el tipo y algunos títulos van abreviados, y la
+     tarjeta con menos margen, para que la consulta de una localidad quepa
+     entera en 375 px */
+  .tabla-consulta .largo { display: none; }
+  .tabla-consulta .corto { display: inline; }
   .tarjeta.tabla-consulta { padding: 0.8rem 0.4rem; }
   /* La consulta tiene pocas columnas: no necesita el ancho mínimo de las
      demás tablas. Si aun así no cabe, la primera columna queda fija al
@@ -2212,17 +2222,20 @@ function pintarConsulta() {
   // clic invierte el orden). Todo orden que se puede pedir en la tabla está
   // también en la lista, para quien no sepa que los títulos se pueden tocar,
   // y cada forma refleja lo que hizo la otra. "Quitar filtros" las devuelve
-  // a localidad de la A a la Z. Los nombres y las fechas arrancan de menor a
-  // mayor y las cifras de mayor a menor, que es lo que se busca.
+  // a localidad de la A a la Z. Los nombres, el número de sesión y las fechas
+  // arrancan de menor a mayor y las cifras de mayor a menor, que es lo que se
+  // busca.
   var COLUMNAS = [
     {id: 'localidad', rot: 'Localidad', asc: 'A a Z', desc: 'Z a A'},
+    {id: 'numero', rot: 'Sesión', corto: 'N.º', asc: 'primera a última',
+     desc: 'última a primera'},
     {id: 'fecha', rot: 'Fecha', asc: 'más antigua primero',
      desc: 'más reciente primero'},
     {id: 'tipo', rot: 'Tipo', asc: 'ordinarias primero',
      desc: 'extraordinarias primero'},
-    {id: 'asistencias', rot: 'Asistentes', cifra: true,
+    {id: 'asistencias', rot: 'Asistentes', corto: 'Asist.', cifra: true,
      asc: 'de menos a más', desc: 'de más a menos'},
-    {id: 'jovenes', rot: 'Jóvenes', cifra: true,
+    {id: 'jovenes', rot: 'Jóvenes', corto: 'Jóv.', cifra: true,
      asc: 'de menos a más', desc: 'de más a menos'}
   ];
   // En la lista, las opciones siguen el orden de las columnas, y en cada
@@ -2238,6 +2251,12 @@ function pintarConsulta() {
     return COLUMNAS.some(function (c) { return c.id === id && c.cifra; });
   }
   var RANGO_TIPO = {'Ordinaria': 0, 'Extraordinaria': 1};
+  var TIPO_CORTO = {'Ordinaria': 'Ord.', 'Extraordinaria': 'Extra.'};
+  // Un texto con su versión para pantallas pequeñas. Sin versión corta, queda igual
+  function conCorto(largo, corto) {
+    return corto ? '<span class="largo">' + largo + '</span>' +
+      '<span class="corto">' + corto + '</span>' : largo;
+  }
   function comparar(id, a, b) {
     if (id === 'localidad') return a.localidad.localeCompare(b.localidad, 'es');
     if (id === 'tipo') return (RANGO_TIPO[a.tipo] === undefined ? 2 : RANGO_TIPO[a.tipo]) -
@@ -2346,21 +2365,23 @@ function pintarConsulta() {
       return '<th' + (activa ? ' aria-sort="' +
           (orden.asc ? 'ascending' : 'descending') + '"' : '') + '>' +
         '<button type="button" class="ordenar' + (activa ? ' activa' : '') +
-        '" data-col="' + c.id + '">' + c.rot + flecha + '</button></th>';
+        '" data-col="' + c.id + '" aria-label="' + c.rot + '">' +
+        conCorto(c.rot, c.corto) + flecha + '</button></th>';
     }).join('');
     var filas = lista.map(function (s) {
       return '<tr>' + (conLoc ? '<td>' + s.localidad + '</td>' : '') +
+        '<td>' + s.numero + '</td>' +
         '<td class="sin-corte">' + s.dia +
-        '<span class="mes-largo"> de ' + nombres[s.mes - 1] + '</span>' +
-        '<span class="mes-corto"> ' + nombres[s.mes - 1].slice(0, 3) +
-        '</span></td>' +
-        '<td class="sin-corte">' + s.tipo + '</td>' +
+        conCorto(' de ' + nombres[s.mes - 1], ' ' + nombres[s.mes - 1].slice(0, 3)) +
+        '</td>' +
+        '<td class="sin-corte">' + conCorto(s.tipo, TIPO_CORTO[s.tipo]) + '</td>' +
         '<td>' + miles(s.asistencias) + '</td>' +
         '<td>' + miles(s.jovenes) + '</td></tr>';
     }).join('');
+    tabla.className = conLoc ? '' : 'una-localidad';
     tabla.innerHTML = '<thead><tr>' + cab + '</tr></thead><tbody>' + filas +
       '<tr class="total"><td>Promedio</td>' + (conLoc ? '<td></td>' : '') +
-      '<td></td><td>' + (n ? pA : '') + '</td>' +
+      '<td></td><td></td><td>' + (n ? pA : '') + '</td>' +
       '<td>' + (n ? pJ : '') + '</td></tr>' +
       '</tbody>';
     tabla.parentNode.style.display = n ? '' : 'none';
@@ -2705,7 +2726,8 @@ def pagina_periodicidad():
     <p>Elige una localidad, un rango de meses o las dos cosas, y cómo ordenar
        la tabla (también con un clic en el título de cada columna). Las cifras
        de asistentes son las de la última carga de cada sesión, y el promedio
-       es por sesión.</p>
+       es por sesión. El número de sesión va por fecha en cada localidad durante
+       el año y no cambia al filtrar.</p>
   </div>
   <div class="filtros">
     <label>Localidad <select id="filtro-localidad"></select></label>

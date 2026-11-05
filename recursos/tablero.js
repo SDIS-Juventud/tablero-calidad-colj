@@ -338,17 +338,20 @@ function pintarConsulta() {
   // clic invierte el orden). Todo orden que se puede pedir en la tabla está
   // también en la lista, para quien no sepa que los títulos se pueden tocar,
   // y cada forma refleja lo que hizo la otra. "Quitar filtros" las devuelve
-  // a localidad de la A a la Z. Los nombres y las fechas arrancan de menor a
-  // mayor y las cifras de mayor a menor, que es lo que se busca.
+  // a localidad de la A a la Z. Los nombres, el número de sesión y las fechas
+  // arrancan de menor a mayor y las cifras de mayor a menor, que es lo que se
+  // busca.
   var COLUMNAS = [
     {id: 'localidad', rot: 'Localidad', asc: 'A a Z', desc: 'Z a A'},
+    {id: 'numero', rot: 'Sesión', corto: 'N.º', asc: 'primera a última',
+     desc: 'última a primera'},
     {id: 'fecha', rot: 'Fecha', asc: 'más antigua primero',
      desc: 'más reciente primero'},
     {id: 'tipo', rot: 'Tipo', asc: 'ordinarias primero',
      desc: 'extraordinarias primero'},
-    {id: 'asistencias', rot: 'Asistentes', cifra: true,
+    {id: 'asistencias', rot: 'Asistentes', corto: 'Asist.', cifra: true,
      asc: 'de menos a más', desc: 'de más a menos'},
-    {id: 'jovenes', rot: 'Jóvenes', cifra: true,
+    {id: 'jovenes', rot: 'Jóvenes', corto: 'Jóv.', cifra: true,
      asc: 'de menos a más', desc: 'de más a menos'}
   ];
   // En la lista, las opciones siguen el orden de las columnas, y en cada
@@ -364,6 +367,12 @@ function pintarConsulta() {
     return COLUMNAS.some(function (c) { return c.id === id && c.cifra; });
   }
   var RANGO_TIPO = {'Ordinaria': 0, 'Extraordinaria': 1};
+  var TIPO_CORTO = {'Ordinaria': 'Ord.', 'Extraordinaria': 'Extra.'};
+  // Un texto con su versión para pantallas pequeñas. Sin versión corta, queda igual
+  function conCorto(largo, corto) {
+    return corto ? '<span class="largo">' + largo + '</span>' +
+      '<span class="corto">' + corto + '</span>' : largo;
+  }
   function comparar(id, a, b) {
     if (id === 'localidad') return a.localidad.localeCompare(b.localidad, 'es');
     if (id === 'tipo') return (RANGO_TIPO[a.tipo] === undefined ? 2 : RANGO_TIPO[a.tipo]) -
@@ -472,21 +481,23 @@ function pintarConsulta() {
       return '<th' + (activa ? ' aria-sort="' +
           (orden.asc ? 'ascending' : 'descending') + '"' : '') + '>' +
         '<button type="button" class="ordenar' + (activa ? ' activa' : '') +
-        '" data-col="' + c.id + '">' + c.rot + flecha + '</button></th>';
+        '" data-col="' + c.id + '" aria-label="' + c.rot + '">' +
+        conCorto(c.rot, c.corto) + flecha + '</button></th>';
     }).join('');
     var filas = lista.map(function (s) {
       return '<tr>' + (conLoc ? '<td>' + s.localidad + '</td>' : '') +
+        '<td>' + s.numero + '</td>' +
         '<td class="sin-corte">' + s.dia +
-        '<span class="mes-largo"> de ' + nombres[s.mes - 1] + '</span>' +
-        '<span class="mes-corto"> ' + nombres[s.mes - 1].slice(0, 3) +
-        '</span></td>' +
-        '<td class="sin-corte">' + s.tipo + '</td>' +
+        conCorto(' de ' + nombres[s.mes - 1], ' ' + nombres[s.mes - 1].slice(0, 3)) +
+        '</td>' +
+        '<td class="sin-corte">' + conCorto(s.tipo, TIPO_CORTO[s.tipo]) + '</td>' +
         '<td>' + miles(s.asistencias) + '</td>' +
         '<td>' + miles(s.jovenes) + '</td></tr>';
     }).join('');
+    tabla.className = conLoc ? '' : 'una-localidad';
     tabla.innerHTML = '<thead><tr>' + cab + '</tr></thead><tbody>' + filas +
       '<tr class="total"><td>Promedio</td>' + (conLoc ? '<td></td>' : '') +
-      '<td></td><td>' + (n ? pA : '') + '</td>' +
+      '<td></td><td></td><td>' + (n ? pA : '') + '</td>' +
       '<td>' + (n ? pJ : '') + '</td></tr>' +
       '</tbody>';
     tabla.parentNode.style.display = n ? '' : 'none';

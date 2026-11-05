@@ -464,9 +464,13 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
 .resumen-consulta .sin-sesion {
   display: block; font-size: 0.88rem; color: var(--gris-oscuro); margin-top: 0.3rem;
 }
-/* Con cuatro o cinco columnas, a todo el ancho las cifras quedaban lejos de
+/* Con cinco o seis columnas, a todo el ancho las cifras quedaban lejos de
    la fecha. Se limita a la medida del texto de arriba. */
 .tarjeta.tabla-consulta { max-width: 880px; }
+/* Con una sola localidad, la primera columna es el número de sesión: se angosta
+   para que no quede lejos de su fecha. */
+.tabla-consulta .una-localidad th:first-child,
+.tabla-consulta .una-localidad td:first-child { width: 1%; white-space: nowrap; }
 /* Quitar filtros: texto en el acento, al pie de las listas. Solo se ve cuando
    algo está distinto del inicio (lo maneja pintarConsulta), así que su
    presencia ya dice que la tabla está filtrada. */
@@ -498,7 +502,7 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
 .tabla-consulta th button:not(.activa) .flecha { opacity: 0.5; }
 /* "27 de abril" partido en tres renglones no se lee como fecha */
 .tabla-consulta td.sin-corte { white-space: nowrap; }
-.tabla-consulta .mes-corto { display: none; }
+.tabla-consulta .corto { display: none; }
 
 @media (max-width: 700px) {
   /* Localidad arriba a todo el ancho; desde y hasta, que son un par, juntos
@@ -508,10 +512,11 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
   .filtros label { flex: 1 1 120px; }
   .filtros label:first-child, .filtros label:last-of-type { flex-basis: 100%; }
   .filtros select { min-width: 0; width: 100%; font-size: 1rem; }
-  /* En el celular el mes va abreviado y la tarjeta con menos margen, para
-     que la consulta de una localidad quepa entera en 375 px */
-  .tabla-consulta .mes-largo { display: none; }
-  .tabla-consulta .mes-corto { display: inline; }
+  /* En el celular el mes, el tipo y algunos títulos van abreviados, y la
+     tarjeta con menos margen, para que la consulta de una localidad quepa
+     entera en 375 px */
+  .tabla-consulta .largo { display: none; }
+  .tabla-consulta .corto { display: inline; }
   .tarjeta.tabla-consulta { padding: 0.8rem 0.4rem; }
   /* La consulta tiene pocas columnas: no necesita el ancho mínimo de las
      demás tablas. Si aun así no cabe, la primera columna queda fija al
