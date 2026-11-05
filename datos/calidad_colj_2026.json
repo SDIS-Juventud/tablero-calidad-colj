@@ -19,13 +19,13 @@
     "planillas": 129,
     "digitales": 39,
     "piden_digital": 42,
-    "sesiones_completas": 125,
+    "sesiones_completas": 128,
     "actas_faltantes": 1,
     "al_dia_sesiones": 19,
     "en_silencio": 2,
     "dias_alerta": 61,
     "ordinarias_exigidas": 4,
-    "carga_completa": 15,
+    "carga_completa": 16,
     "sin_pendientes": 2,
     "con_pendientes": 6,
     "actas_con_ajustes": 79,
@@ -414,10 +414,9 @@
       "planillas": 5,
       "digitales": 1,
       "piden_digital": 2,
-      "sesiones_completas": 4,
+      "sesiones_completas": 5,
       "actas_faltantes": 0,
       "pendientes_carga": [
-        "falta el «Registro de asistencia digital (sistematizado)» del comité 4, que fue mixta",
         "falta el «Registro de asistencia (fotografía o PDF)» del comité 5"
       ],
       "pendientes_imagen": [],
@@ -499,16 +498,14 @@
       "planillas": 6,
       "digitales": 2,
       "piden_digital": 3,
-      "sesiones_completas": 5,
+      "sesiones_completas": 6,
       "actas_faltantes": 0,
-      "pendientes_carga": [
-        "falta el «Registro de asistencia digital (sistematizado)» del comité 2, que fue mixta"
-      ],
+      "pendientes_carga": [],
       "pendientes_imagen": [],
       "pendientes_sesion": [
         "lleva 73 días sin reunirse"
       ],
-      "estado": "falta cargar",
+      "estado": "revisar forma",
       "limpias": 5,
       "numeracion": {
         "ok": 6,
@@ -806,11 +803,10 @@
       "planillas": 6,
       "digitales": 1,
       "piden_digital": 2,
-      "sesiones_completas": 5,
+      "sesiones_completas": 6,
       "actas_faltantes": 0,
       "pendientes_carga": [
-        "falta el «Registro de asistencia (fotografía o PDF)» del comité 5",
-        "falta el «Registro de asistencia digital (sistematizado)» del comité 6, que fue virtual"
+        "falta el «Registro de asistencia (fotografía o PDF)» del comité 5"
       ],
       "pendientes_imagen": [],
       "pendientes_sesion": [],

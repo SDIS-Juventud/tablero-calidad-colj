@@ -533,9 +533,6 @@ function pintarDocumentos() {
       '<td>' + l.sesiones_formulario + '</td>' +
       '<td>' + fraccion(l.actas, l.sesiones_formulario) + '</td>' +
       '<td>' + fraccion(l.planillas, l.sesiones_formulario) + '</td>' +
-      '<td>' + (l.piden_digital
-                ? fraccion(l.digitales, l.piden_digital)
-                : '<span class="neutro">no aplica</span>') + '</td>' +
       '<td>' + chip(l.estado) + '</td></tr>';
   }).join('');
   var r = D.resumen;
@@ -543,8 +540,7 @@ function pintarDocumentos() {
     '<tr class="total"><td>Total</td>' +
     '<td>' + r.sesiones_formulario + '</td>' +
     '<td>' + r.actas + '</td>' +
-    '<td>' + r.planillas + ' de ' + r.sesiones_formulario + '</td>' +
-    '<td>' + r.digitales + ' de ' + r.piden_digital + '</td><td></td></tr>';
+    '<td>' + r.planillas + ' de ' + r.sesiones_formulario + '</td><td></td></tr>';
 }
 
 function pintarPendientes() {

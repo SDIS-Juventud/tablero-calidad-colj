@@ -1036,29 +1036,21 @@ def construir():
                 referencia, archivos.get(nombre, []), usados)
             planillas += tiene_planilla
 
-            # El registro digital solo cuenta donde se pide. Si una sesión
-            # presencial lo subió de todas formas, bienvenido sea, pero no
-            # entra al conteo: inflaría un denominador que no le corresponde.
-            modo = fila["Modalidad"]
-            requiere_digital = modo in MODALIDADES_CON_DIGITAL
-            if requiere_digital:
+            # El registro digital queda solo como cifra de control en los
+            # datos. Desde el 5 de noviembre de 2026 no es un pendiente ni
+            # define si una sesión está completa, porque depende de cada sesión.
+            if fila["Modalidad"] in MODALIDADES_CON_DIGITAL:
                 digitales += tiene_digital
 
-            # Una sesión completa tiene acta y planilla, y el digital cuando
-            # se le pide. Sin acta no está completa, aunque la planilla esté.
-            if (acta is not None and tiene_planilla
-                    and (tiene_digital or not requiere_digital)):
+            # Una sesión completa tiene acta y planilla. Sin acta no está
+            # completa, aunque la planilla esté.
+            if acta is not None and tiene_planilla:
                 completas += 1
 
             if not tiene_planilla:
                 pendientes_carga.append(
                     "falta el «Registro de asistencia (fotografía o PDF)» "
                     "del comité %s" % etiqueta)
-            if requiere_digital and not tiene_digital:
-                pendientes_carga.append(
-                    "falta el «Registro de asistencia digital "
-                    "(sistematizado)» del comité %s, que fue %s"
-                    % (etiqueta, str(modo).lower()))
 
         # El acta que no se cargó es el pendiente más grande que puede tener
         # una localidad, y hasta ahora no aparecía en ninguna parte: la lista
@@ -2417,9 +2409,6 @@ function pintarDocumentos() {
       '<td>' + l.sesiones_formulario + '</td>' +
       '<td>' + fraccion(l.actas, l.sesiones_formulario) + '</td>' +
       '<td>' + fraccion(l.planillas, l.sesiones_formulario) + '</td>' +
-      '<td>' + (l.piden_digital
-                ? fraccion(l.digitales, l.piden_digital)
-                : '<span class="neutro">no aplica</span>') + '</td>' +
       '<td>' + chip(l.estado) + '</td></tr>';
   }).join('');
   var r = D.resumen;
@@ -2427,8 +2416,7 @@ function pintarDocumentos() {
     '<tr class="total"><td>Total</td>' +
     '<td>' + r.sesiones_formulario + '</td>' +
     '<td>' + r.actas + '</td>' +
-    '<td>' + r.planillas + ' de ' + r.sesiones_formulario + '</td>' +
-    '<td>' + r.digitales + ' de ' + r.piden_digital + '</td><td></td></tr>';
+    '<td>' + r.planillas + ' de ' + r.sesiones_formulario + '</td><td></td></tr>';
 }
 
 function pintarPendientes() {
@@ -2748,11 +2736,7 @@ def pagina_documentos():
     """Página de documentos cargados por sesión."""
     titulo = """  <h1>Documentos de cada sesión</h1>
   <p class="intro">Cada sesión debería quedar con el acta y el registro de
-     asistencia firmado. El registro digital sistematizado solo se le pide a
-     los comités virtuales y mixtos, porque en un comité presencial la
-     asistencia se firma en papel y no hay nada que sistematizar. Es el que
-     permite analizar la asistencia sin
-     transcribir a mano.</p>
+     asistencia firmado.</p>
 """
     cuerpo = """
   <div class="tarjeta tabla-ancha">
@@ -2763,7 +2747,6 @@ def pagina_documentos():
           <th>Sesiones<br>reportadas</th>
           <th>Actas<br>cargadas</th>
           <th>Planilla de<br>asistencia</th>
-          <th>Registro digital<br>de los virtuales</th>
           <th>Estado general<br>de la localidad</th>
         </tr>
       </thead>
