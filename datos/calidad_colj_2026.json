@@ -6,28 +6,28 @@
     2025,
     2026
   ],
-  "corte": "22 de octubre de 2026",
-  "ultima_carga": "29 de octubre de 2026",
-  "ultima_sesion": "Barrios Unidos, Rafael Uribe Uribe y Teusaquillo, 22 de octubre de 2026",
+  "corte": "30 de octubre de 2026",
+  "ultima_carga": "1 de noviembre de 2026",
+  "ultima_sesion": "Kennedy, 30 de octubre de 2026",
   "bimestres_exigidos": 4,
   "resumen": {
     "actas": 130,
-    "respuestas_formulario": 133,
-    "sesiones_formulario": 131,
+    "respuestas_formulario": 134,
+    "sesiones_formulario": 132,
     "ordinarias": 89,
-    "extraordinarias": 42,
+    "extraordinarias": 43,
     "planillas": 128,
     "digitales": 38,
-    "piden_digital": 41,
+    "piden_digital": 42,
     "sesiones_completas": 124,
-    "actas_faltantes": 1,
+    "actas_faltantes": 2,
     "al_dia_sesiones": 19,
     "en_silencio": 2,
     "dias_alerta": 61,
     "ordinarias_exigidas": 4,
-    "carga_completa": 15,
+    "carga_completa": 14,
     "sin_pendientes": 2,
-    "con_pendientes": 6,
+    "con_pendientes": 7,
     "actas_con_ajustes": 78,
     "localidades_con_ajustes": 18,
     "limpias": 52,
@@ -57,7 +57,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 2,
+      "dias_sin_sesionar": 10,
       "planillas": 6,
       "digitales": 2,
       "piden_digital": 2,
@@ -159,7 +159,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 8,
+      "dias_sin_sesionar": 16,
       "planillas": 5,
       "digitales": 1,
       "piden_digital": 1,
@@ -240,7 +240,7 @@
       ],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 31,
+      "dias_sin_sesionar": 39,
       "planillas": 4,
       "digitales": 0,
       "piden_digital": 0,
@@ -325,7 +325,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 1,
+      "dias_sin_sesionar": 9,
       "planillas": 9,
       "digitales": 5,
       "piden_digital": 5,
@@ -410,7 +410,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 62,
+      "dias_sin_sesionar": 70,
       "planillas": 5,
       "digitales": 1,
       "piden_digital": 2,
@@ -422,7 +422,7 @@
       ],
       "pendientes_imagen": [],
       "pendientes_sesion": [
-        "lleva 62 días sin reunirse"
+        "lleva 70 días sin reunirse"
       ],
       "estado": "falta cargar",
       "limpias": 3,
@@ -495,7 +495,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 65,
+      "dias_sin_sesionar": 73,
       "planillas": 6,
       "digitales": 2,
       "piden_digital": 3,
@@ -506,7 +506,7 @@
       ],
       "pendientes_imagen": [],
       "pendientes_sesion": [
-        "lleva 65 días sin reunirse"
+        "lleva 73 días sin reunirse"
       ],
       "estado": "falta cargar",
       "limpias": 5,
@@ -564,7 +564,7 @@
       ],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 48,
+      "dias_sin_sesionar": 56,
       "planillas": 8,
       "digitales": 1,
       "piden_digital": 1,
@@ -670,10 +670,10 @@
     {
       "localidad": "Kennedy",
       "actas": 7,
-      "respuestas_formulario": 7,
-      "sesiones_formulario": 7,
+      "respuestas_formulario": 8,
+      "sesiones_formulario": 8,
       "ordinarias": 4,
-      "extraordinarias": 3,
+      "extraordinarias": 4,
       "bimestres_cubiertos": 3,
       "bimestres_con_ordinaria": [
         1,
@@ -686,16 +686,20 @@
       ],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 27,
+      "dias_sin_sesionar": 0,
       "planillas": 7,
       "digitales": 0,
-      "piden_digital": 0,
+      "piden_digital": 1,
       "sesiones_completas": 7,
-      "actas_faltantes": 0,
-      "pendientes_carga": [],
+      "actas_faltantes": 1,
+      "pendientes_carga": [
+        "falta el «Registro de asistencia (fotografía o PDF)» del comité 9",
+        "falta el «Registro de asistencia digital (sistematizado)» del comité 9, que fue virtual",
+        "falta cargar el acta de una sesión reportada al formulario"
+      ],
       "pendientes_imagen": [],
       "pendientes_sesion": [],
-      "estado": "revisar forma",
+      "estado": "falta cargar",
       "limpias": 1,
       "numeracion": {
         "ok": 2,
@@ -794,7 +798,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 14,
+      "dias_sin_sesionar": 22,
       "planillas": 6,
       "digitales": 1,
       "piden_digital": 2,
@@ -868,7 +872,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 35,
+      "dias_sin_sesionar": 43,
       "planillas": 6,
       "digitales": 3,
       "piden_digital": 3,
@@ -972,7 +976,7 @@
       ],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 14,
+      "dias_sin_sesionar": 22,
       "planillas": 7,
       "digitales": 1,
       "piden_digital": 1,
@@ -1080,7 +1084,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 0,
+      "dias_sin_sesionar": 8,
       "planillas": 9,
       "digitales": 3,
       "piden_digital": 3,
@@ -1196,7 +1200,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 0,
+      "dias_sin_sesionar": 8,
       "planillas": 9,
       "digitales": 2,
       "piden_digital": 2,
@@ -1283,7 +1287,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 7,
+      "dias_sin_sesionar": 15,
       "planillas": 6,
       "digitales": 1,
       "piden_digital": 1,
@@ -1363,7 +1367,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 43,
+      "dias_sin_sesionar": 51,
       "planillas": 7,
       "digitales": 5,
       "piden_digital": 5,
@@ -1419,7 +1423,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 8,
+      "dias_sin_sesionar": 16,
       "planillas": 8,
       "digitales": 5,
       "piden_digital": 5,
@@ -1476,7 +1480,7 @@
       ],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 1,
-      "dias_sin_sesionar": 30,
+      "dias_sin_sesionar": 38,
       "planillas": 3,
       "digitales": 0,
       "piden_digital": 0,
@@ -1556,7 +1560,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 0,
+      "dias_sin_sesionar": 8,
       "planillas": 6,
       "digitales": 1,
       "piden_digital": 1,
@@ -1641,7 +1645,7 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 21,
+      "dias_sin_sesionar": 29,
       "planillas": 6,
       "digitales": 0,
       "piden_digital": 0,
@@ -1743,7 +1747,7 @@
       ],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 19,
+      "dias_sin_sesionar": 27,
       "planillas": 5,
       "digitales": 4,
       "piden_digital": 4,
@@ -1938,6 +1942,7 @@
           1,
           0,
           0,
+          0,
           0
         ]
       },
@@ -1957,6 +1962,7 @@
           0,
           3,
           2,
+          0,
           0,
           0,
           0
@@ -1980,6 +1986,7 @@
           1,
           0,
           0,
+          0,
           0
         ]
       },
@@ -1998,6 +2005,7 @@
           0,
           4,
           5,
+          0,
           0,
           0,
           0,
@@ -2022,6 +2030,7 @@
           12,
           1,
           0,
+          0,
           0
         ]
       },
@@ -2042,6 +2051,7 @@
           0,
           8,
           3,
+          0,
           0,
           0
         ]
@@ -2064,7 +2074,8 @@
           0,
           8,
           6,
-          1
+          1,
+          0
         ]
       },
       {
@@ -2085,18 +2096,19 @@
           0,
           0,
           8,
-          4
+          4,
+          0
         ]
       },
       {
         "nombre": "Octubre",
         "abrev": "Oct",
         "preliminar": true,
-        "sesiones": 12,
-        "localidades": 12,
-        "asistencias": 213,
-        "jovenes": 65,
-        "en_plazo": 12,
+        "sesiones": 13,
+        "localidades": 13,
+        "asistencias": 233,
+        "jovenes": 70,
+        "en_plazo": 13,
         "cargas": [
           0,
           0,
@@ -2106,7 +2118,8 @@
           0,
           0,
           0,
-          12
+          12,
+          1
         ]
       }
     ],
@@ -2526,6 +2539,14 @@
         "tipo": "Ordinaria",
         "asistencias": 25,
         "jovenes": 10
+      },
+      {
+        "localidad": "Kennedy",
+        "dia": 30,
+        "mes": 10,
+        "tipo": "Extraordinaria",
+        "asistencias": 20,
+        "jovenes": 5
       },
       {
         "localidad": "Fontibón",
@@ -3181,7 +3202,8 @@
       "Jul",
       "Ago",
       "Sep",
-      "Oct"
+      "Oct",
+      "Nov"
     ],
     "por_localidad": [
       {
@@ -3293,7 +3315,7 @@
           1,
           0,
           1,
-          0
+          1
         ]
       },
       {
@@ -3477,12 +3499,12 @@
     "mes_abierto": "octubre"
   },
   "presentacion": {
-    "hora_madrugada": 41,
-    "hora_madrugada_cierre_manana": 38,
+    "hora_madrugada": 42,
+    "hora_madrugada_cierre_manana": 39,
     "hora_termina_antes": 0,
     "sin_lugar": 13,
     "sesiones_recargadas": 2,
-    "localidades_numero_repetido": 5,
+    "localidades_numero_repetido": 6,
     "max_veces_numero_repetido": 3,
     "localidades_con_sesion": 20,
     "localidades_arrancan_en_1": 20,
