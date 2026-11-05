@@ -11,7 +11,7 @@
   "ultima_sesion": "Kennedy, 30 de octubre de 2026",
   "bimestres_exigidos": 4,
   "resumen": {
-    "actas": 130,
+    "actas": 131,
     "respuestas_formulario": 134,
     "sesiones_formulario": 132,
     "ordinarias": 89,
@@ -19,23 +19,23 @@
     "planillas": 129,
     "digitales": 39,
     "piden_digital": 42,
-    "sesiones_completas": 124,
-    "actas_faltantes": 2,
+    "sesiones_completas": 125,
+    "actas_faltantes": 1,
     "al_dia_sesiones": 19,
     "en_silencio": 2,
     "dias_alerta": 61,
     "ordinarias_exigidas": 4,
-    "carga_completa": 14,
+    "carga_completa": 15,
     "sin_pendientes": 2,
-    "con_pendientes": 7,
-    "actas_con_ajustes": 78,
+    "con_pendientes": 6,
+    "actas_con_ajustes": 79,
     "localidades_con_ajustes": 18,
     "limpias": 52,
-    "num_problema": 30,
+    "num_problema": 31,
     "rec_problema": 42,
-    "cifras_difieren": 38,
+    "cifras_difieren": 39,
     "fechas_difieren": 3,
-    "cifras_comparables": 112,
+    "cifras_comparables": 113,
     "escaneadas": 2
   },
   "localidades": [
@@ -669,7 +669,7 @@
     },
     {
       "localidad": "Kennedy",
-      "actas": 7,
+      "actas": 8,
       "respuestas_formulario": 8,
       "sesiones_formulario": 8,
       "ordinarias": 4,
@@ -690,34 +690,32 @@
       "planillas": 8,
       "digitales": 1,
       "piden_digital": 1,
-      "sesiones_completas": 7,
-      "actas_faltantes": 1,
-      "pendientes_carga": [
-        "falta cargar el acta de una sesión reportada al formulario"
-      ],
+      "sesiones_completas": 8,
+      "actas_faltantes": 0,
+      "pendientes_carga": [],
       "pendientes_imagen": [],
       "pendientes_sesion": [],
-      "estado": "falta cargar",
+      "estado": "revisar forma",
       "limpias": 1,
       "numeracion": {
         "ok": 2,
         "distinto": 0,
         "repetido": 0,
         "blanco": 1,
-        "sin_linea": 4,
+        "sin_linea": 5,
         "escaneo": 0
       },
       "recuadro": {
-        "ok": 3,
+        "ok": 4,
         "sin_recuadro": 0,
         "modificado": 0,
         "no_cuadra": 4,
         "escaneo": 0
       },
       "cifras": {
-        "comparables": 7,
+        "comparables": 8,
         "coinciden": 1,
-        "difieren": 6
+        "difieren": 7
       },
       "fechas": {
         "difieren": 0
@@ -769,11 +767,19 @@
           ]
         },
         {
-          "archivo": "20260925_KENNEDY_ACTA_9.pdf",
+          "archivo": "20260925_KENNEDY_ACTA_7.pdf",
           "fecha": "2026-09-25",
           "ajustes": [
             "al documento le falta la línea ACTA N°",
             "el formulario reporta 15 asistentes no juveniles y 10 asistentes jóvenes; el acta dice 15 asistentes no juveniles y 5 asistentes jóvenes, hay que definir cuál queda"
+          ]
+        },
+        {
+          "archivo": "20261030_KENNEDY_ACTA_8.pdf",
+          "fecha": "2026-10-30",
+          "ajustes": [
+            "al documento le falta la línea ACTA N°",
+            "el formulario reporta 15 asistentes no juveniles y 5 asistentes jóvenes; el acta dice 15 asistentes no juveniles y 3 asistentes jóvenes, hay que definir cuál queda"
           ]
         }
       ]
@@ -1839,7 +1845,7 @@
       "localidad": "Kennedy",
       "a2024": 14,
       "a2025": 12,
-      "a2026": 7
+      "a2026": 8
     },
     {
       "localidad": "Fontibón",
@@ -1917,7 +1923,7 @@
   "totales_serie": {
     "a2024": 222,
     "a2025": 173,
-    "a2026": 130,
+    "a2026": 131,
     "sesiones_matriz_2024": 234
   },
   "meses": {
