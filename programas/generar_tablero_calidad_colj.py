@@ -1562,36 +1562,39 @@ a { color: inherit; }
 
 /* --------------------------------------------------------------- accesos */
 
-/* El acceso de la página de zoom. Es uno solo, Periodicidad, así que va como
-   una fila del mismo ancho de la franja, con el nombre y la glosa a la
-   izquierda y la entrada a la derecha. No lleva cifra propia porque la de
-   localidades al día ya está en la franja de arriba. */
-.accesos { display: grid; gap: 1rem; }
+/* El acceso de la página de zoom, que lleva a Periodicidad. Trae su propia
+   cifra, para que ya se sepa qué hay adentro sin tener que entrar. Va debajo
+   de la franja, del ancho de una de sus cuatro casillas. */
+.accesos {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 900px) { .accesos { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .accesos { grid-template-columns: 1fr; } }
 .acceso {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 1.5rem; text-decoration: none; background: var(--blanco);
-  border-radius: 10px; padding: 1.1rem 1.4rem;
+  display: block; text-decoration: none; background: var(--blanco);
+  border-radius: 10px; padding: 1.3rem 1.4rem 1.2rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .acceso:hover {
   transform: translateY(-2px); box-shadow: 0 3px 12px rgba(0,0,0,0.08);
 }
+.acceso .cifra {
+  font-family: 'Anton', 'Figtree', sans-serif; font-weight: 400;
+  font-size: 2rem; line-height: 1; color: var(--acento);
+}
 .acceso .nombre {
   font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.92rem;
-  color: var(--gris-oscuro); margin-bottom: 0.3rem;
+  color: var(--gris-oscuro); margin: 0.65rem 0 0.35rem;
 }
 .acceso .glosa { font-size: 0.85rem; color: var(--gris); }
 .acceso .entrar {
-  display: block; white-space: nowrap;
+  display: block; margin-top: 0.8rem;
   font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.72rem;
   color: var(--acento);
-}
-@media (max-width: 560px) {
-  .acceso { display: block; }
-  .acceso .entrar { margin-top: 0.8rem; }
 }
 
 /* Fichas de enlace externo. Las que todavía no tienen dirección se marcan
@@ -1983,10 +1986,11 @@ function pintarAccesosZoom() {
   var nodo = document.getElementById('accesos-sesiones');
   if (!nodo) return;
   nodo.innerHTML = '<a class="acceso" href="periodicidad.html">' +
-    '<div><div class="nombre">Periodicidad de las sesiones</div>' +
-    '<div class="glosa">Qué localidades hicieron las ' + r.ordinarias_exigidas +
+    '<div class="cifra">' + r.al_dia_sesiones + ' de 20</div>' +
+    '<div class="nombre">Periodicidad de las sesiones</div>' +
+    '<div class="glosa">Localidades con las ' + r.ordinarias_exigidas +
     ' sesiones ordinarias que se esperan al corte, y consulta de ' +
-    'sesiones por mes y localidad.</div></div>' +
+    'sesiones por mes y localidad.</div>' +
     '<span class="entrar">Ver la página &rarr;</span></a>';
 }
 
@@ -2386,12 +2390,6 @@ def pagina_portada(ultima_carga, ultima_sesion):
     return {"titulo": titulo, "cuerpo": ""}
 
 
-def mes_de(corte):
-    """Saca el nombre del mes de una fecha escrita como "27 de agosto de 2026"."""
-    partes = corte.split(" de ")
-    return partes[1] if len(partes) >= 2 else corte
-
-
 def pagina_estadisticas():
     """Página de estadísticas generales: la serie de años desde 2024."""
     titulo = """  <h1>Estadísticas generales</h1>
@@ -2428,12 +2426,9 @@ def pagina_estadisticas():
     return {"titulo": titulo, "cuerpo": cuerpo}
 
 
-def pagina_zoom(mes_corte):
-    """Página del año en curso: el panorama general y el acceso a periodicidad.
-
-    Recibe el mes de corte porque el texto de entrada nombra el rango de meses
-    que cubre el tablero. Antes esa frase estaba escrita a mano y se quedaba
-    con el mes del corte anterior cada vez que entraban sesiones nuevas.
+def pagina_zoom():
+    """Página del año en curso: el panorama general y el acceso a periodicidad,
+    que es donde está la tabla con los registros de cada localidad.
 
     Hasta el 11 de noviembre de 2026 traía un segundo bloque, «Resumen de
     ajustes», con cuatro páginas (documentos, pendientes, ajustes por acta y
@@ -2446,14 +2441,10 @@ def pagina_zoom(mes_corte):
     cuerpo = """
   <div class="rotulo-seccion">
     <h2>El panorama general</h2>
-    <p>Lo que pasó en las veinte localidades entre enero y MES_CORTE de ANIO_ZOOM,
-       antes de mirar localidad por localidad.</p>
   </div>
   <div class="franja" id="franja-general"></div>
   <div class="accesos" id="accesos-sesiones"></div>
 """
-    cuerpo = cuerpo.replace("MES_CORTE", mes_corte).replace("ANIO_ZOOM",
-                                                            str(ANIO))
     return {"titulo": titulo, "cuerpo": cuerpo}
 
 
@@ -2678,7 +2669,7 @@ def main():
          pagina_estadisticas(),
          "pintarFranjaAnios();pintarSerie();", False),
         ("zoom.html", "%s · COLJ %d" % (TITULO_ZOOM, ANIO),
-         pagina_zoom(mes_de(datos["corte"])),
+         pagina_zoom(),
          "pintarPanorama();pintarAccesosZoom();", False),
         ("enlaces.html", "Enlaces · COLJ", pagina_enlaces(),
          "pintarEnlaces();", False),

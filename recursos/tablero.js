@@ -154,10 +154,11 @@ function pintarAccesosZoom() {
   var nodo = document.getElementById('accesos-sesiones');
   if (!nodo) return;
   nodo.innerHTML = '<a class="acceso" href="periodicidad.html">' +
-    '<div><div class="nombre">Periodicidad de las sesiones</div>' +
-    '<div class="glosa">Qué localidades hicieron las ' + r.ordinarias_exigidas +
+    '<div class="cifra">' + r.al_dia_sesiones + ' de 20</div>' +
+    '<div class="nombre">Periodicidad de las sesiones</div>' +
+    '<div class="glosa">Localidades con las ' + r.ordinarias_exigidas +
     ' sesiones ordinarias que se esperan al corte, y consulta de ' +
-    'sesiones por mes y localidad.</div></div>' +
+    'sesiones por mes y localidad.</div>' +
     '<span class="entrar">Ver la página &rarr;</span></a>';
 }
 
