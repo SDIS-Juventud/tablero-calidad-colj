@@ -18,11 +18,10 @@
   --blanco: #ffffff;
 
   /* Estados. Escala de dos familias, como pide la nota canónica: azul
-     petróleo para lo bueno, gris neutro para el intermedio, rosa coral claro
-     y oscuro para los dos grados de lo malo. Sin verde ni naranja. */
+     petróleo para lo bueno, gris neutro para el intermedio y rosa coral para
+     lo malo. Sin verde ni naranja. */
   --bueno: #1e7895;
   --neutral: #bbb4ae;
-  --malo-claro: #e86269;
   --malo: #c35258;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -75,11 +74,6 @@ a { color: inherit; }
 
 .rotulo-seccion { margin: 2.4rem 0 1rem; }
 .rotulo-seccion:first-child { margin-top: 0.6rem; }
-.rotulo-seccion .numero {
-  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.78rem;
-  color: var(--acento); display: block; margin-bottom: 0.25rem;
-}
 .rotulo-seccion h2 {
   font-family: 'Anton', 'Segoe UI', sans-serif; font-weight: 400;
   text-transform: uppercase; letter-spacing: 0.01em;
@@ -215,41 +209,36 @@ a { color: inherit; }
 
 /* --------------------------------------------------------------- accesos */
 
-/* Los accesos de la página de zoom. Cada uno lleva su propia cifra, para que
-   ya se sepa qué hay adentro sin tener que entrar. Van debajo de la franja de
-   su bloque, en cuatro columnas como las cuatro casillas de la franja: así el
-   bloque de revisión cabe en una fila y Periodicidad queda bajo la primera
-   cifra del panorama. */
-.accesos {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-}
-@media (max-width: 900px) { .accesos { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .accesos { grid-template-columns: 1fr; } }
+/* El acceso de la página de zoom. Es uno solo, Periodicidad, así que va como
+   una fila del mismo ancho de la franja, con el nombre y la glosa a la
+   izquierda y la entrada a la derecha. No lleva cifra propia porque la de
+   localidades al día ya está en la franja de arriba. */
+.accesos { display: grid; gap: 1rem; }
 .acceso {
-  display: block; text-decoration: none; background: var(--blanco);
-  border-radius: 10px; padding: 1.3rem 1.4rem 1.2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1.5rem; text-decoration: none; background: var(--blanco);
+  border-radius: 10px; padding: 1.1rem 1.4rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .acceso:hover {
   transform: translateY(-2px); box-shadow: 0 3px 12px rgba(0,0,0,0.08);
 }
-.acceso .cifra {
-  font-family: 'Anton', 'Figtree', sans-serif; font-weight: 400;
-  font-size: 2rem; line-height: 1; color: var(--acento);
-}
 .acceso .nombre {
   font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.92rem;
-  color: var(--gris-oscuro); margin: 0.65rem 0 0.35rem;
+  color: var(--gris-oscuro); margin-bottom: 0.3rem;
 }
 .acceso .glosa { font-size: 0.85rem; color: var(--gris); }
 .acceso .entrar {
-  display: block; margin-top: 0.8rem;
+  display: block; white-space: nowrap;
   font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.72rem;
   color: var(--acento);
+}
+@media (max-width: 560px) {
+  .acceso { display: block; }
+  .acceso .entrar { margin-top: 0.8rem; }
 }
 
 /* Fichas de enlace externo. Las que todavía no tienen dirección se marcan
@@ -310,28 +299,9 @@ tbody tr.total:hover td { background: var(--blanco); }
   font-weight: 600; font-size: 0.85rem;
 }
 .pastilla.mal { background: var(--malo); color: var(--blanco); }
-/* El cero en las columnas de ajustes es la mejor noticia posible, así que va
-   en el gris de texto y no en un tono apagado que lea como sin dato. */
+/* Una cifra sin alerta va en el gris de texto y no en un tono apagado que
+   lea como sin dato. */
 .neutro { color: var(--gris-oscuro); }
-
-.chip {
-  display: inline-block; padding: 3px 11px; border-radius: 4px;
-  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em;
-  white-space: nowrap;
-}
-.chip.al-dia { background: var(--bueno); color: var(--blanco); }
-.chip.revisar { background: var(--neutral); color: var(--gris-oscuro); }
-.chip.cargar { background: var(--malo-claro); color: var(--blanco); }
-.chip.sesionar { background: var(--malo); color: var(--blanco); }
-
-.barra {
-  display: flex; height: 8px; border-radius: 3px; overflow: hidden;
-  background: var(--gris-claro); min-width: 84px; margin-top: 5px;
-}
-.barra span { display: block; height: 100%; }
-.barra .b-bien { background: var(--bueno); }
-.barra .b-mal { background: var(--malo); }
 
 /* Puntos de bimestre: tres casillas que muestran de un vistazo en cuál se
    sesionó y en cuál no. */
@@ -354,44 +324,6 @@ tbody tr.total:hover td { background: var(--blanco); }
   display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1rem;
 }
-.bloque {
-  background: var(--blanco); border-radius: 10px; padding: 1.1rem 1.3rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-.bloque .nombre {
-  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.9rem;
-  color: var(--gris-oscuro); margin-bottom: 0.5rem;
-}
-.bloque ul { margin: 0; padding-left: 17px; }
-.bloque li { font-size: 0.85rem; color: var(--gris); margin-bottom: 3px; }
-
-details.localidad {
-  background: var(--blanco); border-radius: 10px; margin-bottom: 0.7rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-details.localidad > summary {
-  cursor: pointer; padding: 14px 18px;
-  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.9rem;
-  color: var(--gris-oscuro); display: flex; justify-content: space-between;
-  align-items: center; gap: 16px; list-style: none;
-}
-details.localidad > summary::-webkit-details-marker { display: none; }
-details.localidad > summary .conteo {
-  font-family: 'Figtree', sans-serif; font-weight: 600; text-transform: none;
-  letter-spacing: 0; font-size: 0.82rem; color: var(--malo);
-}
-details.localidad .cuerpo { padding: 0 18px 14px; }
-.ajuste { padding: 10px 0; border-top: 1px solid var(--gris-claro); }
-.ajuste .archivo {
-  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  font-size: 0.78rem; letter-spacing: 0.03em; color: var(--acento);
-  word-break: break-all;
-}
-.ajuste ul { margin: 5px 0 0; padding-left: 17px; }
-.ajuste li { font-size: 0.85rem; color: var(--gris); margin-bottom: 2px; }
-
 .leyenda {
   display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
   font-size: 0.82rem; color: var(--gris); margin: 0.2rem 0 0.4rem;
@@ -401,9 +333,8 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
   margin-right: 6px; vertical-align: -1px;
 }
 .leyenda .punto.bien { background: var(--bueno); }
-.leyenda .punto.mal { background: var(--malo); }
 /* Punto descriptivo, no de estado: el bimestre sin ordinaria no es una falta,
-   así que no puede llevar el rojo que sí llevan las actas con ajuste. */
+   así que no lleva el rojo de las alertas. */
 .leyenda .punto.sin { background: var(--neutral); }
 
 /* Nota destacada bajo una franja de cifras: fondo suave, sin borde de color

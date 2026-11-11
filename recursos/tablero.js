@@ -5,18 +5,6 @@
 
 var D = window.DATOS_COLJ;
 
-function pastilla(valor) {
-  if (valor === 0) return '<span class="neutro">0</span>';
-  return '<span class="pastilla mal">' + valor + '</span>';
-}
-
-function fraccion(parte, total) {
-  if (parte === total) {
-    return '<span class="neutro">' + parte + ' de ' + total + '</span>';
-  }
-  return '<span class="pastilla mal">' + parte + ' de ' + total + '</span>';
-}
-
 /* Un cuadro por bimestre cerrado, en el orden del calendario. Recibe la lista
    de bimestres que sí tuvieron sesión ordinaria, no cuántos fueron: pintar los
    primeros N cuadros mostraba el bimestre equivocado a las localidades que se
@@ -43,26 +31,6 @@ function silencio(dias) {
     return '<span class="pastilla mal">' + texto + '</span>';
   }
   return '<span class="neutro">' + texto + '</span>';
-}
-
-function barra(bien, total) {
-  if (!total) return '';
-  var p = function (n) { return (n / total * 100).toFixed(1); };
-  return '<div class="barra">' +
-    '<span class="b-bien" style="width:' + p(bien) + '%"></span>' +
-    '<span class="b-mal" style="width:' + p(total - bien) + '%"></span></div>';
-}
-
-var ETIQUETA_ESTADO = {
-  'al día': ['al-dia', 'Al día'],
-  'revisar forma': ['revisar', 'Ajustes de forma'],
-  'falta cargar': ['cargar', 'Por cargar'],
-  'falta sesionar': ['sesionar', 'Por sesionar']
-};
-
-function chip(estado) {
-  var e = ETIQUETA_ESTADO[estado];
-  return '<span class="chip ' + e[0] + '">' + e[1] + '</span>';
 }
 
 function franja(id, casillas) {
@@ -110,8 +78,7 @@ function pintarCampos() {
      glosa: 'Las sesiones de ' + listaAnios(D.anios_serie) +
             ' en las veinte localidades.'},
     {href: 'html/zoom.html', num: '2', titulo: tituloZoom(),
-     glosa: 'Cómo va cada localidad en ' + D.anio +
-            ' y qué ajustes tiene su registro.'},
+     glosa: 'Cómo va cada localidad en ' + D.anio + '.'},
     {href: 'html/enlaces.html', num: '3',
      titulo: 'Enlaces generales para el análisis de los COLJ', glosa: ''}
   ];
@@ -184,44 +151,14 @@ function pintarEnlaces() {
 
 function pintarAccesosZoom() {
   var r = D.resumen;
-  var fichas = [
-    {href: 'periodicidad.html', cifra: r.al_dia_sesiones + ' de 20',
-     nombre: 'Periodicidad de las sesiones',
-     glosa: 'Localidades con las ' + r.ordinarias_exigidas +
-            ' sesiones ordinarias que se esperan al corte, y consulta de ' +
-            'sesiones por mes y localidad.'},
-    {href: 'documentos.html',
-     cifra: r.sesiones_completas + ' de ' + r.sesiones_formulario,
-     nombre: 'Documentos de cada sesión',
-     glosa: 'Sesiones con todos sus soportes cargados en el formulario.'},
-    {href: 'pendientes.html', cifra: r.con_pendientes,
-     nombre: 'Qué queda pendiente de cargar',
-     glosa: 'Localidades con alguna sesión o documento por entregar.'},
-    {href: 'detalle.html', cifra: r.actas_con_ajustes,
-     nombre: 'Ajustes por acta',
-     glosa: 'Actas que necesitan algún ajuste en su registro.'},
-    {href: 'ajustes.html', cifra: r.localidades_con_ajustes,
-     nombre: 'Ajustes por localidad',
-     glosa: 'Localidades con alguna acta por ajustar.'}
-  ];
-  // Lo que se hizo y cómo se revisa van separados: Periodicidad queda bajo
-  // el panorama general y el resto bajo el resumen de ajustes.
-  var bloques = {'accesos-sesiones': ['periodicidad.html'],
-                 'accesos-revision': ['documentos.html', 'pendientes.html',
-                                      'detalle.html', 'ajustes.html']};
-  Object.keys(bloques).forEach(function (id) {
-    var nodo = document.getElementById(id);
-    if (!nodo) return;
-    nodo.innerHTML = fichas.filter(function (f) {
-      return bloques[id].indexOf(f.href) >= 0;
-    }).map(function (f) {
-      return '<a class="acceso" href="' + f.href + '">' +
-        '<div class="cifra">' + f.cifra + '</div>' +
-        '<div class="nombre">' + f.nombre + '</div>' +
-        '<div class="glosa">' + f.glosa + '</div>' +
-        '<span class="entrar">Ver la página &rarr;</span></a>';
-    }).join('');
-  });
+  var nodo = document.getElementById('accesos-sesiones');
+  if (!nodo) return;
+  nodo.innerHTML = '<a class="acceso" href="periodicidad.html">' +
+    '<div><div class="nombre">Periodicidad de las sesiones</div>' +
+    '<div class="glosa">Qué localidades hicieron las ' + r.ordinarias_exigidas +
+    ' sesiones ordinarias que se esperan al corte, y consulta de ' +
+    'sesiones por mes y localidad.</div></div>' +
+    '<span class="entrar">Ver la página &rarr;</span></a>';
 }
 
 function pintarPanorama() {
@@ -237,21 +174,6 @@ function pintarPanorama() {
             ' sesiones ordinarias que se esperan al corte.'},
     {v: r.sin_pendientes + ' de 20', rot: 'Localidades sin nada pendiente',
      glosa: 'Sesionaron, cargaron todo y no tienen ajustes de forma.'}
-  ]);
-}
-
-function pintarResumenAjustes() {
-  var r = D.resumen;
-  franja('franja-ajustes', [
-    {v: r.limpias, rot: 'Actas ya listas',
-     glosa: 'De ' + r.actas + '. No necesitan ningún ajuste.'},
-    {v: r.num_problema, rot: 'Numeración por ajustar',
-     glosa: 'El número que trae el acta por dentro no coincide con el del ' +
-            'formulario, repite el de otra acta o quedó vacío.'},
-    {v: r.rec_problema, rot: 'Recuadros por completar',
-     glosa: 'Al cuadro de participantes le falta algo o sus filas no suman.'},
-    {v: r.cifras_difieren, rot: 'Cifras por conciliar',
-     glosa: 'De ' + r.cifras_comparables + ' sesiones comparables.'}
   ]);
 }
 
@@ -526,77 +448,3 @@ function pintarConsulta() {
   actualizar(null);
 }
 
-function pintarDocumentos() {
-  var filas = D.localidades.map(function (l) {
-    return '<tr>' +
-      '<td>' + l.localidad + '</td>' +
-      '<td>' + l.sesiones_formulario + '</td>' +
-      '<td>' + fraccion(l.actas, l.sesiones_formulario) + '</td>' +
-      '<td>' + fraccion(l.planillas, l.sesiones_formulario) + '</td>' +
-      '<td>' + chip(l.estado) + '</td></tr>';
-  }).join('');
-  var r = D.resumen;
-  document.getElementById('tabla-documentos').innerHTML = filas +
-    '<tr class="total"><td>Total</td>' +
-    '<td>' + r.sesiones_formulario + '</td>' +
-    '<td>' + r.actas + '</td>' +
-    '<td>' + r.planillas + ' de ' + r.sesiones_formulario + '</td><td></td></tr>';
-}
-
-function pintarPendientes() {
-  var bloques = D.localidades.filter(function (l) {
-    return l.pendientes_sesion.length || l.pendientes_carga.length ||
-           l.pendientes_imagen.length;
-  }).map(function (l) {
-    var todos = l.pendientes_sesion.concat(l.pendientes_carga)
-                                   .concat(l.pendientes_imagen);
-    return '<div class="bloque"><div class="nombre">' + l.localidad +
-      '</div><ul>' + todos.map(function (p) {
-        return '<li>' + p + '</li>';
-      }).join('') + '</ul></div>';
-  }).join('');
-  document.getElementById('pendientes').innerHTML = bloques ||
-    '<p>Ninguna localidad tiene sesiones ni documentos pendientes.</p>';
-}
-
-function pintarAjustes() {
-  var filas = D.localidades.map(function (l) {
-    var n = l.numeracion, c = l.recuadro;
-    return '<tr>' +
-      '<td>' + l.localidad + '</td>' +
-      '<td>' + l.actas + '</td>' +
-      '<td>' + pastilla(n.distinto + n.repetido + n.blanco + n.sin_linea) +
-      '</td>' +
-      '<td>' + pastilla(c.sin_recuadro + c.modificado + c.no_cuadra) + '</td>' +
-      '<td>' + pastilla(l.cifras.difieren) + '</td>' +
-      '<td>' + pastilla(l.fechas.difieren) + '</td>' +
-      '<td>' + l.limpias + ' de ' + l.actas + barra(l.limpias, l.actas) +
-      '</td></tr>';
-  }).join('');
-  var r = D.resumen;
-  document.getElementById('tabla-ajustes').innerHTML = filas +
-    '<tr class="total"><td>Total</td>' +
-    '<td>' + r.actas + '</td>' +
-    '<td>' + r.num_problema + '</td>' +
-    '<td>' + r.rec_problema + '</td>' +
-    '<td>' + r.cifras_difieren + '</td>' +
-    '<td>' + r.fechas_difieren + '</td>' +
-    '<td>' + r.limpias + ' de ' + r.actas + '</td></tr>';
-}
-
-function pintarDetalle() {
-  document.getElementById('detalle').innerHTML =
-    D.localidades.filter(function (l) { return l.detalle.length; })
-    .map(function (l) {
-      var items = l.detalle.map(function (d) {
-        return '<div class="ajuste"><div class="archivo">' + d.archivo +
-          '</div><ul>' + d.ajustes.map(function (h) {
-            return '<li>' + h + '</li>';
-          }).join('') + '</ul></div>';
-      }).join('');
-      return '<details class="localidad"><summary>' + l.localidad +
-        '<span class="conteo">' + l.detalle.length +
-        (l.detalle.length === 1 ? ' acta con ajustes' : ' actas con ajustes') +
-        '</span></summary><div class="cuerpo">' + items + '</div></details>';
-    }).join('');
-}

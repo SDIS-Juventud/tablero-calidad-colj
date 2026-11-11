@@ -4,9 +4,15 @@
 
 USO:
 Genera el tablero de seguimiento de los COLJ del año, con la portada, las
-cinco páginas de sección, recursos/ y datos/. Lee las actas que dejó el paso 3
+cuatro páginas internas, recursos/ y datos/. Lee las actas que dejó el paso 3
 de la revisión periódica, la carpeta del año y el Excel del formulario, así
 que va después de los pasos 2 y 3.
+
+El tablero es público y solo muestra sesiones, periodicidad y enlaces. Los
+ajustes de cada acta y los documentos pendientes de cada localidad se siguen
+calculando aquí, pero no se publican: quedan en COLJ/programas/, fuera de este
+repositorio, y de ahí los toman el Word y la presentación que se les pasa a
+los equipos locales.
 
 El año es el de la sesión más reciente del formulario. Cuando llega la primera
 sesión de un año nuevo, guarda el tablero del año que cerró en su propia
@@ -113,6 +119,15 @@ RAIZ_SITIO = RAIZ_TABLERO if ABIERTO else os.path.join(RAIZ_TABLERO, str(ANIO))
 TITULO_ZOOM = "Zoom año en curso" if ABIERTO else "Zoom %d" % ANIO
 
 JSON_ACTAS = os.path.join(RAIZ_COLJ, "programas", "calidad_actas_%d.json" % ANIO)
+
+
+def json_completo(anio):
+    """Archivo con todas las cifras del año, incluidos los ajustes por acta y
+    los pendientes por localidad. Queda en COLJ/programas/, que no se publica,
+    junto a lo que leyó el paso 3. De ahí lo leen los pasos 5 y 6."""
+    return os.path.join(RAIZ_COLJ, "programas", "calidad_colj_%d.json" % anio)
+
+
 CARPETA_ANIO = os.path.join(RAIZ_COLJ, str(ANIO))
 CARPETA_DATOS = os.path.join(RAIZ_SITIO, "datos")
 CARPETA_RECURSOS = os.path.join(RAIZ_SITIO, "recursos")
@@ -656,8 +671,8 @@ def datos_por_mes(del_anio, unicas, fecha_corte):
     La página solo usa "sesiones" y "nombres_consulta", en la consulta de
     periodicidad. Los totales por mes y el plazo de carga ya no se muestran
     desde que se quitó la página por mes (9 de octubre de 2026), pero quedan
-    en datos/calidad_colj_2026.json como cifras de control y para los
-    informes. El plazo se mide solo sobre los meses anteriores al del corte:
+    en el archivo completo de COLJ/programas/ como cifras de control y para
+    los informes. El plazo se mide solo sobre los meses anteriores al del corte:
     en el mes abierto, las sesiones que van a llegar tarde todavía no han
     llegado y el rezago se vería más corto de lo que es.
     """
@@ -1356,11 +1371,10 @@ CSS = """
   --blanco: #ffffff;
 
   /* Estados. Escala de dos familias, como pide la nota canónica: azul
-     petróleo para lo bueno, gris neutro para el intermedio, rosa coral claro
-     y oscuro para los dos grados de lo malo. Sin verde ni naranja. */
+     petróleo para lo bueno, gris neutro para el intermedio y rosa coral para
+     lo malo. Sin verde ni naranja. */
   --bueno: #1e7895;
   --neutral: #bbb4ae;
-  --malo-claro: #e86269;
   --malo: #c35258;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1413,11 +1427,6 @@ a { color: inherit; }
 
 .rotulo-seccion { margin: 2.4rem 0 1rem; }
 .rotulo-seccion:first-child { margin-top: 0.6rem; }
-.rotulo-seccion .numero {
-  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.78rem;
-  color: var(--acento); display: block; margin-bottom: 0.25rem;
-}
 .rotulo-seccion h2 {
   font-family: 'Anton', 'Segoe UI', sans-serif; font-weight: 400;
   text-transform: uppercase; letter-spacing: 0.01em;
@@ -1553,41 +1562,36 @@ a { color: inherit; }
 
 /* --------------------------------------------------------------- accesos */
 
-/* Los accesos de la página de zoom. Cada uno lleva su propia cifra, para que
-   ya se sepa qué hay adentro sin tener que entrar. Van debajo de la franja de
-   su bloque, en cuatro columnas como las cuatro casillas de la franja: así el
-   bloque de revisión cabe en una fila y Periodicidad queda bajo la primera
-   cifra del panorama. */
-.accesos {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-}
-@media (max-width: 900px) { .accesos { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .accesos { grid-template-columns: 1fr; } }
+/* El acceso de la página de zoom. Es uno solo, Periodicidad, así que va como
+   una fila del mismo ancho de la franja, con el nombre y la glosa a la
+   izquierda y la entrada a la derecha. No lleva cifra propia porque la de
+   localidades al día ya está en la franja de arriba. */
+.accesos { display: grid; gap: 1rem; }
 .acceso {
-  display: block; text-decoration: none; background: var(--blanco);
-  border-radius: 10px; padding: 1.3rem 1.4rem 1.2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1.5rem; text-decoration: none; background: var(--blanco);
+  border-radius: 10px; padding: 1.1rem 1.4rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .acceso:hover {
   transform: translateY(-2px); box-shadow: 0 3px 12px rgba(0,0,0,0.08);
 }
-.acceso .cifra {
-  font-family: 'Anton', 'Figtree', sans-serif; font-weight: 400;
-  font-size: 2rem; line-height: 1; color: var(--acento);
-}
 .acceso .nombre {
   font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.92rem;
-  color: var(--gris-oscuro); margin: 0.65rem 0 0.35rem;
+  color: var(--gris-oscuro); margin-bottom: 0.3rem;
 }
 .acceso .glosa { font-size: 0.85rem; color: var(--gris); }
 .acceso .entrar {
-  display: block; margin-top: 0.8rem;
+  display: block; white-space: nowrap;
   font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.72rem;
   color: var(--acento);
+}
+@media (max-width: 560px) {
+  .acceso { display: block; }
+  .acceso .entrar { margin-top: 0.8rem; }
 }
 
 /* Fichas de enlace externo. Las que todavía no tienen dirección se marcan
@@ -1648,28 +1652,9 @@ tbody tr.total:hover td { background: var(--blanco); }
   font-weight: 600; font-size: 0.85rem;
 }
 .pastilla.mal { background: var(--malo); color: var(--blanco); }
-/* El cero en las columnas de ajustes es la mejor noticia posible, así que va
-   en el gris de texto y no en un tono apagado que lea como sin dato. */
+/* Una cifra sin alerta va en el gris de texto y no en un tono apagado que
+   lea como sin dato. */
 .neutro { color: var(--gris-oscuro); }
-
-.chip {
-  display: inline-block; padding: 3px 11px; border-radius: 4px;
-  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em;
-  white-space: nowrap;
-}
-.chip.al-dia { background: var(--bueno); color: var(--blanco); }
-.chip.revisar { background: var(--neutral); color: var(--gris-oscuro); }
-.chip.cargar { background: var(--malo-claro); color: var(--blanco); }
-.chip.sesionar { background: var(--malo); color: var(--blanco); }
-
-.barra {
-  display: flex; height: 8px; border-radius: 3px; overflow: hidden;
-  background: var(--gris-claro); min-width: 84px; margin-top: 5px;
-}
-.barra span { display: block; height: 100%; }
-.barra .b-bien { background: var(--bueno); }
-.barra .b-mal { background: var(--malo); }
 
 /* Puntos de bimestre: tres casillas que muestran de un vistazo en cuál se
    sesionó y en cuál no. */
@@ -1692,44 +1677,6 @@ tbody tr.total:hover td { background: var(--blanco); }
   display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1rem;
 }
-.bloque {
-  background: var(--blanco); border-radius: 10px; padding: 1.1rem 1.3rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-.bloque .nombre {
-  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.9rem;
-  color: var(--gris-oscuro); margin-bottom: 0.5rem;
-}
-.bloque ul { margin: 0; padding-left: 17px; }
-.bloque li { font-size: 0.85rem; color: var(--gris); margin-bottom: 3px; }
-
-details.localidad {
-  background: var(--blanco); border-radius: 10px; margin-bottom: 0.7rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-details.localidad > summary {
-  cursor: pointer; padding: 14px 18px;
-  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.9rem;
-  color: var(--gris-oscuro); display: flex; justify-content: space-between;
-  align-items: center; gap: 16px; list-style: none;
-}
-details.localidad > summary::-webkit-details-marker { display: none; }
-details.localidad > summary .conteo {
-  font-family: 'Figtree', sans-serif; font-weight: 600; text-transform: none;
-  letter-spacing: 0; font-size: 0.82rem; color: var(--malo);
-}
-details.localidad .cuerpo { padding: 0 18px 14px; }
-.ajuste { padding: 10px 0; border-top: 1px solid var(--gris-claro); }
-.ajuste .archivo {
-  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  font-size: 0.78rem; letter-spacing: 0.03em; color: var(--acento);
-  word-break: break-all;
-}
-.ajuste ul { margin: 5px 0 0; padding-left: 17px; }
-.ajuste li { font-size: 0.85rem; color: var(--gris); margin-bottom: 2px; }
-
 .leyenda {
   display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
   font-size: 0.82rem; color: var(--gris); margin: 0.2rem 0 0.4rem;
@@ -1739,9 +1686,8 @@ details.localidad .cuerpo { padding: 0 18px 14px; }
   margin-right: 6px; vertical-align: -1px;
 }
 .leyenda .punto.bien { background: var(--bueno); }
-.leyenda .punto.mal { background: var(--malo); }
 /* Punto descriptivo, no de estado: el bimestre sin ordinaria no es una falta,
-   así que no puede llevar el rojo que sí llevan las actas con ajuste. */
+   así que no lleva el rojo de las alertas. */
 .leyenda .punto.sin { background: var(--neutral); }
 
 /* Nota destacada bajo una franja de cifras: fondo suave, sin borde de color
@@ -1888,18 +1834,6 @@ JS_COMUN = """
 
 var D = window.DATOS_COLJ;
 
-function pastilla(valor) {
-  if (valor === 0) return '<span class="neutro">0</span>';
-  return '<span class="pastilla mal">' + valor + '</span>';
-}
-
-function fraccion(parte, total) {
-  if (parte === total) {
-    return '<span class="neutro">' + parte + ' de ' + total + '</span>';
-  }
-  return '<span class="pastilla mal">' + parte + ' de ' + total + '</span>';
-}
-
 /* Un cuadro por bimestre cerrado, en el orden del calendario. Recibe la lista
    de bimestres que sí tuvieron sesión ordinaria, no cuántos fueron: pintar los
    primeros N cuadros mostraba el bimestre equivocado a las localidades que se
@@ -1926,26 +1860,6 @@ function silencio(dias) {
     return '<span class="pastilla mal">' + texto + '</span>';
   }
   return '<span class="neutro">' + texto + '</span>';
-}
-
-function barra(bien, total) {
-  if (!total) return '';
-  var p = function (n) { return (n / total * 100).toFixed(1); };
-  return '<div class="barra">' +
-    '<span class="b-bien" style="width:' + p(bien) + '%"></span>' +
-    '<span class="b-mal" style="width:' + p(total - bien) + '%"></span></div>';
-}
-
-var ETIQUETA_ESTADO = {
-  'al día': ['al-dia', 'Al día'],
-  'revisar forma': ['revisar', 'Ajustes de forma'],
-  'falta cargar': ['cargar', 'Por cargar'],
-  'falta sesionar': ['sesionar', 'Por sesionar']
-};
-
-function chip(estado) {
-  var e = ETIQUETA_ESTADO[estado];
-  return '<span class="chip ' + e[0] + '">' + e[1] + '</span>';
 }
 
 function franja(id, casillas) {
@@ -1993,8 +1907,7 @@ function pintarCampos() {
      glosa: 'Las sesiones de ' + listaAnios(D.anios_serie) +
             ' en las veinte localidades.'},
     {href: 'html/zoom.html', num: '2', titulo: tituloZoom(),
-     glosa: 'Cómo va cada localidad en ' + D.anio +
-            ' y qué ajustes tiene su registro.'},
+     glosa: 'Cómo va cada localidad en ' + D.anio + '.'},
     {href: 'html/enlaces.html', num: '3',
      titulo: 'Enlaces generales para el análisis de los COLJ', glosa: ''}
   ];
@@ -2067,44 +1980,14 @@ function pintarEnlaces() {
 
 function pintarAccesosZoom() {
   var r = D.resumen;
-  var fichas = [
-    {href: 'periodicidad.html', cifra: r.al_dia_sesiones + ' de 20',
-     nombre: 'Periodicidad de las sesiones',
-     glosa: 'Localidades con las ' + r.ordinarias_exigidas +
-            ' sesiones ordinarias que se esperan al corte, y consulta de ' +
-            'sesiones por mes y localidad.'},
-    {href: 'documentos.html',
-     cifra: r.sesiones_completas + ' de ' + r.sesiones_formulario,
-     nombre: 'Documentos de cada sesión',
-     glosa: 'Sesiones con todos sus soportes cargados en el formulario.'},
-    {href: 'pendientes.html', cifra: r.con_pendientes,
-     nombre: 'Qué queda pendiente de cargar',
-     glosa: 'Localidades con alguna sesión o documento por entregar.'},
-    {href: 'detalle.html', cifra: r.actas_con_ajustes,
-     nombre: 'Ajustes por acta',
-     glosa: 'Actas que necesitan algún ajuste en su registro.'},
-    {href: 'ajustes.html', cifra: r.localidades_con_ajustes,
-     nombre: 'Ajustes por localidad',
-     glosa: 'Localidades con alguna acta por ajustar.'}
-  ];
-  // Lo que se hizo y cómo se revisa van separados: Periodicidad queda bajo
-  // el panorama general y el resto bajo el resumen de ajustes.
-  var bloques = {'accesos-sesiones': ['periodicidad.html'],
-                 'accesos-revision': ['documentos.html', 'pendientes.html',
-                                      'detalle.html', 'ajustes.html']};
-  Object.keys(bloques).forEach(function (id) {
-    var nodo = document.getElementById(id);
-    if (!nodo) return;
-    nodo.innerHTML = fichas.filter(function (f) {
-      return bloques[id].indexOf(f.href) >= 0;
-    }).map(function (f) {
-      return '<a class="acceso" href="' + f.href + '">' +
-        '<div class="cifra">' + f.cifra + '</div>' +
-        '<div class="nombre">' + f.nombre + '</div>' +
-        '<div class="glosa">' + f.glosa + '</div>' +
-        '<span class="entrar">Ver la página &rarr;</span></a>';
-    }).join('');
-  });
+  var nodo = document.getElementById('accesos-sesiones');
+  if (!nodo) return;
+  nodo.innerHTML = '<a class="acceso" href="periodicidad.html">' +
+    '<div><div class="nombre">Periodicidad de las sesiones</div>' +
+    '<div class="glosa">Qué localidades hicieron las ' + r.ordinarias_exigidas +
+    ' sesiones ordinarias que se esperan al corte, y consulta de ' +
+    'sesiones por mes y localidad.</div></div>' +
+    '<span class="entrar">Ver la página &rarr;</span></a>';
 }
 
 function pintarPanorama() {
@@ -2120,21 +2003,6 @@ function pintarPanorama() {
             ' sesiones ordinarias que se esperan al corte.'},
     {v: r.sin_pendientes + ' de 20', rot: 'Localidades sin nada pendiente',
      glosa: 'Sesionaron, cargaron todo y no tienen ajustes de forma.'}
-  ]);
-}
-
-function pintarResumenAjustes() {
-  var r = D.resumen;
-  franja('franja-ajustes', [
-    {v: r.limpias, rot: 'Actas ya listas',
-     glosa: 'De ' + r.actas + '. No necesitan ningún ajuste.'},
-    {v: r.num_problema, rot: 'Numeración por ajustar',
-     glosa: 'El número que trae el acta por dentro no coincide con el del ' +
-            'formulario, repite el de otra acta o quedó vacío.'},
-    {v: r.rec_problema, rot: 'Recuadros por completar',
-     glosa: 'Al cuadro de participantes le falta algo o sus filas no suman.'},
-    {v: r.cifras_difieren, rot: 'Cifras por conciliar',
-     glosa: 'De ' + r.cifras_comparables + ' sesiones comparables.'}
   ]);
 }
 
@@ -2409,80 +2277,6 @@ function pintarConsulta() {
   actualizar(null);
 }
 
-function pintarDocumentos() {
-  var filas = D.localidades.map(function (l) {
-    return '<tr>' +
-      '<td>' + l.localidad + '</td>' +
-      '<td>' + l.sesiones_formulario + '</td>' +
-      '<td>' + fraccion(l.actas, l.sesiones_formulario) + '</td>' +
-      '<td>' + fraccion(l.planillas, l.sesiones_formulario) + '</td>' +
-      '<td>' + chip(l.estado) + '</td></tr>';
-  }).join('');
-  var r = D.resumen;
-  document.getElementById('tabla-documentos').innerHTML = filas +
-    '<tr class="total"><td>Total</td>' +
-    '<td>' + r.sesiones_formulario + '</td>' +
-    '<td>' + r.actas + '</td>' +
-    '<td>' + r.planillas + ' de ' + r.sesiones_formulario + '</td><td></td></tr>';
-}
-
-function pintarPendientes() {
-  var bloques = D.localidades.filter(function (l) {
-    return l.pendientes_sesion.length || l.pendientes_carga.length ||
-           l.pendientes_imagen.length;
-  }).map(function (l) {
-    var todos = l.pendientes_sesion.concat(l.pendientes_carga)
-                                   .concat(l.pendientes_imagen);
-    return '<div class="bloque"><div class="nombre">' + l.localidad +
-      '</div><ul>' + todos.map(function (p) {
-        return '<li>' + p + '</li>';
-      }).join('') + '</ul></div>';
-  }).join('');
-  document.getElementById('pendientes').innerHTML = bloques ||
-    '<p>Ninguna localidad tiene sesiones ni documentos pendientes.</p>';
-}
-
-function pintarAjustes() {
-  var filas = D.localidades.map(function (l) {
-    var n = l.numeracion, c = l.recuadro;
-    return '<tr>' +
-      '<td>' + l.localidad + '</td>' +
-      '<td>' + l.actas + '</td>' +
-      '<td>' + pastilla(n.distinto + n.repetido + n.blanco + n.sin_linea) +
-      '</td>' +
-      '<td>' + pastilla(c.sin_recuadro + c.modificado + c.no_cuadra) + '</td>' +
-      '<td>' + pastilla(l.cifras.difieren) + '</td>' +
-      '<td>' + pastilla(l.fechas.difieren) + '</td>' +
-      '<td>' + l.limpias + ' de ' + l.actas + barra(l.limpias, l.actas) +
-      '</td></tr>';
-  }).join('');
-  var r = D.resumen;
-  document.getElementById('tabla-ajustes').innerHTML = filas +
-    '<tr class="total"><td>Total</td>' +
-    '<td>' + r.actas + '</td>' +
-    '<td>' + r.num_problema + '</td>' +
-    '<td>' + r.rec_problema + '</td>' +
-    '<td>' + r.cifras_difieren + '</td>' +
-    '<td>' + r.fechas_difieren + '</td>' +
-    '<td>' + r.limpias + ' de ' + r.actas + '</td></tr>';
-}
-
-function pintarDetalle() {
-  document.getElementById('detalle').innerHTML =
-    D.localidades.filter(function (l) { return l.detalle.length; })
-    .map(function (l) {
-      var items = l.detalle.map(function (d) {
-        return '<div class="ajuste"><div class="archivo">' + d.archivo +
-          '</div><ul>' + d.ajustes.map(function (h) {
-            return '<li>' + h + '</li>';
-          }).join('') + '</ul></div>';
-      }).join('');
-      return '<details class="localidad"><summary>' + l.localidad +
-        '<span class="conteo">' + l.detalle.length +
-        (l.detalle.length === 1 ? ' acta con ajustes' : ' actas con ajustes') +
-        '</span></summary><div class="cuerpo">' + items + '</div></details>';
-    }).join('');
-}
 """
 
 
@@ -2525,9 +2319,9 @@ def envoltura(pestana, pagina, llamada, es_portada=False, vuelve_a=None,
     con_corte agrega el recordatorio de hasta cuándo llegan los datos. Va en
     las páginas con tablas y no en las que solo tienen enlaces.
 
-    vuelve_a dice a dónde lleva el botón de volver. Las cinco vistas del año
-    en curso regresan a zoom.html, que es de donde se entra a ellas, y no a la
-    portada: volver siempre al inicio obligaría a rehacer dos clics.
+    vuelve_a dice a dónde lleva el botón de volver. Periodicidad regresa a
+    zoom.html, que es de donde se entra a ella, y no a la portada: volver
+    siempre al inicio obligaría a rehacer dos clics.
     """
     raiz = "" if es_portada else "../"
     destino = vuelve_a or ("../index.html", "Inicio")
@@ -2539,7 +2333,7 @@ def envoltura(pestana, pagina, llamada, es_portada=False, vuelve_a=None,
     else:
         # El aviso de corte lo llena tablero.js con el dato del año en curso.
         # Va vacío en el HTML a propósito: si la fecha se escribiera aquí,
-        # habría que acordarse de cambiarla en nueve páginas.
+        # habría que acordarse de cambiarla en cada página.
         aviso = ('  <p class="corte-aviso" id="corte-aviso"></p>\n'
                  if con_corte else "")
         cabecera = ('<div class="titulo-zona">\n%s%s%s</div>\n'
@@ -2635,34 +2429,28 @@ def pagina_estadisticas():
 
 
 def pagina_zoom(mes_corte):
-    """Página que agrupa las cinco vistas de la vigencia en curso.
+    """Página del año en curso: el panorama general y el acceso a periodicidad.
 
     Recibe el mes de corte porque el texto de entrada nombra el rango de meses
     que cubre el tablero. Antes esa frase estaba escrita a mano y se quedaba
     con el mes del corte anterior cada vez que entraban sesiones nuevas.
+
+    Hasta el 11 de noviembre de 2026 traía un segundo bloque, «Resumen de
+    ajustes», con cuatro páginas (documentos, pendientes, ajustes por acta y
+    por localidad). Se quitó porque esa información es para cada equipo local
+    y se le entrega en la presentación y el Word, no en una página pública.
     """
     titulo = """  <h1>%s</h1>
-  <p class="intro">Cómo va cada localidad en %d, en cinco vistas. La cifra de
-     cada acceso adelanta lo que se va a encontrar adentro.</p>
+  <p class="intro">Cómo va cada localidad en %d.</p>
 """ % (TITULO_ZOOM, ANIO)
     cuerpo = """
   <div class="rotulo-seccion">
-    <span class="numero">1</span>
     <h2>El panorama general</h2>
     <p>Lo que pasó en las veinte localidades entre enero y MES_CORTE de ANIO_ZOOM,
        antes de mirar localidad por localidad.</p>
   </div>
   <div class="franja" id="franja-general"></div>
   <div class="accesos" id="accesos-sesiones"></div>
-
-  <div class="rotulo-seccion">
-    <span class="numero">2</span>
-    <h2>Resumen de ajustes</h2>
-    <p>Este bloque es para afinar el registro. Compara los documentos
-       adjuntos con lo que se diligenció en el formulario.</p>
-  </div>
-  <div class="franja" id="franja-ajustes"></div>
-  <div class="accesos" id="accesos-revision"></div>
 """
     cuerpo = cuerpo.replace("MES_CORTE", mes_corte).replace("ANIO_ZOOM",
                                                             str(ANIO))
@@ -2739,114 +2527,6 @@ def pagina_periodicidad():
     return {"titulo": titulo, "cuerpo": cuerpo}
 
 
-def pagina_documentos():
-    """Página de documentos cargados por sesión."""
-    titulo = """  <h1>Documentos de cada sesión</h1>
-  <p class="intro">Cada sesión debería quedar con el acta y el registro de
-     asistencia firmado.</p>
-"""
-    cuerpo = """
-  <div class="tarjeta tabla-ancha">
-    <table>
-      <thead>
-        <tr>
-          <th>Localidad</th>
-          <th>Sesiones<br>reportadas</th>
-          <th>Actas<br>cargadas</th>
-          <th>Planilla de<br>asistencia</th>
-          <th>Estado general<br>de la localidad</th>
-        </tr>
-      </thead>
-      <tbody id="tabla-documentos"></tbody>
-    </table>
-  </div>
-  <div class="leyenda">
-    <div><span class="chip al-dia">Al día</span> sesionó, cargó todo y no tiene
-      ajustes por hacer</div>
-    <div><span class="chip revisar">Ajustes de forma</span> sesionó y cargó,
-      con detalles de formato por afinar en algunas actas</div>
-    <div><span class="chip cargar">Por cargar</span> le falta subir algún
-      documento</div>
-    <div><span class="chip sesionar">Por sesionar</span> hizo menos de las """ + (
-        EN_LETRA.get(ORDINARIAS_EXIGIDAS, str(ORDINARIAS_EXIGIDAS))) + """
-      sesiones ordinarias que se esperan al corte</div>
-  </div>
-"""
-    return {"titulo": titulo, "cuerpo": cuerpo}
-
-
-def pagina_pendientes():
-    """Página con lo que le falta a cada localidad."""
-    titulo = """  <h1>Qué queda pendiente de cargar</h1>
-  <p class="intro">Solo aparecen las localidades con algo por entregar. Son
-     pendientes de sesión o de documento; los ajustes de forma están en la
-     página de ajustes por localidad.</p>
-"""
-    cuerpo = """
-  <div class="rejilla" id="pendientes"></div>
-"""
-    return {"titulo": titulo, "cuerpo": cuerpo}
-
-
-def pagina_ajustes():
-    """Página con los ajustes de registro por localidad."""
-    titulo = """  <h1>Ajustes por localidad</h1>
-  <p class="intro">Cuántas actas de cada localidad necesitan algún ajuste y de
-     qué tipo, así que entre menos, mejor. La última columna resume cuántas ya
-     quedaron listas. El ajuste puntual de cada acta está en la página de
-     detalle.</p>
-"""
-    cuerpo = """
-  <div class="tarjeta tabla-ancha">
-    <table>
-      <thead>
-        <tr>
-          <th>Localidad</th>
-          <th>Actas</th>
-          <th>Numeración<br>por ajustar</th>
-          <th>Recuadro<br>por completar</th>
-          <th>Cifras por<br>conciliar</th>
-          <th>Fecha por<br>conciliar</th>
-          <th>Actas<br>ya listas</th>
-        </tr>
-      </thead>
-      <tbody id="tabla-ajustes"></tbody>
-    </table>
-  </div>
-  <div class="leyenda">
-    <div><span class="punto bien"></span>Actas ya listas</div>
-    <div><span class="punto mal"></span>Actas con algún ajuste</div>
-    <div>Numeración: el número que trae el acta por dentro no coincide con el
-      número de comité del formulario, repite el de otra acta, quedó vacío o
-      no está.</div>
-    <div>Recuadro: al cuadro de participantes le falta diligenciar algo, se
-      cambió respecto al formato o sus filas no suman.</div>
-    <div>Fecha: el nombre del archivo del acta dice una fecha de sesión y en
-      el formulario quedó otra.</div>
-  </div>
-"""
-    return {"titulo": titulo, "cuerpo": cuerpo}
-
-
-def pagina_detalle():
-    """Página con el ajuste puntual de cada acta."""
-    titulo = """  <h1>Ajustes por acta</h1>
-  <p class="intro">Solo aparecen las localidades con algún ajuste por hacer. De
-     cada acta se indica qué habría que corregir. Haz clic en una localidad
-     para abrir su lista.</p>
-"""
-    cuerpo = """
-  <div id="detalle"></div>
-
-  <p class="pie-nota"><strong>Nota:</strong> la lectura de los PDF es
-     automática, así que las actas guardadas como imagen escaneada no se pueden
-     revisar por dentro. Sí aparecen en esta lista, con el ajuste «está guardada
-     como imagen», pero de ellas no se puede decir si la numeración o el
-     recuadro están bien.</p>
-"""
-    return {"titulo": titulo, "cuerpo": cuerpo}
-
-
 # ------------------------------------------------------------------ salida
 
 def css_de_fuentes():
@@ -2876,17 +2556,16 @@ def css_de_fuentes():
 SITIO = ["index.html", "html", "recursos", "datos", "imagenes"]
 
 
-def copiar_sitio(destino, sin=()):
+def copiar_sitio(destino):
     """Copia las páginas, los recursos, los datos y las imágenes del tablero
     de la raíz a otra carpeta. Los programas, el histórico y lo que se edita a
     mano no se copian: son uno solo para todos los años."""
     os.makedirs(destino, exist_ok=True)
-    ignorar = shutil.ignore_patterns(*sin) if sin else None
     for nombre in SITIO:
         origen = os.path.join(RAIZ_TABLERO, nombre)
         if os.path.isdir(origen):
             shutil.copytree(origen, os.path.join(destino, nombre),
-                            ignore=ignorar, dirs_exist_ok=True)
+                            dirs_exist_ok=True)
         elif os.path.exists(origen):
             shutil.copy2(origen, os.path.join(destino, nombre))
 
@@ -2898,23 +2577,54 @@ def guardar_anios_cerrados():
     vuelve a generar ahí como año completo, para que deje de decir «año en
     curso». Así la dirección de siempre muestra el año abierto y el anterior
     sigue en línea. Solo pasa una vez por año: si la carpeta ya existe, no se
-    toca.
+    toca. Se sabe que un año se trabajó porque dejó su archivo completo en
+    COLJ/programas/.
     """
     for anio in range(PRIMER_ANIO, ANIO):
-        nombre = "calidad_colj_%d.json" % anio
-        datos_viejos = os.path.join(RAIZ_TABLERO, "datos", nombre)
         carpeta = os.path.join(RAIZ_TABLERO, str(anio))
-        if not os.path.exists(datos_viejos) or os.path.isdir(carpeta):
+        if not os.path.exists(json_completo(anio)) or os.path.isdir(carpeta):
             continue
         print("El tablero pasa a %d. Se guarda el de %d en %s\n"
               % (ANIO, anio, carpeta))
-        copiar_sitio(carpeta, sin=[nombre])
-        shutil.move(datos_viejos, os.path.join(carpeta, "datos", nombre))
+        copiar_sitio(carpeta)
         sys.stdout.flush()
         subprocess.run([sys.executable, os.path.abspath(__file__),
                         "--anio", str(anio), "--cerrado"], cwd=RAIZ_TABLERO,
                        check=True)
         print("\nSigue el tablero de %d.\n" % ANIO)
+
+
+# Lo único que sale al archivo público. Es una lista de lo que sí se publica y
+# no de lo que se quita: así una cifra nueva que se agregue a construir() no
+# llega al sitio por descuido. Si una página pública necesita un campo más, se
+# agrega aquí.
+RESUMEN_PUBLICO = ["actas", "sesiones_formulario", "ordinarias",
+                   "extraordinarias", "al_dia_sesiones", "sin_pendientes",
+                   "en_silencio", "dias_alerta", "ordinarias_exigidas"]
+LOCALIDAD_PUBLICA = ["localidad", "sesiones_formulario", "ordinarias",
+                     "extraordinarias", "bimestres_con_ordinaria",
+                     "bimestres_exigidos", "ordinarias_exigidas",
+                     "faltan_ordinarias", "dias_sin_sesionar"]
+MESES_PUBLICO = ["sesiones", "nombres_consulta"]
+
+# Páginas y archivos que el tablero publicaba y ya no. El generador los quita
+# de la carpeta del sitio para que no sigan en línea.
+PAGINAS_RETIRADAS = ["documentos.html", "pendientes.html", "ajustes.html",
+                     "detalle.html"]
+
+
+def datos_publicos(datos):
+    """Deja de los datos completos solo lo que leen las páginas públicas."""
+    return {
+        "anio": datos["anio"], "abierto": datos["abierto"],
+        "anios_serie": datos["anios_serie"], "corte": datos["corte"],
+        "resumen": {k: datos["resumen"][k] for k in RESUMEN_PUBLICO},
+        "localidades": [{k: loc[k] for k in LOCALIDAD_PUBLICA}
+                        for loc in datos["localidades"]],
+        "serie": datos["serie"], "totales_serie": datos["totales_serie"],
+        "meses": {k: datos["meses"][k] for k in MESES_PUBLICO},
+        "enlaces": datos["enlaces"],
+    }
 
 
 def main():
@@ -2933,10 +2643,10 @@ def main():
     for carpeta in (CARPETA_DATOS, CARPETA_RECURSOS):
         os.makedirs(carpeta, exist_ok=True)
 
-    # ---- datos, en dos formatos: uno para el navegador y otro legible
-    with open(os.path.join(CARPETA_DATOS, "calidad_colj_%d.json" % ANIO),
-              "w", encoding="utf-8") as f:
+    # ---- datos completos, con ajustes y pendientes: fuera del sitio
+    with open(json_completo(ANIO), "w", encoding="utf-8") as f:
         json.dump(datos, f, ensure_ascii=False, indent=2)
+    # ---- datos públicos, para el navegador
     with open(os.path.join(CARPETA_DATOS, "datos_colj.js"),
               "w", encoding="utf-8") as f:
         f.write("/* Datos del tablero COLJ %d. Se entrega como .js y no como\n"
@@ -2946,7 +2656,7 @@ def main():
                 "   Lo genera programas/generar_tablero_calidad_colj.py:\n"
                 "   no editar a mano. */\n")
         f.write("window.DATOS_COLJ = ")
-        json.dump(datos, f, ensure_ascii=False)
+        json.dump(datos_publicos(datos), f, ensure_ascii=False)
         f.write(";\n")
 
     # ---- recursos comunes
@@ -2959,7 +2669,7 @@ def main():
               "w", encoding="utf-8") as f:
         f.write(JS_COMUN)
 
-    # ---- las seis páginas
+    # ---- las cinco páginas
     paginas = [
         ("index.html", "Revisión COLJ %d" % ANIO,
          pagina_portada(datos["ultima_carga"], datos["ultima_sesion"]),
@@ -2969,26 +2679,17 @@ def main():
          "pintarFranjaAnios();pintarSerie();", False),
         ("zoom.html", "%s · COLJ %d" % (TITULO_ZOOM, ANIO),
          pagina_zoom(mes_de(datos["corte"])),
-         "pintarPanorama();pintarResumenAjustes();pintarAccesosZoom();", False),
+         "pintarPanorama();pintarAccesosZoom();", False),
         ("enlaces.html", "Enlaces · COLJ", pagina_enlaces(),
          "pintarEnlaces();", False),
         ("periodicidad.html", "Periodicidad de las sesiones · COLJ %d" % ANIO,
          pagina_periodicidad(), "pintarPeriodicidad();pintarConsulta();",
          False),
-        ("documentos.html", "Documentos de cada sesión · COLJ %d" % ANIO,
-         pagina_documentos(), "pintarDocumentos();", False),
-        ("pendientes.html", "Qué queda pendiente de cargar · COLJ %d" % ANIO,
-         pagina_pendientes(), "pintarPendientes();", False),
-        ("ajustes.html", "Ajustes por localidad · COLJ %d" % ANIO,
-         pagina_ajustes(), "pintarAjustes();", False),
-        ("detalle.html", "Ajustes por acta · COLJ %d" % ANIO,
-         pagina_detalle(), "pintarDetalle();", False),
     ]
-    # Las cinco vistas del año vuelven a zoom.html, que es de donde se entra
-    # a ellas; el resto vuelve a la portada.
+    # Periodicidad vuelve a zoom.html, que es de donde se entra a ella; el
+    # resto vuelve a la portada.
     vuelve_a_zoom = ("zoom.html", TITULO_ZOOM)
-    de_zoom = {"periodicidad.html", "documentos.html", "pendientes.html",
-               "ajustes.html", "detalle.html"}
+    de_zoom = {"periodicidad.html"}
     # Todas las páginas con datos llevan el recordatorio del corte. La de
     # enlaces no, porque ahí no hay ninguna cifra que se pueda leer mal.
     con_corte = de_zoom | {"estadisticas.html", "zoom.html"}
@@ -3006,6 +2707,15 @@ def main():
         if portada:
             continue
         sobrante = os.path.join(RAIZ_SITIO, archivo)
+        if os.path.exists(sobrante):
+            os.remove(sobrante)
+
+    # Lo que el tablero publicaba y ya no: las páginas de ajustes y el
+    # archivo completo de cifras, que ahora vive en COLJ/programas/
+    retirados = [os.path.join(CARPETA_HTML, p) for p in PAGINAS_RETIRADAS]
+    retirados.append(os.path.join(CARPETA_DATOS,
+                                  "calidad_colj_%d.json" % ANIO))
+    for sobrante in retirados:
         if os.path.exists(sobrante):
             os.remove(sobrante)
 
@@ -3028,6 +2738,8 @@ def main():
           "sin nada pendiente %d de 20"
           % (r["sesiones_formulario"], r["actas"], r["al_dia_sesiones"],
              r["sin_pendientes"]))
+    print("Datos completos, con ajustes y pendientes (no se publican): %s"
+          % json_completo(ANIO))
     print("Ajustes | ya listas %d | numeración %d | recuadro %d | cifras %d"
           % (r["limpias"], r["num_problema"], r["rec_problema"],
              r["cifras_difieren"]))
