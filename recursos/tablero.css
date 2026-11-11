@@ -207,42 +207,7 @@ a { color: inherit; }
 }
 
 
-/* --------------------------------------------------------------- accesos */
-
-/* El acceso de la página de zoom, que lleva a Periodicidad. Trae su propia
-   cifra, para que ya se sepa qué hay adentro sin tener que entrar. Va debajo
-   de la franja, del ancho de una de sus cuatro casillas. */
-.accesos {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-}
-@media (max-width: 900px) { .accesos { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .accesos { grid-template-columns: 1fr; } }
-.acceso {
-  display: block; text-decoration: none; background: var(--blanco);
-  border-radius: 10px; padding: 1.3rem 1.4rem 1.2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-.acceso:hover {
-  transform: translateY(-2px); box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-}
-.acceso .cifra {
-  font-family: 'Anton', 'Figtree', sans-serif; font-weight: 400;
-  font-size: 2rem; line-height: 1; color: var(--acento);
-}
-.acceso .nombre {
-  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.92rem;
-  color: var(--gris-oscuro); margin: 0.65rem 0 0.35rem;
-}
-.acceso .glosa { font-size: 0.85rem; color: var(--gris); }
-.acceso .entrar {
-  display: block; margin-top: 0.8rem;
-  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.72rem;
-  color: var(--acento);
-}
+/* --------------------------------------------------------------- enlaces */
 
 /* Fichas de enlace externo. Las que todavía no tienen dirección se marcan
    como pendientes y no son clicables, para que se vea el croquis completo. */

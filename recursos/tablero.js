@@ -149,19 +149,6 @@ function pintarEnlaces() {
   }).join('');
 }
 
-function pintarAccesosZoom() {
-  var r = D.resumen;
-  var nodo = document.getElementById('accesos-sesiones');
-  if (!nodo) return;
-  nodo.innerHTML = '<a class="acceso" href="periodicidad.html">' +
-    '<div class="cifra">' + r.al_dia_sesiones + ' de 20</div>' +
-    '<div class="nombre">Periodicidad de las sesiones</div>' +
-    '<div class="glosa">Localidades con las ' + r.ordinarias_exigidas +
-    ' sesiones ordinarias que se esperan al corte, y consulta de ' +
-    'sesiones por mes y localidad.</div>' +
-    '<span class="entrar">Ver la página &rarr;</span></a>';
-}
-
 function pintarPanorama() {
   var r = D.resumen;
   franja('franja-general', [

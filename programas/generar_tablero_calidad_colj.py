@@ -1560,42 +1560,7 @@ a { color: inherit; }
 }
 
 
-/* --------------------------------------------------------------- accesos */
-
-/* El acceso de la página de zoom, que lleva a Periodicidad. Trae su propia
-   cifra, para que ya se sepa qué hay adentro sin tener que entrar. Va debajo
-   de la franja, del ancho de una de sus cuatro casillas. */
-.accesos {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-}
-@media (max-width: 900px) { .accesos { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .accesos { grid-template-columns: 1fr; } }
-.acceso {
-  display: block; text-decoration: none; background: var(--blanco);
-  border-radius: 10px; padding: 1.3rem 1.4rem 1.2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-.acceso:hover {
-  transform: translateY(-2px); box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-}
-.acceso .cifra {
-  font-family: 'Anton', 'Figtree', sans-serif; font-weight: 400;
-  font-size: 2rem; line-height: 1; color: var(--acento);
-}
-.acceso .nombre {
-  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.92rem;
-  color: var(--gris-oscuro); margin: 0.65rem 0 0.35rem;
-}
-.acceso .glosa { font-size: 0.85rem; color: var(--gris); }
-.acceso .entrar {
-  display: block; margin-top: 0.8rem;
-  font-family: 'Antonio', 'Segoe UI', sans-serif; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.72rem;
-  color: var(--acento);
-}
+/* --------------------------------------------------------------- enlaces */
 
 /* Fichas de enlace externo. Las que todavía no tienen dirección se marcan
    como pendientes y no son clicables, para que se vea el croquis completo. */
@@ -1981,19 +1946,6 @@ function pintarEnlaces() {
   }).join('');
 }
 
-function pintarAccesosZoom() {
-  var r = D.resumen;
-  var nodo = document.getElementById('accesos-sesiones');
-  if (!nodo) return;
-  nodo.innerHTML = '<a class="acceso" href="periodicidad.html">' +
-    '<div class="cifra">' + r.al_dia_sesiones + ' de 20</div>' +
-    '<div class="nombre">Periodicidad de las sesiones</div>' +
-    '<div class="glosa">Localidades con las ' + r.ordinarias_exigidas +
-    ' sesiones ordinarias que se esperan al corte, y consulta de ' +
-    'sesiones por mes y localidad.</div>' +
-    '<span class="entrar">Ver la página &rarr;</span></a>';
-}
-
 function pintarPanorama() {
   var r = D.resumen;
   franja('franja-general', [
@@ -2313,8 +2265,23 @@ ESQUELETO = """<!DOCTYPE html>
 """
 
 
-def envoltura(pestana, pagina, llamada, es_portada=False, vuelve_a=None,
-              con_corte=False):
+REDIRECCION_PERIODICIDAD = """<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="0; url=zoom.html">
+<title>Periodicidad de las sesiones · COLJ</title>
+</head>
+<body>
+<p>La periodicidad de las sesiones ahora está en
+   <a href="zoom.html">la página del año</a>.</p>
+</body>
+</html>
+"""
+
+
+def envoltura(pestana, pagina, llamada, es_portada=False, con_corte=False):
     """Arma una página completa con la cabecera y el pie comunes.
 
     La portada vive en la raíz de la carpeta y las demás páginas en html/, así
@@ -2322,16 +2289,10 @@ def envoltura(pestana, pagina, llamada, es_portada=False, vuelve_a=None,
 
     con_corte agrega el recordatorio de hasta cuándo llegan los datos. Va en
     las páginas con tablas y no en las que solo tienen enlaces.
-
-    vuelve_a dice a dónde lleva el botón de volver. Periodicidad regresa a
-    zoom.html, que es de donde se entra a ella, y no a la portada: volver
-    siempre al inicio obligaría a rehacer dos clics.
     """
     raiz = "" if es_portada else "../"
-    destino = vuelve_a or ("../index.html", "Inicio")
     volver = ("" if es_portada else
-              '  <a class="volver" href="%s">&larr; %s</a>\n'
-              % (destino[0], destino[1]))
+              '  <a class="volver" href="../index.html">&larr; Inicio</a>\n')
     if es_portada:
         cabecera = pagina["titulo"]
     else:
@@ -2427,13 +2388,15 @@ def pagina_estadisticas():
 
 
 def pagina_zoom():
-    """Página del año en curso: el panorama general y el acceso a periodicidad,
-    que es donde está la tabla con los registros de cada localidad.
+    """Página del año en curso: el panorama general y, debajo, la periodicidad
+    de las sesiones con la tabla por localidad y la consulta por mes.
 
-    Hasta el 11 de noviembre de 2026 traía un segundo bloque, «Resumen de
+    Hasta el 11 de noviembre de 2026 la periodicidad era una página aparte, a
+    la que se entraba por una tarjeta, y había un segundo bloque, «Resumen de
     ajustes», con cuatro páginas (documentos, pendientes, ajustes por acta y
-    por localidad). Se quitó porque esa información es para cada equipo local
-    y se le entrega en la presentación y el Word, no en una página pública.
+    por localidad). Los ajustes se quitaron porque son para cada equipo local
+    y se entregan en la presentación y el Word. Al quedar una sola tarjeta,
+    Carolina pidió traer la periodicidad a esta página.
     """
     titulo = """  <h1>%s</h1>
   <p class="intro">Cómo va cada localidad en %d.</p>
@@ -2443,8 +2406,7 @@ def pagina_zoom():
     <h2>El panorama general</h2>
   </div>
   <div class="franja" id="franja-general"></div>
-  <div class="accesos" id="accesos-sesiones"></div>
-"""
+""" + seccion_periodicidad()
     return {"titulo": titulo, "cuerpo": cuerpo}
 
 
@@ -2458,12 +2420,16 @@ def pagina_enlaces():
     return {"titulo": titulo, "cuerpo": cuerpo}
 
 
-def pagina_periodicidad():
-    """Página de periodicidad de las sesiones."""
-    titulo = """  <h1>Periodicidad de las sesiones</h1>
-  <p class="intro">El reglamento fija sesiones ordinarias cada dos meses, así
-     que al corte se le piden %s a cada localidad. Las extraordinarias son
-     adicionales y no cuentan para ese mínimo.</p>
+def seccion_periodicidad():
+    """Periodicidad de las sesiones: la tabla por localidad y la consulta por
+    mes. Va dentro de la página del año, debajo del panorama general."""
+    rotulo = """
+  <div class="rotulo-seccion">
+    <h2>Periodicidad de las sesiones</h2>
+    <p>El reglamento fija sesiones ordinarias cada dos meses, así que al corte
+       se le piden %s a cada localidad. Las extraordinarias son adicionales y
+       no cuentan para ese mínimo.</p>
+  </div>
 """ % EN_LETRA.get(ORDINARIAS_EXIGIDAS, ORDINARIAS_EXIGIDAS)
     cuerpo = """
   <p class="nota-general"><strong>Bimestre fijo o móvil.</strong> El Decreto
@@ -2515,7 +2481,7 @@ def pagina_periodicidad():
     <table id="tabla-consulta"></table>
   </div>
 """
-    return {"titulo": titulo, "cuerpo": cuerpo}
+    return rotulo + cuerpo
 
 
 # ------------------------------------------------------------------ salida
@@ -2660,7 +2626,7 @@ def main():
               "w", encoding="utf-8") as f:
         f.write(JS_COMUN)
 
-    # ---- las cinco páginas
+    # ---- las cuatro páginas
     paginas = [
         ("index.html", "Revisión COLJ %d" % ANIO,
          pagina_portada(datos["ultima_carga"], datos["ultima_sesion"]),
@@ -2670,28 +2636,27 @@ def main():
          "pintarFranjaAnios();pintarSerie();", False),
         ("zoom.html", "%s · COLJ %d" % (TITULO_ZOOM, ANIO),
          pagina_zoom(),
-         "pintarPanorama();pintarAccesosZoom();", False),
+         "pintarPanorama();pintarPeriodicidad();pintarConsulta();", False),
         ("enlaces.html", "Enlaces · COLJ", pagina_enlaces(),
          "pintarEnlaces();", False),
-        ("periodicidad.html", "Periodicidad de las sesiones · COLJ %d" % ANIO,
-         pagina_periodicidad(), "pintarPeriodicidad();pintarConsulta();",
-         False),
     ]
-    # Periodicidad vuelve a zoom.html, que es de donde se entra a ella; el
-    # resto vuelve a la portada.
-    vuelve_a_zoom = ("zoom.html", TITULO_ZOOM)
-    de_zoom = {"periodicidad.html"}
     # Todas las páginas con datos llevan el recordatorio del corte. La de
     # enlaces no, porque ahí no hay ninguna cifra que se pueda leer mal.
-    con_corte = de_zoom | {"estadisticas.html", "zoom.html"}
+    con_corte = {"estadisticas.html", "zoom.html"}
     os.makedirs(CARPETA_HTML, exist_ok=True)
     for archivo, pestana, pagina, llamada, portada in paginas:
-        vuelve = vuelve_a_zoom if archivo in de_zoom else None
         # La portada queda en la raíz del sitio; las demás dentro de html/
         destino = RAIZ_SITIO if portada else CARPETA_HTML
         with open(os.path.join(destino, archivo), "w", encoding="utf-8") as f:
-            f.write(envoltura(pestana, pagina, llamada, portada, vuelve,
+            f.write(envoltura(pestana, pagina, llamada, portada,
                               archivo in con_corte))
+
+    # La periodicidad era una página aparte hasta el 11 de noviembre de 2026.
+    # Su dirección se conserva y lleva a la página del año, para que no se
+    # rompan los enlaces que alguien haya guardado o compartido.
+    with open(os.path.join(CARPETA_HTML, "periodicidad.html"), "w",
+              encoding="utf-8") as f:
+        f.write(REDIRECCION_PERIODICIDAD)
 
     # Barrido de las páginas que quedaron en la raíz de versiones anteriores
     for archivo, _, _, _, portada in paginas:
