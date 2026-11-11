@@ -40,12 +40,12 @@
   },
   "localidades": [
     {
-      "localidad": "Usaquén",
-      "actas": 7,
-      "respuestas_formulario": 7,
-      "sesiones_formulario": 7,
+      "localidad": "Antonio Nariño",
+      "actas": 8,
+      "respuestas_formulario": 8,
+      "sesiones_formulario": 8,
       "ordinarias": 5,
-      "extraordinarias": 2,
+      "extraordinarias": 3,
       "bimestres_cubiertos": 4,
       "bimestres_con_ordinaria": [
         1,
@@ -57,202 +57,19 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 10,
-      "planillas": 6,
-      "digitales": 2,
-      "piden_digital": 2,
-      "sesiones_completas": 6,
-      "actas_faltantes": 0,
-      "pendientes_carga": [
-        "falta el «Registro de asistencia (fotografía o PDF)» del comité 6"
-      ],
-      "pendientes_imagen": [],
-      "pendientes_sesion": [],
-      "estado": "falta cargar",
-      "limpias": 1,
-      "numeracion": {
-        "ok": 2,
-        "distinto": 5,
-        "repetido": 0,
-        "blanco": 0,
-        "sin_linea": 0,
-        "escaneo": 0
-      },
-      "recuadro": {
-        "ok": 7,
-        "sin_recuadro": 0,
-        "modificado": 0,
-        "no_cuadra": 0,
-        "escaneo": 0
-      },
-      "cifras": {
-        "comparables": 7,
-        "coinciden": 5,
-        "difieren": 2
-      },
-      "fechas": {
-        "difieren": 0
-      },
-      "acta_uno": 5,
-      "cifras_invertidas": 0,
-      "detalle": [
-        {
-          "archivo": "20260224_USAQUEN_ACTA_1.pdf",
-          "fecha": "2026-02-24",
-          "ajustes": [
-            "el formulario reporta 21 asistentes no juveniles y 1 asistente joven; el acta dice 22 asistentes no juveniles y 1 asistente joven, hay que definir cuál queda"
-          ]
-        },
-        {
-          "archivo": "20260318_USAQUEN_ACTA_2.pdf",
-          "fecha": "2026-03-18",
-          "ajustes": [
-            "en el formulario quedó como comité 2 y por dentro dice ACTA N° 1"
-          ]
-        },
-        {
-          "archivo": "20260421_USAQUEN_ACTA_3.pdf",
-          "fecha": "2026-04-21",
-          "ajustes": [
-            "en el formulario quedó como comité 3 y por dentro dice ACTA N° 1"
-          ]
-        },
-        {
-          "archivo": "20260519_USAQUEN_ACTA_4.pdf",
-          "fecha": "2026-05-19",
-          "ajustes": [
-            "en el formulario quedó como comité 4 y por dentro dice ACTA N° 1"
-          ]
-        },
-        {
-          "archivo": "20260616_USAQUEN_ACTA_5.pdf",
-          "fecha": "2026-06-16",
-          "ajustes": [
-            "en el formulario quedó como comité 5 y por dentro dice ACTA N° 1"
-          ]
-        },
-        {
-          "archivo": "20260819_USAQUEN_ACTA_6.pdf",
-          "fecha": "2026-08-19",
-          "ajustes": [
-            "en el formulario quedó como comité 6 y por dentro dice ACTA N° 1",
-            "el formulario reporta 11 asistentes no juveniles y 7 asistentes jóvenes; el acta dice 11 asistentes no juveniles y 6 asistentes jóvenes, hay que definir cuál queda"
-          ]
-        }
-      ]
-    },
-    {
-      "localidad": "Chapinero",
-      "actas": 5,
-      "respuestas_formulario": 5,
-      "sesiones_formulario": 5,
-      "ordinarias": 5,
-      "extraordinarias": 0,
-      "bimestres_cubiertos": 4,
-      "bimestres_con_ordinaria": [
-        1,
-        2,
-        3,
-        4
-      ],
-      "bimestres_exigidos": 4,
-      "bimestres_faltantes": [],
-      "ordinarias_exigidas": 4,
-      "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 16,
-      "planillas": 5,
-      "digitales": 1,
-      "piden_digital": 1,
-      "sesiones_completas": 5,
+      "dias_sin_sesionar": 3,
+      "planillas": 8,
+      "digitales": 6,
+      "piden_digital": 6,
+      "sesiones_completas": 8,
       "actas_faltantes": 0,
       "pendientes_carga": [],
       "pendientes_imagen": [],
       "pendientes_sesion": [],
-      "estado": "revisar forma",
-      "limpias": 2,
+      "estado": "al día",
+      "limpias": 8,
       "numeracion": {
-        "ok": 2,
-        "distinto": 3,
-        "repetido": 0,
-        "blanco": 0,
-        "sin_linea": 0,
-        "escaneo": 0
-      },
-      "recuadro": {
-        "ok": 5,
-        "sin_recuadro": 0,
-        "modificado": 0,
-        "no_cuadra": 0,
-        "escaneo": 0
-      },
-      "cifras": {
-        "comparables": 5,
-        "coinciden": 3,
-        "difieren": 2
-      },
-      "fechas": {
-        "difieren": 0
-      },
-      "acta_uno": 0,
-      "cifras_invertidas": 0,
-      "detalle": [
-        {
-          "archivo": "20260211_CHAPINERO_ACTA_1.pdf",
-          "fecha": "2026-02-11",
-          "ajustes": [
-            "en el formulario quedó como comité 1 y por dentro dice ACTA N° 12"
-          ]
-        },
-        {
-          "archivo": "20260408_CHAPINERO_ACTA_2.pdf",
-          "fecha": "2026-04-08",
-          "ajustes": [
-            "en el formulario quedó como comité 2 y por dentro dice ACTA N° 3",
-            "el formulario reporta 20 asistentes no juveniles y 2 asistentes jóvenes; el acta dice 18 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
-          ]
-        },
-        {
-          "archivo": "20260610_CHAPINERO_ACTA_3.pdf",
-          "fecha": "2026-06-10",
-          "ajustes": [
-            "en el formulario quedó como comité 3 y por dentro dice ACTA N° 4",
-            "el formulario reporta 14 asistentes no juveniles y 2 asistentes jóvenes; el acta dice 16 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
-          ]
-        }
-      ]
-    },
-    {
-      "localidad": "Santa Fe",
-      "actas": 4,
-      "respuestas_formulario": 4,
-      "sesiones_formulario": 4,
-      "ordinarias": 4,
-      "extraordinarias": 0,
-      "bimestres_cubiertos": 3,
-      "bimestres_con_ordinaria": [
-        1,
-        2,
-        4
-      ],
-      "bimestres_exigidos": 4,
-      "bimestres_faltantes": [
-        "mayo y junio"
-      ],
-      "ordinarias_exigidas": 4,
-      "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 39,
-      "planillas": 4,
-      "digitales": 0,
-      "piden_digital": 0,
-      "sesiones_completas": 4,
-      "actas_faltantes": 0,
-      "pendientes_carga": [],
-      "pendientes_imagen": [],
-      "pendientes_sesion": [],
-      "estado": "revisar forma",
-      "limpias": 0,
-      "numeracion": {
-        "ok": 4,
+        "ok": 8,
         "distinto": 0,
         "repetido": 0,
         "blanco": 0,
@@ -260,15 +77,15 @@
         "escaneo": 0
       },
       "recuadro": {
-        "ok": 0,
-        "sin_recuadro": 3,
+        "ok": 8,
+        "sin_recuadro": 0,
         "modificado": 0,
-        "no_cuadra": 1,
+        "no_cuadra": 0,
         "escaneo": 0
       },
       "cifras": {
-        "comparables": 1,
-        "coinciden": 1,
+        "comparables": 8,
+        "coinciden": 8,
         "difieren": 0
       },
       "fechas": {
@@ -276,39 +93,10 @@
       },
       "acta_uno": 0,
       "cifras_invertidas": 0,
-      "detalle": [
-        {
-          "archivo": "20260216_SANTAFE_ACTA_1.pdf",
-          "fecha": "2026-02-16",
-          "ajustes": [
-            "el total de jóvenes dice 5 jóvenes y las tres filas de abajo suman 0"
-          ]
-        },
-        {
-          "archivo": "20260427_SANTAFE_ACTA_2.pdf",
-          "fecha": "2026-04-27",
-          "ajustes": [
-            "falta el recuadro de participantes"
-          ]
-        },
-        {
-          "archivo": "20260706_SANTAFE_ACTA_3.pdf",
-          "fecha": "2026-07-06",
-          "ajustes": [
-            "falta el recuadro de participantes"
-          ]
-        },
-        {
-          "archivo": "20260921_SANTAFE_ACTA_4.pdf",
-          "fecha": "2026-09-21",
-          "ajustes": [
-            "falta el recuadro de participantes"
-          ]
-        }
-      ]
+      "detalle": []
     },
     {
-      "localidad": "San Cristóbal",
+      "localidad": "Barrios Unidos",
       "actas": 9,
       "respuestas_formulario": 9,
       "sesiones_formulario": 9,
@@ -325,21 +113,21 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 9,
+      "dias_sin_sesionar": 8,
       "planillas": 9,
-      "digitales": 5,
-      "piden_digital": 5,
+      "digitales": 3,
+      "piden_digital": 3,
       "sesiones_completas": 9,
       "actas_faltantes": 0,
       "pendientes_carga": [],
       "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
-      "limpias": 5,
+      "limpias": 1,
       "numeracion": {
-        "ok": 9,
+        "ok": 6,
         "distinto": 0,
-        "repetido": 0,
+        "repetido": 3,
         "blanco": 0,
         "sin_linea": 0,
         "escaneo": 0
@@ -347,103 +135,14 @@
       "recuadro": {
         "ok": 7,
         "sin_recuadro": 0,
-        "modificado": 1,
-        "no_cuadra": 1,
-        "escaneo": 0
-      },
-      "cifras": {
-        "comparables": 8,
-        "coinciden": 6,
-        "difieren": 2
-      },
-      "fechas": {
-        "difieren": 0
-      },
-      "acta_uno": 0,
-      "cifras_invertidas": 0,
-      "detalle": [
-        {
-          "archivo": "20260218_SANCRISTOBAL_ACTA_1.pdf",
-          "fecha": "2026-02-18",
-          "ajustes": [
-            "la fila de total de jóvenes del recuadro quedó sin número"
-          ]
-        },
-        {
-          "archivo": "20260415_SAN_CRISTOBAL_ACTA_3.pdf",
-          "fecha": "2026-04-15",
-          "ajustes": [
-            "el formulario reporta 12 asistentes no juveniles y 1 asistente joven; el acta dice 13 asistentes no juveniles y 1 asistente joven, hay que definir cuál queda"
-          ]
-        },
-        {
-          "archivo": "20260617_SAN_CRISTOBAL_ACTA_5.pdf",
-          "fecha": "2026-06-17",
-          "ajustes": [
-            "el total de jóvenes dice 3 jóvenes y las tres filas de abajo suman 2"
-          ]
-        },
-        {
-          "archivo": "20260916_SAN_CRISTOBAL_ACTA_8.pdf",
-          "fecha": "2026-09-16",
-          "ajustes": [
-            "el formulario reporta 11 asistentes no juveniles y 11 asistentes jóvenes; el acta dice 11 asistentes no juveniles y 1 asistente joven, hay que definir cuál queda"
-          ]
-        }
-      ]
-    },
-    {
-      "localidad": "Usme",
-      "actas": 6,
-      "respuestas_formulario": 6,
-      "sesiones_formulario": 6,
-      "ordinarias": 4,
-      "extraordinarias": 2,
-      "bimestres_cubiertos": 4,
-      "bimestres_con_ordinaria": [
-        1,
-        2,
-        3,
-        4
-      ],
-      "bimestres_exigidos": 4,
-      "bimestres_faltantes": [],
-      "ordinarias_exigidas": 4,
-      "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 70,
-      "planillas": 5,
-      "digitales": 1,
-      "piden_digital": 2,
-      "sesiones_completas": 5,
-      "actas_faltantes": 0,
-      "pendientes_carga": [
-        "falta el «Registro de asistencia (fotografía o PDF)» del comité 5"
-      ],
-      "pendientes_imagen": [],
-      "pendientes_sesion": [
-        "lleva 70 días sin reunirse"
-      ],
-      "estado": "falta cargar",
-      "limpias": 3,
-      "numeracion": {
-        "ok": 5,
-        "distinto": 0,
-        "repetido": 1,
-        "blanco": 0,
-        "sin_linea": 0,
-        "escaneo": 0
-      },
-      "recuadro": {
-        "ok": 3,
-        "sin_recuadro": 0,
-        "modificado": 1,
+        "modificado": 0,
         "no_cuadra": 2,
         "escaneo": 0
       },
       "cifras": {
-        "comparables": 5,
-        "coinciden": 4,
-        "difieren": 1
+        "comparables": 9,
+        "coinciden": 3,
+        "difieren": 6
       },
       "fechas": {
         "difieren": 0
@@ -452,92 +151,62 @@
       "cifras_invertidas": 0,
       "detalle": [
         {
-          "archivo": "20260320_USME_ACTA_2.pdf",
-          "fecha": "2026-03-20",
+          "archivo": "20260226_BARRIOS_UNIDOS_ACTA_1.pdf",
+          "fecha": "2026-02-26",
           "ajustes": [
-            "la fila de asistentes no juveniles del recuadro quedó sin número"
+            "el formulario reporta 19 asistentes no juveniles y 7 asistentes jóvenes; el acta dice 12 asistentes no juveniles y 7 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
-          "archivo": "20260417_USME_ACTA_3.pdf",
-          "fecha": "2026-04-17",
+          "archivo": "20260319_BARRIOS_UNIDOS_ACTA_2.pdf",
+          "fecha": "2026-03-19",
           "ajustes": [
-            "el total de jóvenes dice 4 jóvenes y las tres filas de abajo suman 5",
-            "el formulario reporta 10 asistentes no juveniles y 5 asistentes jóvenes; el acta dice 10 asistentes no juveniles y 4 asistentes jóvenes, hay que definir cuál queda"
+            "el formulario reporta 13 asistentes no juveniles y 5 asistentes jóvenes; el acta dice 8 asistentes no juveniles y 5 asistentes jóvenes, hay que definir cuál queda"
           ]
         },
         {
-          "archivo": "20260821_USME_ACTA_5.pdf",
-          "fecha": "2026-08-21",
+          "archivo": "20260326_BARRIOS_UNIDOS_ACTA_3.pdf",
+          "fecha": "2026-03-26",
           "ajustes": [
-            "por dentro dice ACTA N° 5, el mismo número del acta del 19 de junio de 2026; la numeración tiene que seguir el orden de las sesiones",
-            "el total de jóvenes dice 7 jóvenes y las tres filas de abajo suman 4"
+            "el formulario reporta 7 asistentes no juveniles y 2 asistentes jóvenes; el acta dice 5 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
           ]
-        }
-      ]
-    },
-    {
-      "localidad": "Tunjuelito",
-      "actas": 6,
-      "respuestas_formulario": 6,
-      "sesiones_formulario": 6,
-      "ordinarias": 4,
-      "extraordinarias": 2,
-      "bimestres_cubiertos": 4,
-      "bimestres_con_ordinaria": [
-        1,
-        2,
-        3,
-        4
-      ],
-      "bimestres_exigidos": 4,
-      "bimestres_faltantes": [],
-      "ordinarias_exigidas": 4,
-      "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 73,
-      "planillas": 6,
-      "digitales": 2,
-      "piden_digital": 3,
-      "sesiones_completas": 6,
-      "actas_faltantes": 0,
-      "pendientes_carga": [],
-      "pendientes_imagen": [],
-      "pendientes_sesion": [
-        "lleva 73 días sin reunirse"
-      ],
-      "estado": "revisar forma",
-      "limpias": 5,
-      "numeracion": {
-        "ok": 6,
-        "distinto": 0,
-        "repetido": 0,
-        "blanco": 0,
-        "sin_linea": 0,
-        "escaneo": 0
-      },
-      "recuadro": {
-        "ok": 6,
-        "sin_recuadro": 0,
-        "modificado": 0,
-        "no_cuadra": 0,
-        "escaneo": 0
-      },
-      "cifras": {
-        "comparables": 6,
-        "coinciden": 5,
-        "difieren": 1
-      },
-      "fechas": {
-        "difieren": 0
-      },
-      "acta_uno": 0,
-      "cifras_invertidas": 0,
-      "detalle": [
+        },
         {
-          "archivo": "20260421_TUNJUELITO_ACTA_3.pdf",
-          "fecha": "2026-04-21",
+          "archivo": "20260423_BARRIOS_UNIDOS_ACTA_4.pdf",
+          "fecha": "2026-04-23",
           "ajustes": [
-            "el formulario reporta 16 asistentes no juveniles y 4 asistentes jóvenes; el acta dice 15 asistentes no juveniles y 4 asistentes jóvenes, hay que definir cuál queda"
+            "el formulario reporta 13 asistentes no juveniles y 3 asistentes jóvenes; el acta dice 13 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
+          ]
+        },
+        {
+          "archivo": "20260716_BARRIOS_UNIDOS_ACTA_6.docx",
+          "fecha": "2026-07-16",
+          "ajustes": [
+            "el formulario reporta 12 asistentes no juveniles y 3 asistentes jóvenes; el acta dice 9 asistentes no juveniles y 3 asistentes jóvenes, hay que definir cuál queda"
+          ]
+        },
+        {
+          "archivo": "20260827_BARRIOS_UNIDOS_ACTA_7.pdf",
+          "fecha": "2026-08-27",
+          "ajustes": [
+            "por dentro dice ACTA N° 4, el mismo número del acta del 23 de abril de 2026; la numeración tiene que seguir el orden de las sesiones",
+            "el total de jóvenes dice 4 jóvenes y las tres filas de abajo suman 5"
+          ]
+        },
+        {
+          "archivo": "20260924_BARRIOS_UNIDOS_ACTA_8.pdf",
+          "fecha": "2026-09-24",
+          "ajustes": [
+            "por dentro dice ACTA N° 4, el mismo número del acta del 23 de abril de 2026; la numeración tiene que seguir el orden de las sesiones"
+          ]
+        },
+        {
+          "archivo": "20261022_BARRIOS_UNIDOS_ACTA_9.pdf",
+          "fecha": "2026-10-22",
+          "ajustes": [
+            "por dentro dice ACTA N° 5, el mismo número del acta del 25 de junio de 2026; la numeración tiene que seguir el orden de las sesiones",
+            "el total de jóvenes dice 9 jóvenes y las tres filas de abajo suman 4",
+            "el formulario reporta 13 asistentes no juveniles y 9 asistentes jóvenes; el acta dice 10 asistentes no juveniles y 9 asistentes jóvenes, hay que definir cuál queda"
           ]
         }
       ]
@@ -665,6 +334,363 @@
       ]
     },
     {
+      "localidad": "Chapinero",
+      "actas": 5,
+      "respuestas_formulario": 5,
+      "sesiones_formulario": 5,
+      "ordinarias": 5,
+      "extraordinarias": 0,
+      "bimestres_cubiertos": 4,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "bimestres_exigidos": 4,
+      "bimestres_faltantes": [],
+      "ordinarias_exigidas": 4,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 16,
+      "planillas": 5,
+      "digitales": 1,
+      "piden_digital": 1,
+      "sesiones_completas": 5,
+      "actas_faltantes": 0,
+      "pendientes_carga": [],
+      "pendientes_imagen": [],
+      "pendientes_sesion": [],
+      "estado": "revisar forma",
+      "limpias": 2,
+      "numeracion": {
+        "ok": 2,
+        "distinto": 3,
+        "repetido": 0,
+        "blanco": 0,
+        "sin_linea": 0,
+        "escaneo": 0
+      },
+      "recuadro": {
+        "ok": 5,
+        "sin_recuadro": 0,
+        "modificado": 0,
+        "no_cuadra": 0,
+        "escaneo": 0
+      },
+      "cifras": {
+        "comparables": 5,
+        "coinciden": 3,
+        "difieren": 2
+      },
+      "fechas": {
+        "difieren": 0
+      },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
+      "detalle": [
+        {
+          "archivo": "20260211_CHAPINERO_ACTA_1.pdf",
+          "fecha": "2026-02-11",
+          "ajustes": [
+            "en el formulario quedó como comité 1 y por dentro dice ACTA N° 12"
+          ]
+        },
+        {
+          "archivo": "20260408_CHAPINERO_ACTA_2.pdf",
+          "fecha": "2026-04-08",
+          "ajustes": [
+            "en el formulario quedó como comité 2 y por dentro dice ACTA N° 3",
+            "el formulario reporta 20 asistentes no juveniles y 2 asistentes jóvenes; el acta dice 18 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
+          ]
+        },
+        {
+          "archivo": "20260610_CHAPINERO_ACTA_3.pdf",
+          "fecha": "2026-06-10",
+          "ajustes": [
+            "en el formulario quedó como comité 3 y por dentro dice ACTA N° 4",
+            "el formulario reporta 14 asistentes no juveniles y 2 asistentes jóvenes; el acta dice 16 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
+          ]
+        }
+      ]
+    },
+    {
+      "localidad": "Ciudad Bolívar",
+      "actas": 6,
+      "respuestas_formulario": 6,
+      "sesiones_formulario": 6,
+      "ordinarias": 5,
+      "extraordinarias": 1,
+      "bimestres_cubiertos": 4,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "bimestres_exigidos": 4,
+      "bimestres_faltantes": [],
+      "ordinarias_exigidas": 4,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 29,
+      "planillas": 6,
+      "digitales": 0,
+      "piden_digital": 0,
+      "sesiones_completas": 6,
+      "actas_faltantes": 0,
+      "pendientes_carga": [],
+      "pendientes_imagen": [],
+      "pendientes_sesion": [],
+      "estado": "revisar forma",
+      "limpias": 0,
+      "numeracion": {
+        "ok": 6,
+        "distinto": 0,
+        "repetido": 0,
+        "blanco": 0,
+        "sin_linea": 0,
+        "escaneo": 0
+      },
+      "recuadro": {
+        "ok": 2,
+        "sin_recuadro": 0,
+        "modificado": 0,
+        "no_cuadra": 4,
+        "escaneo": 0
+      },
+      "cifras": {
+        "comparables": 6,
+        "coinciden": 2,
+        "difieren": 4
+      },
+      "fechas": {
+        "difieren": 0
+      },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
+      "detalle": [
+        {
+          "archivo": "20260211_CIUDAD_BOLIVAR_ACTA_1.pdf",
+          "fecha": "2026-02-11",
+          "ajustes": [
+            "el total de jóvenes dice 11 jóvenes y las tres filas de abajo suman 6"
+          ]
+        },
+        {
+          "archivo": "20260314_CIUDAD_BOLIVAR_ACTA_2.pdf",
+          "fecha": "2026-03-14",
+          "ajustes": [
+            "el total de jóvenes dice 6 jóvenes y las tres filas de abajo suman 2",
+            "el formulario reporta 26 asistentes no juveniles y 6 asistentes jóvenes; el acta dice 24 asistentes no juveniles y 6 asistentes jóvenes, hay que definir cuál queda"
+          ]
+        },
+        {
+          "archivo": "20260410_CIUDAD_BOLIVAR_ACTA_3.pdf",
+          "fecha": "2026-04-10",
+          "ajustes": [
+            "el total de jóvenes dice 2 jóvenes y las tres filas de abajo suman 1"
+          ]
+        },
+        {
+          "archivo": "20260617_CIUDAD_BOLIVAR_ACTA_4.pdf",
+          "fecha": "2026-06-17",
+          "ajustes": [
+            "el total de jóvenes dice 2 jóvenes y las tres filas de abajo suman 6",
+            "el formulario reporta 30 asistentes no juveniles y 6 asistentes jóvenes; el acta dice 25 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
+          ]
+        },
+        {
+          "archivo": "20260818_CIUDAD_BOLIVAR_ACTA_5.pdf",
+          "fecha": "2026-08-18",
+          "ajustes": [
+            "el formulario reporta 20 asistentes no juveniles y 2 asistentes jóvenes; el acta dice 22 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
+          ]
+        },
+        {
+          "archivo": "20261001_CIUDAD_BOLIVAR_ACTA_6.pdf",
+          "fecha": "2026-10-01",
+          "ajustes": [
+            "el formulario reporta 20 asistentes no juveniles y 4 asistentes jóvenes; el acta dice 27 asistentes no juveniles y 4 asistentes jóvenes, hay que definir cuál queda"
+          ]
+        }
+      ]
+    },
+    {
+      "localidad": "Engativá",
+      "actas": 6,
+      "respuestas_formulario": 6,
+      "sesiones_formulario": 6,
+      "ordinarias": 4,
+      "extraordinarias": 2,
+      "bimestres_cubiertos": 4,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "bimestres_exigidos": 4,
+      "bimestres_faltantes": [],
+      "ordinarias_exigidas": 4,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 43,
+      "planillas": 6,
+      "digitales": 3,
+      "piden_digital": 3,
+      "sesiones_completas": 6,
+      "actas_faltantes": 0,
+      "pendientes_carga": [],
+      "pendientes_imagen": [],
+      "pendientes_sesion": [],
+      "estado": "revisar forma",
+      "limpias": 0,
+      "numeracion": {
+        "ok": 1,
+        "distinto": 0,
+        "repetido": 0,
+        "blanco": 2,
+        "sin_linea": 3,
+        "escaneo": 0
+      },
+      "recuadro": {
+        "ok": 1,
+        "sin_recuadro": 5,
+        "modificado": 0,
+        "no_cuadra": 0,
+        "escaneo": 0
+      },
+      "cifras": {
+        "comparables": 1,
+        "coinciden": 1,
+        "difieren": 0
+      },
+      "fechas": {
+        "difieren": 0
+      },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
+      "detalle": [
+        {
+          "archivo": "20260225_ENGATIVA_ACTA_1.pdf",
+          "fecha": "2026-02-25",
+          "ajustes": [
+            "falta el recuadro de participantes"
+          ]
+        },
+        {
+          "archivo": "20260429_ENGATIVA_ACTA_2.pdf",
+          "fecha": "2026-04-29",
+          "ajustes": [
+            "al documento le falta la línea ACTA N°",
+            "falta el recuadro de participantes"
+          ]
+        },
+        {
+          "archivo": "20260603_ENGATIVA_ACTA_3.pdf",
+          "fecha": "2026-06-03",
+          "ajustes": [
+            "la línea ACTA N° quedó sin número"
+          ]
+        },
+        {
+          "archivo": "20260625_ENGATIVA_ACTA_4.pdf",
+          "fecha": "2026-06-25",
+          "ajustes": [
+            "la línea ACTA N° quedó sin número",
+            "falta el recuadro de participantes"
+          ]
+        },
+        {
+          "archivo": "20260811_ENGATIVA_ACTA_5.pdf",
+          "fecha": "2026-08-11",
+          "ajustes": [
+            "al documento le falta la línea ACTA N°",
+            "falta el recuadro de participantes"
+          ]
+        },
+        {
+          "archivo": "20260917_ENGATIVA_ACTA_6.pdf",
+          "fecha": "2026-09-17",
+          "ajustes": [
+            "al documento le falta la línea ACTA N°",
+            "falta el recuadro de participantes"
+          ]
+        }
+      ]
+    },
+    {
+      "localidad": "Fontibón",
+      "actas": 7,
+      "respuestas_formulario": 7,
+      "sesiones_formulario": 7,
+      "ordinarias": 5,
+      "extraordinarias": 2,
+      "bimestres_cubiertos": 4,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "bimestres_exigidos": 4,
+      "bimestres_faltantes": [],
+      "ordinarias_exigidas": 4,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 22,
+      "planillas": 6,
+      "digitales": 1,
+      "piden_digital": 2,
+      "sesiones_completas": 6,
+      "actas_faltantes": 0,
+      "pendientes_carga": [
+        "falta el «Registro de asistencia (fotografía o PDF)» del comité 5"
+      ],
+      "pendientes_imagen": [],
+      "pendientes_sesion": [],
+      "estado": "falta cargar",
+      "limpias": 5,
+      "numeracion": {
+        "ok": 6,
+        "distinto": 1,
+        "repetido": 0,
+        "blanco": 0,
+        "sin_linea": 0,
+        "escaneo": 0
+      },
+      "recuadro": {
+        "ok": 7,
+        "sin_recuadro": 0,
+        "modificado": 0,
+        "no_cuadra": 0,
+        "escaneo": 0
+      },
+      "cifras": {
+        "comparables": 7,
+        "coinciden": 6,
+        "difieren": 1
+      },
+      "fechas": {
+        "difieren": 0
+      },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
+      "detalle": [
+        {
+          "archivo": "20260326_FONTIBON_ACTA_2.pdf",
+          "fecha": "2026-03-26",
+          "ajustes": [
+            "el formulario reporta 29 asistentes no juveniles y 7 asistentes jóvenes; el acta dice 22 asistentes no juveniles y 7 asistentes jóvenes, hay que definir cuál queda"
+          ]
+        },
+        {
+          "archivo": "20260723_FONTIBON_ACTA_5.pdf",
+          "fecha": "2026-07-23",
+          "ajustes": [
+            "en el formulario quedó como comité 7 y por dentro dice ACTA N° 5"
+          ]
+        }
+      ]
+    },
+    {
       "localidad": "Kennedy",
       "actas": 8,
       "respuestas_formulario": 8,
@@ -782,120 +808,50 @@
       ]
     },
     {
-      "localidad": "Fontibón",
-      "actas": 7,
-      "respuestas_formulario": 7,
-      "sesiones_formulario": 7,
-      "ordinarias": 5,
-      "extraordinarias": 2,
-      "bimestres_cubiertos": 4,
+      "localidad": "La Candelaria",
+      "actas": 3,
+      "respuestas_formulario": 3,
+      "sesiones_formulario": 3,
+      "ordinarias": 3,
+      "extraordinarias": 0,
+      "bimestres_cubiertos": 2,
       "bimestres_con_ordinaria": [
         1,
-        2,
-        3,
-        4
+        2
       ],
       "bimestres_exigidos": 4,
-      "bimestres_faltantes": [],
-      "ordinarias_exigidas": 4,
-      "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 22,
-      "planillas": 6,
-      "digitales": 1,
-      "piden_digital": 2,
-      "sesiones_completas": 6,
-      "actas_faltantes": 0,
-      "pendientes_carga": [
-        "falta el «Registro de asistencia (fotografía o PDF)» del comité 5"
+      "bimestres_faltantes": [
+        "mayo y junio",
+        "julio y agosto"
       ],
+      "ordinarias_exigidas": 4,
+      "faltan_ordinarias": 1,
+      "dias_sin_sesionar": 38,
+      "planillas": 3,
+      "digitales": 0,
+      "piden_digital": 0,
+      "sesiones_completas": 3,
+      "actas_faltantes": 0,
+      "pendientes_carga": [],
       "pendientes_imagen": [],
-      "pendientes_sesion": [],
-      "estado": "falta cargar",
-      "limpias": 5,
+      "pendientes_sesion": [
+        "queda pendiente una sesión ordinaria para llegar a las 4 que se esperan al corte"
+      ],
+      "estado": "falta sesionar",
+      "limpias": 0,
       "numeracion": {
-        "ok": 6,
-        "distinto": 1,
+        "ok": 3,
+        "distinto": 0,
         "repetido": 0,
         "blanco": 0,
         "sin_linea": 0,
         "escaneo": 0
       },
       "recuadro": {
-        "ok": 7,
-        "sin_recuadro": 0,
+        "ok": 0,
+        "sin_recuadro": 2,
         "modificado": 0,
-        "no_cuadra": 0,
-        "escaneo": 0
-      },
-      "cifras": {
-        "comparables": 7,
-        "coinciden": 6,
-        "difieren": 1
-      },
-      "fechas": {
-        "difieren": 0
-      },
-      "acta_uno": 0,
-      "cifras_invertidas": 0,
-      "detalle": [
-        {
-          "archivo": "20260326_FONTIBON_ACTA_2.pdf",
-          "fecha": "2026-03-26",
-          "ajustes": [
-            "el formulario reporta 29 asistentes no juveniles y 7 asistentes jóvenes; el acta dice 22 asistentes no juveniles y 7 asistentes jóvenes, hay que definir cuál queda"
-          ]
-        },
-        {
-          "archivo": "20260723_FONTIBON_ACTA_5.pdf",
-          "fecha": "2026-07-23",
-          "ajustes": [
-            "en el formulario quedó como comité 7 y por dentro dice ACTA N° 5"
-          ]
-        }
-      ]
-    },
-    {
-      "localidad": "Engativá",
-      "actas": 6,
-      "respuestas_formulario": 6,
-      "sesiones_formulario": 6,
-      "ordinarias": 4,
-      "extraordinarias": 2,
-      "bimestres_cubiertos": 4,
-      "bimestres_con_ordinaria": [
-        1,
-        2,
-        3,
-        4
-      ],
-      "bimestres_exigidos": 4,
-      "bimestres_faltantes": [],
-      "ordinarias_exigidas": 4,
-      "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 43,
-      "planillas": 6,
-      "digitales": 3,
-      "piden_digital": 3,
-      "sesiones_completas": 6,
-      "actas_faltantes": 0,
-      "pendientes_carga": [],
-      "pendientes_imagen": [],
-      "pendientes_sesion": [],
-      "estado": "revisar forma",
-      "limpias": 0,
-      "numeracion": {
-        "ok": 1,
-        "distinto": 0,
-        "repetido": 0,
-        "blanco": 2,
-        "sin_linea": 3,
-        "escaneo": 0
-      },
-      "recuadro": {
-        "ok": 1,
-        "sin_recuadro": 5,
-        "modificado": 0,
-        "no_cuadra": 0,
+        "no_cuadra": 1,
         "escaneo": 0
       },
       "cifras": {
@@ -910,48 +866,415 @@
       "cifras_invertidas": 0,
       "detalle": [
         {
-          "archivo": "20260225_ENGATIVA_ACTA_1.pdf",
-          "fecha": "2026-02-25",
+          "archivo": "20260209_LA_CANDELARIA_ACTA_1.pdf",
+          "fecha": "2026-02-09",
+          "ajustes": [
+            "el total de jóvenes dice 5 jóvenes y las tres filas de abajo suman 0"
+          ]
+        },
+        {
+          "archivo": "20260428_LA_CANDELARIA_ACTA_2.pdf",
+          "fecha": "2026-04-28",
           "ajustes": [
             "falta el recuadro de participantes"
           ]
         },
         {
-          "archivo": "20260429_ENGATIVA_ACTA_2.pdf",
-          "fecha": "2026-04-29",
+          "archivo": "20260922_LA_CANDELARIA_ACTA_3.pdf",
+          "fecha": "2026-09-22",
           "ajustes": [
-            "al documento le falta la línea ACTA N°",
             "falta el recuadro de participantes"
+          ]
+        }
+      ]
+    },
+    {
+      "localidad": "Los Mártires",
+      "actas": 6,
+      "respuestas_formulario": 6,
+      "sesiones_formulario": 6,
+      "ordinarias": 5,
+      "extraordinarias": 1,
+      "bimestres_cubiertos": 4,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "bimestres_exigidos": 4,
+      "bimestres_faltantes": [],
+      "ordinarias_exigidas": 4,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 15,
+      "planillas": 6,
+      "digitales": 1,
+      "piden_digital": 1,
+      "sesiones_completas": 6,
+      "actas_faltantes": 0,
+      "pendientes_carga": [],
+      "pendientes_imagen": [],
+      "pendientes_sesion": [],
+      "estado": "revisar forma",
+      "limpias": 3,
+      "numeracion": {
+        "ok": 4,
+        "distinto": 1,
+        "repetido": 0,
+        "blanco": 1,
+        "sin_linea": 0,
+        "escaneo": 0
+      },
+      "recuadro": {
+        "ok": 5,
+        "sin_recuadro": 0,
+        "modificado": 0,
+        "no_cuadra": 1,
+        "escaneo": 0
+      },
+      "cifras": {
+        "comparables": 6,
+        "coinciden": 5,
+        "difieren": 1
+      },
+      "fechas": {
+        "difieren": 1
+      },
+      "acta_uno": 1,
+      "cifras_invertidas": 0,
+      "detalle": [
+        {
+          "archivo": "20260119_MARTIRES_ACTA_1.pdf",
+          "fecha": "2026-01-19",
+          "ajustes": [
+            "el total de jóvenes dice 22 jóvenes y las tres filas de abajo suman 25",
+            "el formulario reporta 25 asistentes no juveniles y 19 asistentes jóvenes; el acta dice 25 asistentes no juveniles y 22 asistentes jóvenes, hay que definir cuál queda",
+            "el nombre del archivo dice que la sesión fue el 19 de enero de 2026 y en el formulario quedó el 19 de febrero de 2026, hay que definir cuál es la fecha real y dejarla igual en los dos"
           ]
         },
         {
-          "archivo": "20260603_ENGATIVA_ACTA_3.pdf",
-          "fecha": "2026-06-03",
+          "archivo": "20260319_MARTIRES_ACTA_2.pdf",
+          "fecha": "2026-03-19",
+          "ajustes": [
+            "en el formulario quedó como comité 2 y por dentro dice ACTA N° 1"
+          ]
+        },
+        {
+          "archivo": "20260423_MARTIRES_ACTA_3.pdf",
+          "fecha": "2026-04-23",
           "ajustes": [
             "la línea ACTA N° quedó sin número"
           ]
+        }
+      ]
+    },
+    {
+      "localidad": "Puente Aranda",
+      "actas": 8,
+      "respuestas_formulario": 8,
+      "sesiones_formulario": 8,
+      "ordinarias": 5,
+      "extraordinarias": 3,
+      "bimestres_cubiertos": 4,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "bimestres_exigidos": 4,
+      "bimestres_faltantes": [],
+      "ordinarias_exigidas": 4,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 16,
+      "planillas": 8,
+      "digitales": 5,
+      "piden_digital": 5,
+      "sesiones_completas": 8,
+      "actas_faltantes": 0,
+      "pendientes_carga": [],
+      "pendientes_imagen": [],
+      "pendientes_sesion": [],
+      "estado": "al día",
+      "limpias": 8,
+      "numeracion": {
+        "ok": 8,
+        "distinto": 0,
+        "repetido": 0,
+        "blanco": 0,
+        "sin_linea": 0,
+        "escaneo": 0
+      },
+      "recuadro": {
+        "ok": 8,
+        "sin_recuadro": 0,
+        "modificado": 0,
+        "no_cuadra": 0,
+        "escaneo": 0
+      },
+      "cifras": {
+        "comparables": 8,
+        "coinciden": 8,
+        "difieren": 0
+      },
+      "fechas": {
+        "difieren": 0
+      },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
+      "detalle": []
+    },
+    {
+      "localidad": "Rafael Uribe Uribe",
+      "actas": 6,
+      "respuestas_formulario": 6,
+      "sesiones_formulario": 6,
+      "ordinarias": 5,
+      "extraordinarias": 1,
+      "bimestres_cubiertos": 4,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "bimestres_exigidos": 4,
+      "bimestres_faltantes": [],
+      "ordinarias_exigidas": 4,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 8,
+      "planillas": 6,
+      "digitales": 1,
+      "piden_digital": 1,
+      "sesiones_completas": 6,
+      "actas_faltantes": 0,
+      "pendientes_carga": [],
+      "pendientes_imagen": [],
+      "pendientes_sesion": [],
+      "estado": "revisar forma",
+      "limpias": 2,
+      "numeracion": {
+        "ok": 4,
+        "distinto": 2,
+        "repetido": 0,
+        "blanco": 0,
+        "sin_linea": 0,
+        "escaneo": 0
+      },
+      "recuadro": {
+        "ok": 5,
+        "sin_recuadro": 0,
+        "modificado": 0,
+        "no_cuadra": 1,
+        "escaneo": 0
+      },
+      "cifras": {
+        "comparables": 6,
+        "coinciden": 5,
+        "difieren": 1
+      },
+      "fechas": {
+        "difieren": 0
+      },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
+      "detalle": [
+        {
+          "archivo": "20260319_RAFAEL_URIBE_URIBE_ACTA_2.pdf",
+          "fecha": "2026-03-19",
+          "ajustes": [
+            "el formulario reporta 23 asistentes no juveniles y 13 asistentes jóvenes; el acta dice 11 asistentes no juveniles y 13 asistentes jóvenes, hay que definir cuál queda"
+          ]
         },
         {
-          "archivo": "20260625_ENGATIVA_ACTA_4.pdf",
-          "fecha": "2026-06-25",
+          "archivo": "20260416_RAFAEL_URIBE_URIBE_ACTA_3.pdf",
+          "fecha": "2026-04-16",
           "ajustes": [
-            "la línea ACTA N° quedó sin número",
+            "el total de jóvenes dice 13 jóvenes y las tres filas de abajo suman 2"
+          ]
+        },
+        {
+          "archivo": "20260618_RAFAEL_URIBE_URIBE_ACTA_4.pdf",
+          "fecha": "2026-06-18",
+          "ajustes": [
+            "en el formulario quedó como comité 4 y por dentro dice ACTA N° 3"
+          ]
+        },
+        {
+          "archivo": "20260820_RAFAEL_URIBE_URIBE_ACTA_4.pdf",
+          "fecha": "2026-08-20",
+          "ajustes": [
+            "en el formulario quedó como comité 5 y por dentro dice ACTA N° 4"
+          ]
+        }
+      ]
+    },
+    {
+      "localidad": "San Cristóbal",
+      "actas": 9,
+      "respuestas_formulario": 9,
+      "sesiones_formulario": 9,
+      "ordinarias": 5,
+      "extraordinarias": 4,
+      "bimestres_cubiertos": 4,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "bimestres_exigidos": 4,
+      "bimestres_faltantes": [],
+      "ordinarias_exigidas": 4,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 9,
+      "planillas": 9,
+      "digitales": 5,
+      "piden_digital": 5,
+      "sesiones_completas": 9,
+      "actas_faltantes": 0,
+      "pendientes_carga": [],
+      "pendientes_imagen": [],
+      "pendientes_sesion": [],
+      "estado": "revisar forma",
+      "limpias": 5,
+      "numeracion": {
+        "ok": 9,
+        "distinto": 0,
+        "repetido": 0,
+        "blanco": 0,
+        "sin_linea": 0,
+        "escaneo": 0
+      },
+      "recuadro": {
+        "ok": 7,
+        "sin_recuadro": 0,
+        "modificado": 1,
+        "no_cuadra": 1,
+        "escaneo": 0
+      },
+      "cifras": {
+        "comparables": 8,
+        "coinciden": 6,
+        "difieren": 2
+      },
+      "fechas": {
+        "difieren": 0
+      },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
+      "detalle": [
+        {
+          "archivo": "20260218_SANCRISTOBAL_ACTA_1.pdf",
+          "fecha": "2026-02-18",
+          "ajustes": [
+            "la fila de total de jóvenes del recuadro quedó sin número"
+          ]
+        },
+        {
+          "archivo": "20260415_SAN_CRISTOBAL_ACTA_3.pdf",
+          "fecha": "2026-04-15",
+          "ajustes": [
+            "el formulario reporta 12 asistentes no juveniles y 1 asistente joven; el acta dice 13 asistentes no juveniles y 1 asistente joven, hay que definir cuál queda"
+          ]
+        },
+        {
+          "archivo": "20260617_SAN_CRISTOBAL_ACTA_5.pdf",
+          "fecha": "2026-06-17",
+          "ajustes": [
+            "el total de jóvenes dice 3 jóvenes y las tres filas de abajo suman 2"
+          ]
+        },
+        {
+          "archivo": "20260916_SAN_CRISTOBAL_ACTA_8.pdf",
+          "fecha": "2026-09-16",
+          "ajustes": [
+            "el formulario reporta 11 asistentes no juveniles y 11 asistentes jóvenes; el acta dice 11 asistentes no juveniles y 1 asistente joven, hay que definir cuál queda"
+          ]
+        }
+      ]
+    },
+    {
+      "localidad": "Santa Fe",
+      "actas": 4,
+      "respuestas_formulario": 4,
+      "sesiones_formulario": 4,
+      "ordinarias": 4,
+      "extraordinarias": 0,
+      "bimestres_cubiertos": 3,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        4
+      ],
+      "bimestres_exigidos": 4,
+      "bimestres_faltantes": [
+        "mayo y junio"
+      ],
+      "ordinarias_exigidas": 4,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 39,
+      "planillas": 4,
+      "digitales": 0,
+      "piden_digital": 0,
+      "sesiones_completas": 4,
+      "actas_faltantes": 0,
+      "pendientes_carga": [],
+      "pendientes_imagen": [],
+      "pendientes_sesion": [],
+      "estado": "revisar forma",
+      "limpias": 0,
+      "numeracion": {
+        "ok": 4,
+        "distinto": 0,
+        "repetido": 0,
+        "blanco": 0,
+        "sin_linea": 0,
+        "escaneo": 0
+      },
+      "recuadro": {
+        "ok": 0,
+        "sin_recuadro": 3,
+        "modificado": 0,
+        "no_cuadra": 1,
+        "escaneo": 0
+      },
+      "cifras": {
+        "comparables": 1,
+        "coinciden": 1,
+        "difieren": 0
+      },
+      "fechas": {
+        "difieren": 0
+      },
+      "acta_uno": 0,
+      "cifras_invertidas": 0,
+      "detalle": [
+        {
+          "archivo": "20260216_SANTAFE_ACTA_1.pdf",
+          "fecha": "2026-02-16",
+          "ajustes": [
+            "el total de jóvenes dice 5 jóvenes y las tres filas de abajo suman 0"
+          ]
+        },
+        {
+          "archivo": "20260427_SANTAFE_ACTA_2.pdf",
+          "fecha": "2026-04-27",
+          "ajustes": [
             "falta el recuadro de participantes"
           ]
         },
         {
-          "archivo": "20260811_ENGATIVA_ACTA_5.pdf",
-          "fecha": "2026-08-11",
+          "archivo": "20260706_SANTAFE_ACTA_3.pdf",
+          "fecha": "2026-07-06",
           "ajustes": [
-            "al documento le falta la línea ACTA N°",
             "falta el recuadro de participantes"
           ]
         },
         {
-          "archivo": "20260917_ENGATIVA_ACTA_6.pdf",
-          "fecha": "2026-09-17",
+          "archivo": "20260921_SANTAFE_ACTA_4.pdf",
+          "fecha": "2026-09-21",
           "ajustes": [
-            "al documento le falta la línea ACTA N°",
             "falta el recuadro de participantes"
           ]
         }
@@ -1067,53 +1390,54 @@
       ]
     },
     {
-      "localidad": "Barrios Unidos",
-      "actas": 9,
-      "respuestas_formulario": 9,
-      "sesiones_formulario": 9,
-      "ordinarias": 5,
-      "extraordinarias": 4,
-      "bimestres_cubiertos": 4,
+      "localidad": "Sumapaz",
+      "actas": 5,
+      "respuestas_formulario": 6,
+      "sesiones_formulario": 5,
+      "ordinarias": 4,
+      "extraordinarias": 1,
+      "bimestres_cubiertos": 3,
       "bimestres_con_ordinaria": [
         1,
-        2,
         3,
         4
       ],
       "bimestres_exigidos": 4,
-      "bimestres_faltantes": [],
+      "bimestres_faltantes": [
+        "marzo y abril"
+      ],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 8,
-      "planillas": 9,
-      "digitales": 3,
-      "piden_digital": 3,
-      "sesiones_completas": 9,
+      "dias_sin_sesionar": 27,
+      "planillas": 5,
+      "digitales": 4,
+      "piden_digital": 4,
+      "sesiones_completas": 5,
       "actas_faltantes": 0,
       "pendientes_carga": [],
       "pendientes_imagen": [],
       "pendientes_sesion": [],
       "estado": "revisar forma",
-      "limpias": 1,
+      "limpias": 4,
       "numeracion": {
-        "ok": 6,
+        "ok": 5,
         "distinto": 0,
-        "repetido": 3,
+        "repetido": 0,
         "blanco": 0,
         "sin_linea": 0,
         "escaneo": 0
       },
       "recuadro": {
-        "ok": 7,
+        "ok": 5,
         "sin_recuadro": 0,
         "modificado": 0,
-        "no_cuadra": 2,
+        "no_cuadra": 0,
         "escaneo": 0
       },
       "cifras": {
-        "comparables": 9,
-        "coinciden": 3,
-        "difieren": 6
+        "comparables": 5,
+        "coinciden": 4,
+        "difieren": 1
       },
       "fechas": {
         "difieren": 0
@@ -1122,62 +1446,10 @@
       "cifras_invertidas": 0,
       "detalle": [
         {
-          "archivo": "20260226_BARRIOS_UNIDOS_ACTA_1.pdf",
-          "fecha": "2026-02-26",
+          "archivo": "20260224_SUMAPAZ_ACTA_1.pdf",
+          "fecha": "2026-02-24",
           "ajustes": [
-            "el formulario reporta 19 asistentes no juveniles y 7 asistentes jóvenes; el acta dice 12 asistentes no juveniles y 7 asistentes jóvenes, hay que definir cuál queda"
-          ]
-        },
-        {
-          "archivo": "20260319_BARRIOS_UNIDOS_ACTA_2.pdf",
-          "fecha": "2026-03-19",
-          "ajustes": [
-            "el formulario reporta 13 asistentes no juveniles y 5 asistentes jóvenes; el acta dice 8 asistentes no juveniles y 5 asistentes jóvenes, hay que definir cuál queda"
-          ]
-        },
-        {
-          "archivo": "20260326_BARRIOS_UNIDOS_ACTA_3.pdf",
-          "fecha": "2026-03-26",
-          "ajustes": [
-            "el formulario reporta 7 asistentes no juveniles y 2 asistentes jóvenes; el acta dice 5 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
-          ]
-        },
-        {
-          "archivo": "20260423_BARRIOS_UNIDOS_ACTA_4.pdf",
-          "fecha": "2026-04-23",
-          "ajustes": [
-            "el formulario reporta 13 asistentes no juveniles y 3 asistentes jóvenes; el acta dice 13 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
-          ]
-        },
-        {
-          "archivo": "20260716_BARRIOS_UNIDOS_ACTA_6.docx",
-          "fecha": "2026-07-16",
-          "ajustes": [
-            "el formulario reporta 12 asistentes no juveniles y 3 asistentes jóvenes; el acta dice 9 asistentes no juveniles y 3 asistentes jóvenes, hay que definir cuál queda"
-          ]
-        },
-        {
-          "archivo": "20260827_BARRIOS_UNIDOS_ACTA_7.pdf",
-          "fecha": "2026-08-27",
-          "ajustes": [
-            "por dentro dice ACTA N° 4, el mismo número del acta del 23 de abril de 2026; la numeración tiene que seguir el orden de las sesiones",
-            "el total de jóvenes dice 4 jóvenes y las tres filas de abajo suman 5"
-          ]
-        },
-        {
-          "archivo": "20260924_BARRIOS_UNIDOS_ACTA_8.pdf",
-          "fecha": "2026-09-24",
-          "ajustes": [
-            "por dentro dice ACTA N° 4, el mismo número del acta del 23 de abril de 2026; la numeración tiene que seguir el orden de las sesiones"
-          ]
-        },
-        {
-          "archivo": "20261022_BARRIOS_UNIDOS_ACTA_9.pdf",
-          "fecha": "2026-10-22",
-          "ajustes": [
-            "por dentro dice ACTA N° 5, el mismo número del acta del 25 de junio de 2026; la numeración tiene que seguir el orden de las sesiones",
-            "el total de jóvenes dice 9 jóvenes y las tres filas de abajo suman 4",
-            "el formulario reporta 13 asistentes no juveniles y 9 asistentes jóvenes; el acta dice 10 asistentes no juveniles y 9 asistentes jóvenes, hay que definir cuál queda"
+            "el formulario reporta 18 asistentes no juveniles y 5 asistentes jóvenes; el acta dice 23 asistentes no juveniles y 5 asistentes jóvenes, hay que definir cuál queda"
           ]
         }
       ]
@@ -1270,12 +1542,12 @@
       ]
     },
     {
-      "localidad": "Los Mártires",
+      "localidad": "Tunjuelito",
       "actas": 6,
       "respuestas_formulario": 6,
       "sesiones_formulario": 6,
-      "ordinarias": 5,
-      "extraordinarias": 1,
+      "ordinarias": 4,
+      "extraordinarias": 2,
       "bimestres_cubiertos": 4,
       "bimestres_con_ordinaria": [
         1,
@@ -1287,375 +1559,19 @@
       "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 15,
+      "dias_sin_sesionar": 73,
       "planillas": 6,
-      "digitales": 1,
-      "piden_digital": 1,
+      "digitales": 2,
+      "piden_digital": 3,
       "sesiones_completas": 6,
-      "actas_faltantes": 0,
-      "pendientes_carga": [],
-      "pendientes_imagen": [],
-      "pendientes_sesion": [],
-      "estado": "revisar forma",
-      "limpias": 3,
-      "numeracion": {
-        "ok": 4,
-        "distinto": 1,
-        "repetido": 0,
-        "blanco": 1,
-        "sin_linea": 0,
-        "escaneo": 0
-      },
-      "recuadro": {
-        "ok": 5,
-        "sin_recuadro": 0,
-        "modificado": 0,
-        "no_cuadra": 1,
-        "escaneo": 0
-      },
-      "cifras": {
-        "comparables": 6,
-        "coinciden": 5,
-        "difieren": 1
-      },
-      "fechas": {
-        "difieren": 1
-      },
-      "acta_uno": 1,
-      "cifras_invertidas": 0,
-      "detalle": [
-        {
-          "archivo": "20260119_MARTIRES_ACTA_1.pdf",
-          "fecha": "2026-01-19",
-          "ajustes": [
-            "el total de jóvenes dice 22 jóvenes y las tres filas de abajo suman 25",
-            "el formulario reporta 25 asistentes no juveniles y 19 asistentes jóvenes; el acta dice 25 asistentes no juveniles y 22 asistentes jóvenes, hay que definir cuál queda",
-            "el nombre del archivo dice que la sesión fue el 19 de enero de 2026 y en el formulario quedó el 19 de febrero de 2026, hay que definir cuál es la fecha real y dejarla igual en los dos"
-          ]
-        },
-        {
-          "archivo": "20260319_MARTIRES_ACTA_2.pdf",
-          "fecha": "2026-03-19",
-          "ajustes": [
-            "en el formulario quedó como comité 2 y por dentro dice ACTA N° 1"
-          ]
-        },
-        {
-          "archivo": "20260423_MARTIRES_ACTA_3.pdf",
-          "fecha": "2026-04-23",
-          "ajustes": [
-            "la línea ACTA N° quedó sin número"
-          ]
-        }
-      ]
-    },
-    {
-      "localidad": "Antonio Nariño",
-      "actas": 8,
-      "respuestas_formulario": 8,
-      "sesiones_formulario": 8,
-      "ordinarias": 5,
-      "extraordinarias": 3,
-      "bimestres_cubiertos": 4,
-      "bimestres_con_ordinaria": [
-        1,
-        2,
-        3,
-        4
-      ],
-      "bimestres_exigidos": 4,
-      "bimestres_faltantes": [],
-      "ordinarias_exigidas": 4,
-      "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 3,
-      "planillas": 8,
-      "digitales": 6,
-      "piden_digital": 6,
-      "sesiones_completas": 8,
-      "actas_faltantes": 0,
-      "pendientes_carga": [],
-      "pendientes_imagen": [],
-      "pendientes_sesion": [],
-      "estado": "al día",
-      "limpias": 8,
-      "numeracion": {
-        "ok": 8,
-        "distinto": 0,
-        "repetido": 0,
-        "blanco": 0,
-        "sin_linea": 0,
-        "escaneo": 0
-      },
-      "recuadro": {
-        "ok": 8,
-        "sin_recuadro": 0,
-        "modificado": 0,
-        "no_cuadra": 0,
-        "escaneo": 0
-      },
-      "cifras": {
-        "comparables": 8,
-        "coinciden": 8,
-        "difieren": 0
-      },
-      "fechas": {
-        "difieren": 0
-      },
-      "acta_uno": 0,
-      "cifras_invertidas": 0,
-      "detalle": []
-    },
-    {
-      "localidad": "Puente Aranda",
-      "actas": 8,
-      "respuestas_formulario": 8,
-      "sesiones_formulario": 8,
-      "ordinarias": 5,
-      "extraordinarias": 3,
-      "bimestres_cubiertos": 4,
-      "bimestres_con_ordinaria": [
-        1,
-        2,
-        3,
-        4
-      ],
-      "bimestres_exigidos": 4,
-      "bimestres_faltantes": [],
-      "ordinarias_exigidas": 4,
-      "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 16,
-      "planillas": 8,
-      "digitales": 5,
-      "piden_digital": 5,
-      "sesiones_completas": 8,
-      "actas_faltantes": 0,
-      "pendientes_carga": [],
-      "pendientes_imagen": [],
-      "pendientes_sesion": [],
-      "estado": "al día",
-      "limpias": 8,
-      "numeracion": {
-        "ok": 8,
-        "distinto": 0,
-        "repetido": 0,
-        "blanco": 0,
-        "sin_linea": 0,
-        "escaneo": 0
-      },
-      "recuadro": {
-        "ok": 8,
-        "sin_recuadro": 0,
-        "modificado": 0,
-        "no_cuadra": 0,
-        "escaneo": 0
-      },
-      "cifras": {
-        "comparables": 8,
-        "coinciden": 8,
-        "difieren": 0
-      },
-      "fechas": {
-        "difieren": 0
-      },
-      "acta_uno": 0,
-      "cifras_invertidas": 0,
-      "detalle": []
-    },
-    {
-      "localidad": "La Candelaria",
-      "actas": 3,
-      "respuestas_formulario": 3,
-      "sesiones_formulario": 3,
-      "ordinarias": 3,
-      "extraordinarias": 0,
-      "bimestres_cubiertos": 2,
-      "bimestres_con_ordinaria": [
-        1,
-        2
-      ],
-      "bimestres_exigidos": 4,
-      "bimestres_faltantes": [
-        "mayo y junio",
-        "julio y agosto"
-      ],
-      "ordinarias_exigidas": 4,
-      "faltan_ordinarias": 1,
-      "dias_sin_sesionar": 38,
-      "planillas": 3,
-      "digitales": 0,
-      "piden_digital": 0,
-      "sesiones_completas": 3,
       "actas_faltantes": 0,
       "pendientes_carga": [],
       "pendientes_imagen": [],
       "pendientes_sesion": [
-        "queda pendiente una sesión ordinaria para llegar a las 4 que se esperan al corte"
+        "lleva 73 días sin reunirse"
       ],
-      "estado": "falta sesionar",
-      "limpias": 0,
-      "numeracion": {
-        "ok": 3,
-        "distinto": 0,
-        "repetido": 0,
-        "blanco": 0,
-        "sin_linea": 0,
-        "escaneo": 0
-      },
-      "recuadro": {
-        "ok": 0,
-        "sin_recuadro": 2,
-        "modificado": 0,
-        "no_cuadra": 1,
-        "escaneo": 0
-      },
-      "cifras": {
-        "comparables": 1,
-        "coinciden": 1,
-        "difieren": 0
-      },
-      "fechas": {
-        "difieren": 0
-      },
-      "acta_uno": 0,
-      "cifras_invertidas": 0,
-      "detalle": [
-        {
-          "archivo": "20260209_LA_CANDELARIA_ACTA_1.pdf",
-          "fecha": "2026-02-09",
-          "ajustes": [
-            "el total de jóvenes dice 5 jóvenes y las tres filas de abajo suman 0"
-          ]
-        },
-        {
-          "archivo": "20260428_LA_CANDELARIA_ACTA_2.pdf",
-          "fecha": "2026-04-28",
-          "ajustes": [
-            "falta el recuadro de participantes"
-          ]
-        },
-        {
-          "archivo": "20260922_LA_CANDELARIA_ACTA_3.pdf",
-          "fecha": "2026-09-22",
-          "ajustes": [
-            "falta el recuadro de participantes"
-          ]
-        }
-      ]
-    },
-    {
-      "localidad": "Rafael Uribe Uribe",
-      "actas": 6,
-      "respuestas_formulario": 6,
-      "sesiones_formulario": 6,
-      "ordinarias": 5,
-      "extraordinarias": 1,
-      "bimestres_cubiertos": 4,
-      "bimestres_con_ordinaria": [
-        1,
-        2,
-        3,
-        4
-      ],
-      "bimestres_exigidos": 4,
-      "bimestres_faltantes": [],
-      "ordinarias_exigidas": 4,
-      "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 8,
-      "planillas": 6,
-      "digitales": 1,
-      "piden_digital": 1,
-      "sesiones_completas": 6,
-      "actas_faltantes": 0,
-      "pendientes_carga": [],
-      "pendientes_imagen": [],
-      "pendientes_sesion": [],
       "estado": "revisar forma",
-      "limpias": 2,
-      "numeracion": {
-        "ok": 4,
-        "distinto": 2,
-        "repetido": 0,
-        "blanco": 0,
-        "sin_linea": 0,
-        "escaneo": 0
-      },
-      "recuadro": {
-        "ok": 5,
-        "sin_recuadro": 0,
-        "modificado": 0,
-        "no_cuadra": 1,
-        "escaneo": 0
-      },
-      "cifras": {
-        "comparables": 6,
-        "coinciden": 5,
-        "difieren": 1
-      },
-      "fechas": {
-        "difieren": 0
-      },
-      "acta_uno": 0,
-      "cifras_invertidas": 0,
-      "detalle": [
-        {
-          "archivo": "20260319_RAFAEL_URIBE_URIBE_ACTA_2.pdf",
-          "fecha": "2026-03-19",
-          "ajustes": [
-            "el formulario reporta 23 asistentes no juveniles y 13 asistentes jóvenes; el acta dice 11 asistentes no juveniles y 13 asistentes jóvenes, hay que definir cuál queda"
-          ]
-        },
-        {
-          "archivo": "20260416_RAFAEL_URIBE_URIBE_ACTA_3.pdf",
-          "fecha": "2026-04-16",
-          "ajustes": [
-            "el total de jóvenes dice 13 jóvenes y las tres filas de abajo suman 2"
-          ]
-        },
-        {
-          "archivo": "20260618_RAFAEL_URIBE_URIBE_ACTA_4.pdf",
-          "fecha": "2026-06-18",
-          "ajustes": [
-            "en el formulario quedó como comité 4 y por dentro dice ACTA N° 3"
-          ]
-        },
-        {
-          "archivo": "20260820_RAFAEL_URIBE_URIBE_ACTA_4.pdf",
-          "fecha": "2026-08-20",
-          "ajustes": [
-            "en el formulario quedó como comité 5 y por dentro dice ACTA N° 4"
-          ]
-        }
-      ]
-    },
-    {
-      "localidad": "Ciudad Bolívar",
-      "actas": 6,
-      "respuestas_formulario": 6,
-      "sesiones_formulario": 6,
-      "ordinarias": 5,
-      "extraordinarias": 1,
-      "bimestres_cubiertos": 4,
-      "bimestres_con_ordinaria": [
-        1,
-        2,
-        3,
-        4
-      ],
-      "bimestres_exigidos": 4,
-      "bimestres_faltantes": [],
-      "ordinarias_exigidas": 4,
-      "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 29,
-      "planillas": 6,
-      "digitales": 0,
-      "piden_digital": 0,
-      "sesiones_completas": 6,
-      "actas_faltantes": 0,
-      "pendientes_carga": [],
-      "pendientes_imagen": [],
-      "pendientes_sesion": [],
-      "estado": "revisar forma",
-      "limpias": 0,
+      "limpias": 5,
       "numeracion": {
         "ok": 6,
         "distinto": 0,
@@ -1665,16 +1581,16 @@
         "escaneo": 0
       },
       "recuadro": {
-        "ok": 2,
+        "ok": 6,
         "sin_recuadro": 0,
         "modificado": 0,
-        "no_cuadra": 4,
+        "no_cuadra": 0,
         "escaneo": 0
       },
       "cifras": {
         "comparables": 6,
-        "coinciden": 2,
-        "difieren": 4
+        "coinciden": 5,
+        "difieren": 1
       },
       "fechas": {
         "difieren": 0
@@ -1683,94 +1599,162 @@
       "cifras_invertidas": 0,
       "detalle": [
         {
-          "archivo": "20260211_CIUDAD_BOLIVAR_ACTA_1.pdf",
-          "fecha": "2026-02-11",
+          "archivo": "20260421_TUNJUELITO_ACTA_3.pdf",
+          "fecha": "2026-04-21",
           "ajustes": [
-            "el total de jóvenes dice 11 jóvenes y las tres filas de abajo suman 6"
-          ]
-        },
-        {
-          "archivo": "20260314_CIUDAD_BOLIVAR_ACTA_2.pdf",
-          "fecha": "2026-03-14",
-          "ajustes": [
-            "el total de jóvenes dice 6 jóvenes y las tres filas de abajo suman 2",
-            "el formulario reporta 26 asistentes no juveniles y 6 asistentes jóvenes; el acta dice 24 asistentes no juveniles y 6 asistentes jóvenes, hay que definir cuál queda"
-          ]
-        },
-        {
-          "archivo": "20260410_CIUDAD_BOLIVAR_ACTA_3.pdf",
-          "fecha": "2026-04-10",
-          "ajustes": [
-            "el total de jóvenes dice 2 jóvenes y las tres filas de abajo suman 1"
-          ]
-        },
-        {
-          "archivo": "20260617_CIUDAD_BOLIVAR_ACTA_4.pdf",
-          "fecha": "2026-06-17",
-          "ajustes": [
-            "el total de jóvenes dice 2 jóvenes y las tres filas de abajo suman 6",
-            "el formulario reporta 30 asistentes no juveniles y 6 asistentes jóvenes; el acta dice 25 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
-          ]
-        },
-        {
-          "archivo": "20260818_CIUDAD_BOLIVAR_ACTA_5.pdf",
-          "fecha": "2026-08-18",
-          "ajustes": [
-            "el formulario reporta 20 asistentes no juveniles y 2 asistentes jóvenes; el acta dice 22 asistentes no juveniles y 2 asistentes jóvenes, hay que definir cuál queda"
-          ]
-        },
-        {
-          "archivo": "20261001_CIUDAD_BOLIVAR_ACTA_6.pdf",
-          "fecha": "2026-10-01",
-          "ajustes": [
-            "el formulario reporta 20 asistentes no juveniles y 4 asistentes jóvenes; el acta dice 27 asistentes no juveniles y 4 asistentes jóvenes, hay que definir cuál queda"
+            "el formulario reporta 16 asistentes no juveniles y 4 asistentes jóvenes; el acta dice 15 asistentes no juveniles y 4 asistentes jóvenes, hay que definir cuál queda"
           ]
         }
       ]
     },
     {
-      "localidad": "Sumapaz",
-      "actas": 5,
-      "respuestas_formulario": 6,
-      "sesiones_formulario": 5,
-      "ordinarias": 4,
-      "extraordinarias": 1,
-      "bimestres_cubiertos": 3,
+      "localidad": "Usaquén",
+      "actas": 7,
+      "respuestas_formulario": 7,
+      "sesiones_formulario": 7,
+      "ordinarias": 5,
+      "extraordinarias": 2,
+      "bimestres_cubiertos": 4,
       "bimestres_con_ordinaria": [
         1,
+        2,
         3,
         4
       ],
       "bimestres_exigidos": 4,
-      "bimestres_faltantes": [
-        "marzo y abril"
-      ],
+      "bimestres_faltantes": [],
       "ordinarias_exigidas": 4,
       "faltan_ordinarias": 0,
-      "dias_sin_sesionar": 27,
-      "planillas": 5,
-      "digitales": 4,
-      "piden_digital": 4,
-      "sesiones_completas": 5,
+      "dias_sin_sesionar": 10,
+      "planillas": 6,
+      "digitales": 2,
+      "piden_digital": 2,
+      "sesiones_completas": 6,
       "actas_faltantes": 0,
-      "pendientes_carga": [],
+      "pendientes_carga": [
+        "falta el «Registro de asistencia (fotografía o PDF)» del comité 6"
+      ],
       "pendientes_imagen": [],
       "pendientes_sesion": [],
-      "estado": "revisar forma",
-      "limpias": 4,
+      "estado": "falta cargar",
+      "limpias": 1,
       "numeracion": {
-        "ok": 5,
-        "distinto": 0,
+        "ok": 2,
+        "distinto": 5,
         "repetido": 0,
         "blanco": 0,
         "sin_linea": 0,
         "escaneo": 0
       },
       "recuadro": {
-        "ok": 5,
+        "ok": 7,
         "sin_recuadro": 0,
         "modificado": 0,
         "no_cuadra": 0,
+        "escaneo": 0
+      },
+      "cifras": {
+        "comparables": 7,
+        "coinciden": 5,
+        "difieren": 2
+      },
+      "fechas": {
+        "difieren": 0
+      },
+      "acta_uno": 5,
+      "cifras_invertidas": 0,
+      "detalle": [
+        {
+          "archivo": "20260224_USAQUEN_ACTA_1.pdf",
+          "fecha": "2026-02-24",
+          "ajustes": [
+            "el formulario reporta 21 asistentes no juveniles y 1 asistente joven; el acta dice 22 asistentes no juveniles y 1 asistente joven, hay que definir cuál queda"
+          ]
+        },
+        {
+          "archivo": "20260318_USAQUEN_ACTA_2.pdf",
+          "fecha": "2026-03-18",
+          "ajustes": [
+            "en el formulario quedó como comité 2 y por dentro dice ACTA N° 1"
+          ]
+        },
+        {
+          "archivo": "20260421_USAQUEN_ACTA_3.pdf",
+          "fecha": "2026-04-21",
+          "ajustes": [
+            "en el formulario quedó como comité 3 y por dentro dice ACTA N° 1"
+          ]
+        },
+        {
+          "archivo": "20260519_USAQUEN_ACTA_4.pdf",
+          "fecha": "2026-05-19",
+          "ajustes": [
+            "en el formulario quedó como comité 4 y por dentro dice ACTA N° 1"
+          ]
+        },
+        {
+          "archivo": "20260616_USAQUEN_ACTA_5.pdf",
+          "fecha": "2026-06-16",
+          "ajustes": [
+            "en el formulario quedó como comité 5 y por dentro dice ACTA N° 1"
+          ]
+        },
+        {
+          "archivo": "20260819_USAQUEN_ACTA_6.pdf",
+          "fecha": "2026-08-19",
+          "ajustes": [
+            "en el formulario quedó como comité 6 y por dentro dice ACTA N° 1",
+            "el formulario reporta 11 asistentes no juveniles y 7 asistentes jóvenes; el acta dice 11 asistentes no juveniles y 6 asistentes jóvenes, hay que definir cuál queda"
+          ]
+        }
+      ]
+    },
+    {
+      "localidad": "Usme",
+      "actas": 6,
+      "respuestas_formulario": 6,
+      "sesiones_formulario": 6,
+      "ordinarias": 4,
+      "extraordinarias": 2,
+      "bimestres_cubiertos": 4,
+      "bimestres_con_ordinaria": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "bimestres_exigidos": 4,
+      "bimestres_faltantes": [],
+      "ordinarias_exigidas": 4,
+      "faltan_ordinarias": 0,
+      "dias_sin_sesionar": 70,
+      "planillas": 5,
+      "digitales": 1,
+      "piden_digital": 2,
+      "sesiones_completas": 5,
+      "actas_faltantes": 0,
+      "pendientes_carga": [
+        "falta el «Registro de asistencia (fotografía o PDF)» del comité 5"
+      ],
+      "pendientes_imagen": [],
+      "pendientes_sesion": [
+        "lleva 70 días sin reunirse"
+      ],
+      "estado": "falta cargar",
+      "limpias": 3,
+      "numeracion": {
+        "ok": 5,
+        "distinto": 0,
+        "repetido": 1,
+        "blanco": 0,
+        "sin_linea": 0,
+        "escaneo": 0
+      },
+      "recuadro": {
+        "ok": 3,
+        "sin_recuadro": 0,
+        "modificado": 1,
+        "no_cuadra": 2,
         "escaneo": 0
       },
       "cifras": {
@@ -1785,10 +1769,26 @@
       "cifras_invertidas": 0,
       "detalle": [
         {
-          "archivo": "20260224_SUMAPAZ_ACTA_1.pdf",
-          "fecha": "2026-02-24",
+          "archivo": "20260320_USME_ACTA_2.pdf",
+          "fecha": "2026-03-20",
           "ajustes": [
-            "el formulario reporta 18 asistentes no juveniles y 5 asistentes jóvenes; el acta dice 23 asistentes no juveniles y 5 asistentes jóvenes, hay que definir cuál queda"
+            "la fila de asistentes no juveniles del recuadro quedó sin número"
+          ]
+        },
+        {
+          "archivo": "20260417_USME_ACTA_3.pdf",
+          "fecha": "2026-04-17",
+          "ajustes": [
+            "el total de jóvenes dice 4 jóvenes y las tres filas de abajo suman 5",
+            "el formulario reporta 10 asistentes no juveniles y 5 asistentes jóvenes; el acta dice 10 asistentes no juveniles y 4 asistentes jóvenes, hay que definir cuál queda"
+          ]
+        },
+        {
+          "archivo": "20260821_USME_ACTA_5.pdf",
+          "fecha": "2026-08-21",
+          "ajustes": [
+            "por dentro dice ACTA N° 5, el mismo número del acta del 19 de junio de 2026; la numeración tiene que seguir el orden de las sesiones",
+            "el total de jóvenes dice 7 jóvenes y las tres filas de abajo suman 4"
           ]
         }
       ]
@@ -1796,70 +1796,10 @@
   ],
   "serie": [
     {
-      "localidad": "Usaquén",
-      "a2024": 11,
-      "a2025": 6,
-      "a2026": 7
-    },
-    {
-      "localidad": "Chapinero",
-      "a2024": 7,
-      "a2025": 11,
-      "a2026": 5
-    },
-    {
-      "localidad": "Santa Fe",
-      "a2024": 10,
-      "a2025": 8,
-      "a2026": 4
-    },
-    {
-      "localidad": "San Cristóbal",
-      "a2024": 12,
-      "a2025": 10,
-      "a2026": 9
-    },
-    {
-      "localidad": "Usme",
-      "a2024": 12,
-      "a2025": 6,
-      "a2026": 6
-    },
-    {
-      "localidad": "Tunjuelito",
-      "a2024": 12,
+      "localidad": "Antonio Nariño",
+      "a2024": 9,
       "a2025": 7,
-      "a2026": 6
-    },
-    {
-      "localidad": "Bosa",
-      "a2024": 11,
-      "a2025": 11,
       "a2026": 8
-    },
-    {
-      "localidad": "Kennedy",
-      "a2024": 14,
-      "a2025": 12,
-      "a2026": 8
-    },
-    {
-      "localidad": "Fontibón",
-      "a2024": 12,
-      "a2025": 8,
-      "a2026": 7
-    },
-    {
-      "localidad": "Engativá",
-      "a2024": 11,
-      "a2025": 6,
-      "a2026": 6
-    },
-    {
-      "localidad": "Suba",
-      "a2024": 12,
-      "a2025": 7,
-      "a2026": 6
     },
     {
       "localidad": "Barrios Unidos",
@@ -1868,27 +1808,39 @@
       "a2026": 9
     },
     {
-      "localidad": "Teusaquillo",
-      "a2024": 10,
-      "a2025": 8,
-      "a2026": 9
-    },
-    {
-      "localidad": "Los Mártires",
-      "a2024": 10,
+      "localidad": "Bosa",
+      "a2024": 11,
       "a2025": 11,
-      "a2026": 6
-    },
-    {
-      "localidad": "Antonio Nariño",
-      "a2024": 9,
-      "a2025": 7,
       "a2026": 8
     },
     {
-      "localidad": "Puente Aranda",
+      "localidad": "Chapinero",
+      "a2024": 7,
+      "a2025": 11,
+      "a2026": 5
+    },
+    {
+      "localidad": "Ciudad Bolívar",
+      "a2024": 13,
+      "a2025": 9,
+      "a2026": 6
+    },
+    {
+      "localidad": "Engativá",
+      "a2024": 11,
+      "a2025": 6,
+      "a2026": 6
+    },
+    {
+      "localidad": "Fontibón",
       "a2024": 12,
-      "a2025": 10,
+      "a2025": 8,
+      "a2026": 7
+    },
+    {
+      "localidad": "Kennedy",
+      "a2024": 14,
+      "a2025": 12,
       "a2026": 8
     },
     {
@@ -1898,15 +1850,39 @@
       "a2026": 3
     },
     {
+      "localidad": "Los Mártires",
+      "a2024": 10,
+      "a2025": 11,
+      "a2026": 6
+    },
+    {
+      "localidad": "Puente Aranda",
+      "a2024": 12,
+      "a2025": 10,
+      "a2026": 8
+    },
+    {
       "localidad": "Rafael Uribe Uribe",
       "a2024": 14,
       "a2025": 7,
       "a2026": 6
     },
     {
-      "localidad": "Ciudad Bolívar",
-      "a2024": 13,
-      "a2025": 9,
+      "localidad": "San Cristóbal",
+      "a2024": 12,
+      "a2025": 10,
+      "a2026": 9
+    },
+    {
+      "localidad": "Santa Fe",
+      "a2024": 10,
+      "a2025": 8,
+      "a2026": 4
+    },
+    {
+      "localidad": "Suba",
+      "a2024": 12,
+      "a2025": 7,
       "a2026": 6
     },
     {
@@ -1914,6 +1890,30 @@
       "a2024": 12,
       "a2025": 11,
       "a2026": 5
+    },
+    {
+      "localidad": "Teusaquillo",
+      "a2024": 10,
+      "a2025": 8,
+      "a2026": 9
+    },
+    {
+      "localidad": "Tunjuelito",
+      "a2024": 12,
+      "a2025": 7,
+      "a2026": 6
+    },
+    {
+      "localidad": "Usaquén",
+      "a2024": 11,
+      "a2025": 6,
+      "a2026": 7
+    },
+    {
+      "localidad": "Usme",
+      "a2024": 12,
+      "a2025": 6,
+      "a2026": 6
     }
   ],
   "totales_serie": {
@@ -2125,657 +2125,72 @@
     ],
     "sesiones": [
       {
-        "localidad": "Usaquén",
+        "localidad": "Antonio Nariño",
         "numero": 1,
-        "dia": 24,
-        "mes": 2,
-        "tipo": "Ordinaria",
-        "asistencias": 22,
-        "jovenes": 1
-      },
-      {
-        "localidad": "Usaquén",
-        "numero": 2,
-        "dia": 18,
-        "mes": 3,
-        "tipo": "Extraordinaria",
-        "asistencias": 17,
-        "jovenes": 1
-      },
-      {
-        "localidad": "Usaquén",
-        "numero": 3,
-        "dia": 21,
-        "mes": 4,
-        "tipo": "Ordinaria",
-        "asistencias": 22,
-        "jovenes": 5
-      },
-      {
-        "localidad": "Usaquén",
-        "numero": 4,
-        "dia": 19,
-        "mes": 5,
-        "tipo": "Extraordinaria",
-        "asistencias": 21,
-        "jovenes": 6
-      },
-      {
-        "localidad": "Usaquén",
-        "numero": 5,
-        "dia": 16,
-        "mes": 6,
-        "tipo": "Ordinaria",
-        "asistencias": 22,
-        "jovenes": 11
-      },
-      {
-        "localidad": "Usaquén",
-        "numero": 6,
-        "dia": 19,
-        "mes": 8,
-        "tipo": "Ordinaria",
-        "asistencias": 18,
-        "jovenes": 7
-      },
-      {
-        "localidad": "Usaquén",
-        "numero": 7,
-        "dia": 20,
-        "mes": 10,
-        "tipo": "Ordinaria",
-        "asistencias": 6,
-        "jovenes": 0
-      },
-      {
-        "localidad": "Chapinero",
-        "numero": 1,
-        "dia": 11,
-        "mes": 2,
-        "tipo": "Ordinaria",
-        "asistencias": 17,
-        "jovenes": 2
-      },
-      {
-        "localidad": "Chapinero",
-        "numero": 2,
-        "dia": 8,
-        "mes": 4,
-        "tipo": "Ordinaria",
-        "asistencias": 22,
-        "jovenes": 2
-      },
-      {
-        "localidad": "Chapinero",
-        "numero": 3,
-        "dia": 10,
-        "mes": 6,
-        "tipo": "Ordinaria",
-        "asistencias": 16,
-        "jovenes": 2
-      },
-      {
-        "localidad": "Chapinero",
-        "numero": 4,
-        "dia": 19,
-        "mes": 8,
-        "tipo": "Ordinaria",
-        "asistencias": 15,
-        "jovenes": 4
-      },
-      {
-        "localidad": "Chapinero",
-        "numero": 5,
-        "dia": 14,
-        "mes": 10,
-        "tipo": "Ordinaria",
-        "asistencias": 17,
-        "jovenes": 3
-      },
-      {
-        "localidad": "Santa Fe",
-        "numero": 1,
-        "dia": 16,
+        "dia": 17,
         "mes": 2,
         "tipo": "Ordinaria",
         "asistencias": 23,
         "jovenes": 5
       },
       {
-        "localidad": "Santa Fe",
+        "localidad": "Antonio Nariño",
         "numero": 2,
-        "dia": 27,
-        "mes": 4,
-        "tipo": "Ordinaria",
-        "asistencias": 18,
-        "jovenes": 4
-      },
-      {
-        "localidad": "Santa Fe",
-        "numero": 3,
-        "dia": 6,
-        "mes": 7,
-        "tipo": "Ordinaria",
-        "asistencias": 16,
-        "jovenes": 5
-      },
-      {
-        "localidad": "Santa Fe",
-        "numero": 4,
-        "dia": 21,
-        "mes": 9,
-        "tipo": "Ordinaria",
-        "asistencias": 13,
-        "jovenes": 4
-      },
-      {
-        "localidad": "San Cristóbal",
-        "numero": 1,
-        "dia": 18,
-        "mes": 2,
-        "tipo": "Ordinaria",
-        "asistencias": 9,
-        "jovenes": 0
-      },
-      {
-        "localidad": "San Cristóbal",
-        "numero": 2,
-        "dia": 18,
+        "dia": 17,
         "mes": 3,
         "tipo": "Extraordinaria",
-        "asistencias": 13,
+        "asistencias": 16,
+        "jovenes": 4
+      },
+      {
+        "localidad": "Antonio Nariño",
+        "numero": 3,
+        "dia": 21,
+        "mes": 4,
+        "tipo": "Ordinaria",
+        "asistencias": 16,
         "jovenes": 2
       },
       {
-        "localidad": "San Cristóbal",
-        "numero": 3,
-        "dia": 15,
-        "mes": 4,
-        "tipo": "Ordinaria",
-        "asistencias": 13,
-        "jovenes": 1
-      },
-      {
-        "localidad": "San Cristóbal",
+        "localidad": "Antonio Nariño",
         "numero": 4,
         "dia": 20,
         "mes": 5,
         "tipo": "Extraordinaria",
-        "asistencias": 13,
-        "jovenes": 3
-      },
-      {
-        "localidad": "San Cristóbal",
-        "numero": 5,
-        "dia": 17,
-        "mes": 6,
-        "tipo": "Ordinaria",
-        "asistencias": 14,
-        "jovenes": 3
-      },
-      {
-        "localidad": "San Cristóbal",
-        "numero": 6,
-        "dia": 15,
-        "mes": 7,
-        "tipo": "Extraordinaria",
-        "asistencias": 11,
-        "jovenes": 2
-      },
-      {
-        "localidad": "San Cristóbal",
-        "numero": 7,
-        "dia": 19,
-        "mes": 8,
-        "tipo": "Ordinaria",
-        "asistencias": 12,
-        "jovenes": 1
-      },
-      {
-        "localidad": "San Cristóbal",
-        "numero": 8,
-        "dia": 16,
-        "mes": 9,
-        "tipo": "Extraordinaria",
-        "asistencias": 22,
-        "jovenes": 11
-      },
-      {
-        "localidad": "San Cristóbal",
-        "numero": 9,
-        "dia": 21,
-        "mes": 10,
-        "tipo": "Ordinaria",
-        "asistencias": 16,
-        "jovenes": 5
-      },
-      {
-        "localidad": "Usme",
-        "numero": 1,
-        "dia": 20,
-        "mes": 2,
-        "tipo": "Ordinaria",
-        "asistencias": 34,
-        "jovenes": 12
-      },
-      {
-        "localidad": "Usme",
-        "numero": 2,
-        "dia": 20,
-        "mes": 3,
-        "tipo": "Extraordinaria",
-        "asistencias": 12,
-        "jovenes": 2
-      },
-      {
-        "localidad": "Usme",
-        "numero": 3,
-        "dia": 17,
-        "mes": 4,
-        "tipo": "Ordinaria",
         "asistencias": 15,
-        "jovenes": 5
-      },
-      {
-        "localidad": "Usme",
-        "numero": 4,
-        "dia": 30,
-        "mes": 5,
-        "tipo": "Extraordinaria",
-        "asistencias": 28,
-        "jovenes": 17
-      },
-      {
-        "localidad": "Usme",
-        "numero": 5,
-        "dia": 19,
-        "mes": 6,
-        "tipo": "Ordinaria",
-        "asistencias": 11,
         "jovenes": 3
       },
       {
-        "localidad": "Usme",
-        "numero": 6,
-        "dia": 21,
-        "mes": 8,
-        "tipo": "Ordinaria",
-        "asistencias": 27,
-        "jovenes": 7
-      },
-      {
-        "localidad": "Tunjuelito",
-        "numero": 1,
-        "dia": 17,
-        "mes": 2,
-        "tipo": "Ordinaria",
-        "asistencias": 26,
-        "jovenes": 8
-      },
-      {
-        "localidad": "Tunjuelito",
-        "numero": 2,
-        "dia": 28,
-        "mes": 3,
-        "tipo": "Extraordinaria",
-        "asistencias": 22,
-        "jovenes": 5
-      },
-      {
-        "localidad": "Tunjuelito",
-        "numero": 3,
-        "dia": 21,
-        "mes": 4,
-        "tipo": "Ordinaria",
-        "asistencias": 20,
-        "jovenes": 4
-      },
-      {
-        "localidad": "Tunjuelito",
-        "numero": 4,
+        "localidad": "Antonio Nariño",
+        "numero": 5,
         "dia": 16,
         "mes": 6,
         "tipo": "Ordinaria",
-        "asistencias": 20,
-        "jovenes": 4
-      },
-      {
-        "localidad": "Tunjuelito",
-        "numero": 5,
-        "dia": 7,
-        "mes": 7,
-        "tipo": "Extraordinaria",
-        "asistencias": 18,
+        "asistencias": 13,
         "jovenes": 3
       },
       {
-        "localidad": "Tunjuelito",
+        "localidad": "Antonio Nariño",
         "numero": 6,
-        "dia": 18,
+        "dia": 25,
         "mes": 8,
-        "tipo": "Ordinaria",
-        "asistencias": 18,
-        "jovenes": 4
-      },
-      {
-        "localidad": "Bosa",
-        "numero": 1,
-        "dia": 13,
-        "mes": 2,
-        "tipo": "Ordinaria",
-        "asistencias": 39,
-        "jovenes": 19
-      },
-      {
-        "localidad": "Bosa",
-        "numero": 2,
-        "dia": 27,
-        "mes": 2,
-        "tipo": "Extraordinaria",
-        "asistencias": 11,
-        "jovenes": 0
-      },
-      {
-        "localidad": "Bosa",
-        "numero": 3,
-        "dia": 17,
-        "mes": 3,
-        "tipo": "Extraordinaria",
-        "asistencias": 18,
-        "jovenes": 6
-      },
-      {
-        "localidad": "Bosa",
-        "numero": 4,
-        "dia": 17,
-        "mes": 4,
-        "tipo": "Ordinaria",
-        "asistencias": 28,
-        "jovenes": 7
-      },
-      {
-        "localidad": "Bosa",
-        "numero": 5,
-        "dia": 19,
-        "mes": 6,
         "tipo": "Ordinaria",
         "asistencias": 23,
         "jovenes": 8
       },
       {
-        "localidad": "Bosa",
-        "numero": 6,
-        "dia": 4,
-        "mes": 7,
-        "tipo": "Extraordinaria",
-        "asistencias": 27,
-        "jovenes": 13
-      },
-      {
-        "localidad": "Bosa",
+        "localidad": "Antonio Nariño",
         "numero": 7,
-        "dia": 23,
-        "mes": 7,
-        "tipo": "Extraordinaria",
-        "asistencias": 28,
-        "jovenes": 5
-      },
-      {
-        "localidad": "Bosa",
-        "numero": 8,
-        "dia": 4,
-        "mes": 9,
-        "tipo": "Ordinaria",
-        "asistencias": 27,
-        "jovenes": 13
-      },
-      {
-        "localidad": "Kennedy",
-        "numero": 1,
-        "dia": 27,
-        "mes": 2,
-        "tipo": "Ordinaria",
-        "asistencias": 34,
-        "jovenes": 24
-      },
-      {
-        "localidad": "Kennedy",
-        "numero": 2,
-        "dia": 27,
-        "mes": 3,
-        "tipo": "Extraordinaria",
-        "asistencias": 58,
-        "jovenes": 46
-      },
-      {
-        "localidad": "Kennedy",
-        "numero": 3,
-        "dia": 24,
-        "mes": 4,
-        "tipo": "Ordinaria",
-        "asistencias": 47,
-        "jovenes": 29
-      },
-      {
-        "localidad": "Kennedy",
-        "numero": 4,
-        "dia": 29,
-        "mes": 5,
-        "tipo": "Extraordinaria",
-        "asistencias": 26,
-        "jovenes": 13
-      },
-      {
-        "localidad": "Kennedy",
-        "numero": 5,
-        "dia": 26,
-        "mes": 6,
-        "tipo": "Ordinaria",
-        "asistencias": 17,
-        "jovenes": 2
-      },
-      {
-        "localidad": "Kennedy",
-        "numero": 6,
-        "dia": 31,
-        "mes": 7,
-        "tipo": "Extraordinaria",
-        "asistencias": 44,
-        "jovenes": 15
-      },
-      {
-        "localidad": "Kennedy",
-        "numero": 7,
-        "dia": 25,
-        "mes": 9,
-        "tipo": "Ordinaria",
-        "asistencias": 25,
-        "jovenes": 10
-      },
-      {
-        "localidad": "Kennedy",
-        "numero": 8,
-        "dia": 30,
-        "mes": 10,
-        "tipo": "Extraordinaria",
-        "asistencias": 20,
-        "jovenes": 5
-      },
-      {
-        "localidad": "Fontibón",
-        "numero": 1,
-        "dia": 27,
-        "mes": 2,
-        "tipo": "Ordinaria",
-        "asistencias": 24,
-        "jovenes": 13
-      },
-      {
-        "localidad": "Fontibón",
-        "numero": 2,
-        "dia": 26,
-        "mes": 3,
-        "tipo": "Extraordinaria",
-        "asistencias": 36,
-        "jovenes": 7
-      },
-      {
-        "localidad": "Fontibón",
-        "numero": 3,
-        "dia": 23,
-        "mes": 4,
-        "tipo": "Ordinaria",
-        "asistencias": 14,
-        "jovenes": 5
-      },
-      {
-        "localidad": "Fontibón",
-        "numero": 4,
-        "dia": 25,
-        "mes": 6,
-        "tipo": "Ordinaria",
-        "asistencias": 27,
-        "jovenes": 9
-      },
-      {
-        "localidad": "Fontibón",
-        "numero": 5,
-        "dia": 23,
-        "mes": 7,
-        "tipo": "Extraordinaria",
-        "asistencias": 17,
-        "jovenes": 3
-      },
-      {
-        "localidad": "Fontibón",
-        "numero": 6,
-        "dia": 27,
-        "mes": 8,
-        "tipo": "Ordinaria",
-        "asistencias": 17,
-        "jovenes": 1
-      },
-      {
-        "localidad": "Fontibón",
-        "numero": 7,
-        "dia": 8,
-        "mes": 10,
-        "tipo": "Ordinaria",
-        "asistencias": 13,
-        "jovenes": 0
-      },
-      {
-        "localidad": "Engativá",
-        "numero": 1,
-        "dia": 25,
-        "mes": 2,
-        "tipo": "Ordinaria",
-        "asistencias": 19,
-        "jovenes": 9
-      },
-      {
-        "localidad": "Engativá",
-        "numero": 2,
-        "dia": 29,
-        "mes": 4,
-        "tipo": "Ordinaria",
-        "asistencias": 17,
-        "jovenes": 4
-      },
-      {
-        "localidad": "Engativá",
-        "numero": 3,
-        "dia": 3,
-        "mes": 6,
-        "tipo": "Extraordinaria",
-        "asistencias": 17,
-        "jovenes": 6
-      },
-      {
-        "localidad": "Engativá",
-        "numero": 4,
-        "dia": 25,
-        "mes": 6,
-        "tipo": "Ordinaria",
-        "asistencias": 17,
-        "jovenes": 1
-      },
-      {
-        "localidad": "Engativá",
-        "numero": 5,
-        "dia": 11,
-        "mes": 8,
-        "tipo": "Ordinaria",
-        "asistencias": 17,
-        "jovenes": 7
-      },
-      {
-        "localidad": "Engativá",
-        "numero": 6,
-        "dia": 17,
-        "mes": 9,
-        "tipo": "Extraordinaria",
-        "asistencias": 33,
-        "jovenes": 4
-      },
-      {
-        "localidad": "Suba",
-        "numero": 1,
-        "dia": 12,
-        "mes": 2,
-        "tipo": "Ordinaria",
-        "asistencias": 4,
-        "jovenes": 4
-      },
-      {
-        "localidad": "Suba",
-        "numero": 2,
-        "dia": 12,
-        "mes": 3,
-        "tipo": "Extraordinaria",
-        "asistencias": 25,
-        "jovenes": 6
-      },
-      {
-        "localidad": "Suba",
-        "numero": 3,
         "dia": 9,
-        "mes": 5,
-        "tipo": "Ordinaria",
-        "asistencias": 5,
-        "jovenes": 3
-      },
-      {
-        "localidad": "Suba",
-        "numero": 4,
-        "dia": 11,
-        "mes": 6,
-        "tipo": "Ordinaria",
-        "asistencias": 21,
-        "jovenes": 6
-      },
-      {
-        "localidad": "Suba",
-        "numero": 5,
-        "dia": 13,
-        "mes": 8,
-        "tipo": "Ordinaria",
-        "asistencias": 17,
-        "jovenes": 5
-      },
-      {
-        "localidad": "Suba",
-        "numero": 6,
-        "dia": 10,
         "mes": 9,
         "tipo": "Extraordinaria",
-        "asistencias": 14,
-        "jovenes": 1
+        "asistencias": 15,
+        "jovenes": 2
       },
       {
-        "localidad": "Suba",
-        "numero": 7,
-        "dia": 8,
+        "localidad": "Antonio Nariño",
+        "numero": 8,
+        "dia": 27,
         "mes": 10,
         "tipo": "Ordinaria",
         "asistencias": 16,
@@ -2861,6 +2276,798 @@
         "tipo": "Ordinaria",
         "asistencias": 22,
         "jovenes": 9
+      },
+      {
+        "localidad": "Bosa",
+        "numero": 1,
+        "dia": 13,
+        "mes": 2,
+        "tipo": "Ordinaria",
+        "asistencias": 39,
+        "jovenes": 19
+      },
+      {
+        "localidad": "Bosa",
+        "numero": 2,
+        "dia": 27,
+        "mes": 2,
+        "tipo": "Extraordinaria",
+        "asistencias": 11,
+        "jovenes": 0
+      },
+      {
+        "localidad": "Bosa",
+        "numero": 3,
+        "dia": 17,
+        "mes": 3,
+        "tipo": "Extraordinaria",
+        "asistencias": 18,
+        "jovenes": 6
+      },
+      {
+        "localidad": "Bosa",
+        "numero": 4,
+        "dia": 17,
+        "mes": 4,
+        "tipo": "Ordinaria",
+        "asistencias": 28,
+        "jovenes": 7
+      },
+      {
+        "localidad": "Bosa",
+        "numero": 5,
+        "dia": 19,
+        "mes": 6,
+        "tipo": "Ordinaria",
+        "asistencias": 23,
+        "jovenes": 8
+      },
+      {
+        "localidad": "Bosa",
+        "numero": 6,
+        "dia": 4,
+        "mes": 7,
+        "tipo": "Extraordinaria",
+        "asistencias": 27,
+        "jovenes": 13
+      },
+      {
+        "localidad": "Bosa",
+        "numero": 7,
+        "dia": 23,
+        "mes": 7,
+        "tipo": "Extraordinaria",
+        "asistencias": 28,
+        "jovenes": 5
+      },
+      {
+        "localidad": "Bosa",
+        "numero": 8,
+        "dia": 4,
+        "mes": 9,
+        "tipo": "Ordinaria",
+        "asistencias": 27,
+        "jovenes": 13
+      },
+      {
+        "localidad": "Chapinero",
+        "numero": 1,
+        "dia": 11,
+        "mes": 2,
+        "tipo": "Ordinaria",
+        "asistencias": 17,
+        "jovenes": 2
+      },
+      {
+        "localidad": "Chapinero",
+        "numero": 2,
+        "dia": 8,
+        "mes": 4,
+        "tipo": "Ordinaria",
+        "asistencias": 22,
+        "jovenes": 2
+      },
+      {
+        "localidad": "Chapinero",
+        "numero": 3,
+        "dia": 10,
+        "mes": 6,
+        "tipo": "Ordinaria",
+        "asistencias": 16,
+        "jovenes": 2
+      },
+      {
+        "localidad": "Chapinero",
+        "numero": 4,
+        "dia": 19,
+        "mes": 8,
+        "tipo": "Ordinaria",
+        "asistencias": 15,
+        "jovenes": 4
+      },
+      {
+        "localidad": "Chapinero",
+        "numero": 5,
+        "dia": 14,
+        "mes": 10,
+        "tipo": "Ordinaria",
+        "asistencias": 17,
+        "jovenes": 3
+      },
+      {
+        "localidad": "Ciudad Bolívar",
+        "numero": 1,
+        "dia": 11,
+        "mes": 2,
+        "tipo": "Ordinaria",
+        "asistencias": 31,
+        "jovenes": 11
+      },
+      {
+        "localidad": "Ciudad Bolívar",
+        "numero": 2,
+        "dia": 14,
+        "mes": 3,
+        "tipo": "Extraordinaria",
+        "asistencias": 32,
+        "jovenes": 6
+      },
+      {
+        "localidad": "Ciudad Bolívar",
+        "numero": 3,
+        "dia": 10,
+        "mes": 4,
+        "tipo": "Ordinaria",
+        "asistencias": 27,
+        "jovenes": 2
+      },
+      {
+        "localidad": "Ciudad Bolívar",
+        "numero": 4,
+        "dia": 17,
+        "mes": 6,
+        "tipo": "Ordinaria",
+        "asistencias": 36,
+        "jovenes": 6
+      },
+      {
+        "localidad": "Ciudad Bolívar",
+        "numero": 5,
+        "dia": 18,
+        "mes": 8,
+        "tipo": "Ordinaria",
+        "asistencias": 22,
+        "jovenes": 2
+      },
+      {
+        "localidad": "Ciudad Bolívar",
+        "numero": 6,
+        "dia": 1,
+        "mes": 10,
+        "tipo": "Ordinaria",
+        "asistencias": 24,
+        "jovenes": 4
+      },
+      {
+        "localidad": "Engativá",
+        "numero": 1,
+        "dia": 25,
+        "mes": 2,
+        "tipo": "Ordinaria",
+        "asistencias": 19,
+        "jovenes": 9
+      },
+      {
+        "localidad": "Engativá",
+        "numero": 2,
+        "dia": 29,
+        "mes": 4,
+        "tipo": "Ordinaria",
+        "asistencias": 17,
+        "jovenes": 4
+      },
+      {
+        "localidad": "Engativá",
+        "numero": 3,
+        "dia": 3,
+        "mes": 6,
+        "tipo": "Extraordinaria",
+        "asistencias": 17,
+        "jovenes": 6
+      },
+      {
+        "localidad": "Engativá",
+        "numero": 4,
+        "dia": 25,
+        "mes": 6,
+        "tipo": "Ordinaria",
+        "asistencias": 17,
+        "jovenes": 1
+      },
+      {
+        "localidad": "Engativá",
+        "numero": 5,
+        "dia": 11,
+        "mes": 8,
+        "tipo": "Ordinaria",
+        "asistencias": 17,
+        "jovenes": 7
+      },
+      {
+        "localidad": "Engativá",
+        "numero": 6,
+        "dia": 17,
+        "mes": 9,
+        "tipo": "Extraordinaria",
+        "asistencias": 33,
+        "jovenes": 4
+      },
+      {
+        "localidad": "Fontibón",
+        "numero": 1,
+        "dia": 27,
+        "mes": 2,
+        "tipo": "Ordinaria",
+        "asistencias": 24,
+        "jovenes": 13
+      },
+      {
+        "localidad": "Fontibón",
+        "numero": 2,
+        "dia": 26,
+        "mes": 3,
+        "tipo": "Extraordinaria",
+        "asistencias": 36,
+        "jovenes": 7
+      },
+      {
+        "localidad": "Fontibón",
+        "numero": 3,
+        "dia": 23,
+        "mes": 4,
+        "tipo": "Ordinaria",
+        "asistencias": 14,
+        "jovenes": 5
+      },
+      {
+        "localidad": "Fontibón",
+        "numero": 4,
+        "dia": 25,
+        "mes": 6,
+        "tipo": "Ordinaria",
+        "asistencias": 27,
+        "jovenes": 9
+      },
+      {
+        "localidad": "Fontibón",
+        "numero": 5,
+        "dia": 23,
+        "mes": 7,
+        "tipo": "Extraordinaria",
+        "asistencias": 17,
+        "jovenes": 3
+      },
+      {
+        "localidad": "Fontibón",
+        "numero": 6,
+        "dia": 27,
+        "mes": 8,
+        "tipo": "Ordinaria",
+        "asistencias": 17,
+        "jovenes": 1
+      },
+      {
+        "localidad": "Fontibón",
+        "numero": 7,
+        "dia": 8,
+        "mes": 10,
+        "tipo": "Ordinaria",
+        "asistencias": 13,
+        "jovenes": 0
+      },
+      {
+        "localidad": "Kennedy",
+        "numero": 1,
+        "dia": 27,
+        "mes": 2,
+        "tipo": "Ordinaria",
+        "asistencias": 34,
+        "jovenes": 24
+      },
+      {
+        "localidad": "Kennedy",
+        "numero": 2,
+        "dia": 27,
+        "mes": 3,
+        "tipo": "Extraordinaria",
+        "asistencias": 58,
+        "jovenes": 46
+      },
+      {
+        "localidad": "Kennedy",
+        "numero": 3,
+        "dia": 24,
+        "mes": 4,
+        "tipo": "Ordinaria",
+        "asistencias": 47,
+        "jovenes": 29
+      },
+      {
+        "localidad": "Kennedy",
+        "numero": 4,
+        "dia": 29,
+        "mes": 5,
+        "tipo": "Extraordinaria",
+        "asistencias": 26,
+        "jovenes": 13
+      },
+      {
+        "localidad": "Kennedy",
+        "numero": 5,
+        "dia": 26,
+        "mes": 6,
+        "tipo": "Ordinaria",
+        "asistencias": 17,
+        "jovenes": 2
+      },
+      {
+        "localidad": "Kennedy",
+        "numero": 6,
+        "dia": 31,
+        "mes": 7,
+        "tipo": "Extraordinaria",
+        "asistencias": 44,
+        "jovenes": 15
+      },
+      {
+        "localidad": "Kennedy",
+        "numero": 7,
+        "dia": 25,
+        "mes": 9,
+        "tipo": "Ordinaria",
+        "asistencias": 25,
+        "jovenes": 10
+      },
+      {
+        "localidad": "Kennedy",
+        "numero": 8,
+        "dia": 30,
+        "mes": 10,
+        "tipo": "Extraordinaria",
+        "asistencias": 20,
+        "jovenes": 5
+      },
+      {
+        "localidad": "La Candelaria",
+        "numero": 1,
+        "dia": 9,
+        "mes": 2,
+        "tipo": "Ordinaria",
+        "asistencias": 35,
+        "jovenes": 5
+      },
+      {
+        "localidad": "La Candelaria",
+        "numero": 2,
+        "dia": 28,
+        "mes": 4,
+        "tipo": "Ordinaria",
+        "asistencias": 11,
+        "jovenes": 10
+      },
+      {
+        "localidad": "La Candelaria",
+        "numero": 3,
+        "dia": 22,
+        "mes": 9,
+        "tipo": "Ordinaria",
+        "asistencias": 11,
+        "jovenes": 2
+      },
+      {
+        "localidad": "Los Mártires",
+        "numero": 1,
+        "dia": 19,
+        "mes": 2,
+        "tipo": "Ordinaria",
+        "asistencias": 44,
+        "jovenes": 19
+      },
+      {
+        "localidad": "Los Mártires",
+        "numero": 2,
+        "dia": 19,
+        "mes": 3,
+        "tipo": "Extraordinaria",
+        "asistencias": 17,
+        "jovenes": 6
+      },
+      {
+        "localidad": "Los Mártires",
+        "numero": 3,
+        "dia": 23,
+        "mes": 4,
+        "tipo": "Ordinaria",
+        "asistencias": 32,
+        "jovenes": 12
+      },
+      {
+        "localidad": "Los Mártires",
+        "numero": 4,
+        "dia": 18,
+        "mes": 6,
+        "tipo": "Ordinaria",
+        "asistencias": 19,
+        "jovenes": 6
+      },
+      {
+        "localidad": "Los Mártires",
+        "numero": 5,
+        "dia": 20,
+        "mes": 8,
+        "tipo": "Ordinaria",
+        "asistencias": 17,
+        "jovenes": 3
+      },
+      {
+        "localidad": "Los Mártires",
+        "numero": 6,
+        "dia": 15,
+        "mes": 10,
+        "tipo": "Ordinaria",
+        "asistencias": 17,
+        "jovenes": 5
+      },
+      {
+        "localidad": "Puente Aranda",
+        "numero": 1,
+        "dia": 24,
+        "mes": 2,
+        "tipo": "Ordinaria",
+        "asistencias": 14,
+        "jovenes": 3
+      },
+      {
+        "localidad": "Puente Aranda",
+        "numero": 2,
+        "dia": 16,
+        "mes": 4,
+        "tipo": "Ordinaria",
+        "asistencias": 42,
+        "jovenes": 27
+      },
+      {
+        "localidad": "Puente Aranda",
+        "numero": 3,
+        "dia": 21,
+        "mes": 5,
+        "tipo": "Extraordinaria",
+        "asistencias": 17,
+        "jovenes": 4
+      },
+      {
+        "localidad": "Puente Aranda",
+        "numero": 4,
+        "dia": 18,
+        "mes": 6,
+        "tipo": "Ordinaria",
+        "asistencias": 24,
+        "jovenes": 11
+      },
+      {
+        "localidad": "Puente Aranda",
+        "numero": 5,
+        "dia": 11,
+        "mes": 7,
+        "tipo": "Extraordinaria",
+        "asistencias": 20,
+        "jovenes": 9
+      },
+      {
+        "localidad": "Puente Aranda",
+        "numero": 6,
+        "dia": 27,
+        "mes": 8,
+        "tipo": "Ordinaria",
+        "asistencias": 17,
+        "jovenes": 5
+      },
+      {
+        "localidad": "Puente Aranda",
+        "numero": 7,
+        "dia": 26,
+        "mes": 9,
+        "tipo": "Extraordinaria",
+        "asistencias": 16,
+        "jovenes": 2
+      },
+      {
+        "localidad": "Puente Aranda",
+        "numero": 8,
+        "dia": 14,
+        "mes": 10,
+        "tipo": "Ordinaria",
+        "asistencias": 18,
+        "jovenes": 5
+      },
+      {
+        "localidad": "Rafael Uribe Uribe",
+        "numero": 1,
+        "dia": 19,
+        "mes": 2,
+        "tipo": "Ordinaria",
+        "asistencias": 53,
+        "jovenes": 36
+      },
+      {
+        "localidad": "Rafael Uribe Uribe",
+        "numero": 2,
+        "dia": 19,
+        "mes": 3,
+        "tipo": "Extraordinaria",
+        "asistencias": 36,
+        "jovenes": 13
+      },
+      {
+        "localidad": "Rafael Uribe Uribe",
+        "numero": 3,
+        "dia": 16,
+        "mes": 4,
+        "tipo": "Ordinaria",
+        "asistencias": 27,
+        "jovenes": 13
+      },
+      {
+        "localidad": "Rafael Uribe Uribe",
+        "numero": 4,
+        "dia": 18,
+        "mes": 6,
+        "tipo": "Ordinaria",
+        "asistencias": 35,
+        "jovenes": 19
+      },
+      {
+        "localidad": "Rafael Uribe Uribe",
+        "numero": 5,
+        "dia": 20,
+        "mes": 8,
+        "tipo": "Ordinaria",
+        "asistencias": 27,
+        "jovenes": 14
+      },
+      {
+        "localidad": "Rafael Uribe Uribe",
+        "numero": 6,
+        "dia": 22,
+        "mes": 10,
+        "tipo": "Ordinaria",
+        "asistencias": 41,
+        "jovenes": 26
+      },
+      {
+        "localidad": "San Cristóbal",
+        "numero": 1,
+        "dia": 18,
+        "mes": 2,
+        "tipo": "Ordinaria",
+        "asistencias": 9,
+        "jovenes": 0
+      },
+      {
+        "localidad": "San Cristóbal",
+        "numero": 2,
+        "dia": 18,
+        "mes": 3,
+        "tipo": "Extraordinaria",
+        "asistencias": 13,
+        "jovenes": 2
+      },
+      {
+        "localidad": "San Cristóbal",
+        "numero": 3,
+        "dia": 15,
+        "mes": 4,
+        "tipo": "Ordinaria",
+        "asistencias": 13,
+        "jovenes": 1
+      },
+      {
+        "localidad": "San Cristóbal",
+        "numero": 4,
+        "dia": 20,
+        "mes": 5,
+        "tipo": "Extraordinaria",
+        "asistencias": 13,
+        "jovenes": 3
+      },
+      {
+        "localidad": "San Cristóbal",
+        "numero": 5,
+        "dia": 17,
+        "mes": 6,
+        "tipo": "Ordinaria",
+        "asistencias": 14,
+        "jovenes": 3
+      },
+      {
+        "localidad": "San Cristóbal",
+        "numero": 6,
+        "dia": 15,
+        "mes": 7,
+        "tipo": "Extraordinaria",
+        "asistencias": 11,
+        "jovenes": 2
+      },
+      {
+        "localidad": "San Cristóbal",
+        "numero": 7,
+        "dia": 19,
+        "mes": 8,
+        "tipo": "Ordinaria",
+        "asistencias": 12,
+        "jovenes": 1
+      },
+      {
+        "localidad": "San Cristóbal",
+        "numero": 8,
+        "dia": 16,
+        "mes": 9,
+        "tipo": "Extraordinaria",
+        "asistencias": 22,
+        "jovenes": 11
+      },
+      {
+        "localidad": "San Cristóbal",
+        "numero": 9,
+        "dia": 21,
+        "mes": 10,
+        "tipo": "Ordinaria",
+        "asistencias": 16,
+        "jovenes": 5
+      },
+      {
+        "localidad": "Santa Fe",
+        "numero": 1,
+        "dia": 16,
+        "mes": 2,
+        "tipo": "Ordinaria",
+        "asistencias": 23,
+        "jovenes": 5
+      },
+      {
+        "localidad": "Santa Fe",
+        "numero": 2,
+        "dia": 27,
+        "mes": 4,
+        "tipo": "Ordinaria",
+        "asistencias": 18,
+        "jovenes": 4
+      },
+      {
+        "localidad": "Santa Fe",
+        "numero": 3,
+        "dia": 6,
+        "mes": 7,
+        "tipo": "Ordinaria",
+        "asistencias": 16,
+        "jovenes": 5
+      },
+      {
+        "localidad": "Santa Fe",
+        "numero": 4,
+        "dia": 21,
+        "mes": 9,
+        "tipo": "Ordinaria",
+        "asistencias": 13,
+        "jovenes": 4
+      },
+      {
+        "localidad": "Suba",
+        "numero": 1,
+        "dia": 12,
+        "mes": 2,
+        "tipo": "Ordinaria",
+        "asistencias": 4,
+        "jovenes": 4
+      },
+      {
+        "localidad": "Suba",
+        "numero": 2,
+        "dia": 12,
+        "mes": 3,
+        "tipo": "Extraordinaria",
+        "asistencias": 25,
+        "jovenes": 6
+      },
+      {
+        "localidad": "Suba",
+        "numero": 3,
+        "dia": 9,
+        "mes": 5,
+        "tipo": "Ordinaria",
+        "asistencias": 5,
+        "jovenes": 3
+      },
+      {
+        "localidad": "Suba",
+        "numero": 4,
+        "dia": 11,
+        "mes": 6,
+        "tipo": "Ordinaria",
+        "asistencias": 21,
+        "jovenes": 6
+      },
+      {
+        "localidad": "Suba",
+        "numero": 5,
+        "dia": 13,
+        "mes": 8,
+        "tipo": "Ordinaria",
+        "asistencias": 17,
+        "jovenes": 5
+      },
+      {
+        "localidad": "Suba",
+        "numero": 6,
+        "dia": 10,
+        "mes": 9,
+        "tipo": "Extraordinaria",
+        "asistencias": 14,
+        "jovenes": 1
+      },
+      {
+        "localidad": "Suba",
+        "numero": 7,
+        "dia": 8,
+        "mes": 10,
+        "tipo": "Ordinaria",
+        "asistencias": 16,
+        "jovenes": 3
+      },
+      {
+        "localidad": "Sumapaz",
+        "numero": 1,
+        "dia": 24,
+        "mes": 2,
+        "tipo": "Ordinaria",
+        "asistencias": 23,
+        "jovenes": 5
+      },
+      {
+        "localidad": "Sumapaz",
+        "numero": 2,
+        "dia": 23,
+        "mes": 5,
+        "tipo": "Ordinaria",
+        "asistencias": 22,
+        "jovenes": 9
+      },
+      {
+        "localidad": "Sumapaz",
+        "numero": 3,
+        "dia": 12,
+        "mes": 7,
+        "tipo": "Ordinaria",
+        "asistencias": 12,
+        "jovenes": 2
+      },
+      {
+        "localidad": "Sumapaz",
+        "numero": 4,
+        "dia": 12,
+        "mes": 9,
+        "tipo": "Ordinaria",
+        "asistencias": 20,
+        "jovenes": 6
+      },
+      {
+        "localidad": "Sumapaz",
+        "numero": 5,
+        "dia": 3,
+        "mes": 10,
+        "tipo": "Extraordinaria",
+        "asistencias": 14,
+        "jovenes": 4
       },
       {
         "localidad": "Teusaquillo",
@@ -2944,382 +3151,175 @@
         "jovenes": 1
       },
       {
-        "localidad": "Los Mártires",
-        "numero": 1,
-        "dia": 19,
-        "mes": 2,
-        "tipo": "Ordinaria",
-        "asistencias": 44,
-        "jovenes": 19
-      },
-      {
-        "localidad": "Los Mártires",
-        "numero": 2,
-        "dia": 19,
-        "mes": 3,
-        "tipo": "Extraordinaria",
-        "asistencias": 17,
-        "jovenes": 6
-      },
-      {
-        "localidad": "Los Mártires",
-        "numero": 3,
-        "dia": 23,
-        "mes": 4,
-        "tipo": "Ordinaria",
-        "asistencias": 32,
-        "jovenes": 12
-      },
-      {
-        "localidad": "Los Mártires",
-        "numero": 4,
-        "dia": 18,
-        "mes": 6,
-        "tipo": "Ordinaria",
-        "asistencias": 19,
-        "jovenes": 6
-      },
-      {
-        "localidad": "Los Mártires",
-        "numero": 5,
-        "dia": 20,
-        "mes": 8,
-        "tipo": "Ordinaria",
-        "asistencias": 17,
-        "jovenes": 3
-      },
-      {
-        "localidad": "Los Mártires",
-        "numero": 6,
-        "dia": 15,
-        "mes": 10,
-        "tipo": "Ordinaria",
-        "asistencias": 17,
-        "jovenes": 5
-      },
-      {
-        "localidad": "Antonio Nariño",
+        "localidad": "Tunjuelito",
         "numero": 1,
         "dia": 17,
         "mes": 2,
         "tipo": "Ordinaria",
-        "asistencias": 23,
-        "jovenes": 5
-      },
-      {
-        "localidad": "Antonio Nariño",
-        "numero": 2,
-        "dia": 17,
-        "mes": 3,
-        "tipo": "Extraordinaria",
-        "asistencias": 16,
-        "jovenes": 4
-      },
-      {
-        "localidad": "Antonio Nariño",
-        "numero": 3,
-        "dia": 21,
-        "mes": 4,
-        "tipo": "Ordinaria",
-        "asistencias": 16,
-        "jovenes": 2
-      },
-      {
-        "localidad": "Antonio Nariño",
-        "numero": 4,
-        "dia": 20,
-        "mes": 5,
-        "tipo": "Extraordinaria",
-        "asistencias": 15,
-        "jovenes": 3
-      },
-      {
-        "localidad": "Antonio Nariño",
-        "numero": 5,
-        "dia": 16,
-        "mes": 6,
-        "tipo": "Ordinaria",
-        "asistencias": 13,
-        "jovenes": 3
-      },
-      {
-        "localidad": "Antonio Nariño",
-        "numero": 6,
-        "dia": 25,
-        "mes": 8,
-        "tipo": "Ordinaria",
-        "asistencias": 23,
+        "asistencias": 26,
         "jovenes": 8
       },
       {
-        "localidad": "Antonio Nariño",
-        "numero": 7,
-        "dia": 9,
-        "mes": 9,
-        "tipo": "Extraordinaria",
-        "asistencias": 15,
-        "jovenes": 2
-      },
-      {
-        "localidad": "Antonio Nariño",
-        "numero": 8,
-        "dia": 27,
-        "mes": 10,
-        "tipo": "Ordinaria",
-        "asistencias": 16,
-        "jovenes": 3
-      },
-      {
-        "localidad": "Puente Aranda",
-        "numero": 1,
-        "dia": 24,
-        "mes": 2,
-        "tipo": "Ordinaria",
-        "asistencias": 14,
-        "jovenes": 3
-      },
-      {
-        "localidad": "Puente Aranda",
-        "numero": 2,
-        "dia": 16,
-        "mes": 4,
-        "tipo": "Ordinaria",
-        "asistencias": 42,
-        "jovenes": 27
-      },
-      {
-        "localidad": "Puente Aranda",
-        "numero": 3,
-        "dia": 21,
-        "mes": 5,
-        "tipo": "Extraordinaria",
-        "asistencias": 17,
-        "jovenes": 4
-      },
-      {
-        "localidad": "Puente Aranda",
-        "numero": 4,
-        "dia": 18,
-        "mes": 6,
-        "tipo": "Ordinaria",
-        "asistencias": 24,
-        "jovenes": 11
-      },
-      {
-        "localidad": "Puente Aranda",
-        "numero": 5,
-        "dia": 11,
-        "mes": 7,
-        "tipo": "Extraordinaria",
-        "asistencias": 20,
-        "jovenes": 9
-      },
-      {
-        "localidad": "Puente Aranda",
-        "numero": 6,
-        "dia": 27,
-        "mes": 8,
-        "tipo": "Ordinaria",
-        "asistencias": 17,
-        "jovenes": 5
-      },
-      {
-        "localidad": "Puente Aranda",
-        "numero": 7,
-        "dia": 26,
-        "mes": 9,
-        "tipo": "Extraordinaria",
-        "asistencias": 16,
-        "jovenes": 2
-      },
-      {
-        "localidad": "Puente Aranda",
-        "numero": 8,
-        "dia": 14,
-        "mes": 10,
-        "tipo": "Ordinaria",
-        "asistencias": 18,
-        "jovenes": 5
-      },
-      {
-        "localidad": "La Candelaria",
-        "numero": 1,
-        "dia": 9,
-        "mes": 2,
-        "tipo": "Ordinaria",
-        "asistencias": 35,
-        "jovenes": 5
-      },
-      {
-        "localidad": "La Candelaria",
+        "localidad": "Tunjuelito",
         "numero": 2,
         "dia": 28,
-        "mes": 4,
-        "tipo": "Ordinaria",
-        "asistencias": 11,
-        "jovenes": 10
-      },
-      {
-        "localidad": "La Candelaria",
-        "numero": 3,
-        "dia": 22,
-        "mes": 9,
-        "tipo": "Ordinaria",
-        "asistencias": 11,
-        "jovenes": 2
-      },
-      {
-        "localidad": "Rafael Uribe Uribe",
-        "numero": 1,
-        "dia": 19,
-        "mes": 2,
-        "tipo": "Ordinaria",
-        "asistencias": 53,
-        "jovenes": 36
-      },
-      {
-        "localidad": "Rafael Uribe Uribe",
-        "numero": 2,
-        "dia": 19,
         "mes": 3,
         "tipo": "Extraordinaria",
-        "asistencias": 36,
-        "jovenes": 13
-      },
-      {
-        "localidad": "Rafael Uribe Uribe",
-        "numero": 3,
-        "dia": 16,
-        "mes": 4,
-        "tipo": "Ordinaria",
-        "asistencias": 27,
-        "jovenes": 13
-      },
-      {
-        "localidad": "Rafael Uribe Uribe",
-        "numero": 4,
-        "dia": 18,
-        "mes": 6,
-        "tipo": "Ordinaria",
-        "asistencias": 35,
-        "jovenes": 19
-      },
-      {
-        "localidad": "Rafael Uribe Uribe",
-        "numero": 5,
-        "dia": 20,
-        "mes": 8,
-        "tipo": "Ordinaria",
-        "asistencias": 27,
-        "jovenes": 14
-      },
-      {
-        "localidad": "Rafael Uribe Uribe",
-        "numero": 6,
-        "dia": 22,
-        "mes": 10,
-        "tipo": "Ordinaria",
-        "asistencias": 41,
-        "jovenes": 26
-      },
-      {
-        "localidad": "Ciudad Bolívar",
-        "numero": 1,
-        "dia": 11,
-        "mes": 2,
-        "tipo": "Ordinaria",
-        "asistencias": 31,
-        "jovenes": 11
-      },
-      {
-        "localidad": "Ciudad Bolívar",
-        "numero": 2,
-        "dia": 14,
-        "mes": 3,
-        "tipo": "Extraordinaria",
-        "asistencias": 32,
-        "jovenes": 6
-      },
-      {
-        "localidad": "Ciudad Bolívar",
-        "numero": 3,
-        "dia": 10,
-        "mes": 4,
-        "tipo": "Ordinaria",
-        "asistencias": 27,
-        "jovenes": 2
-      },
-      {
-        "localidad": "Ciudad Bolívar",
-        "numero": 4,
-        "dia": 17,
-        "mes": 6,
-        "tipo": "Ordinaria",
-        "asistencias": 36,
-        "jovenes": 6
-      },
-      {
-        "localidad": "Ciudad Bolívar",
-        "numero": 5,
-        "dia": 18,
-        "mes": 8,
-        "tipo": "Ordinaria",
         "asistencias": 22,
-        "jovenes": 2
+        "jovenes": 5
       },
       {
-        "localidad": "Ciudad Bolívar",
-        "numero": 6,
-        "dia": 1,
-        "mes": 10,
+        "localidad": "Tunjuelito",
+        "numero": 3,
+        "dia": 21,
+        "mes": 4,
         "tipo": "Ordinaria",
-        "asistencias": 24,
+        "asistencias": 20,
         "jovenes": 4
       },
       {
-        "localidad": "Sumapaz",
+        "localidad": "Tunjuelito",
+        "numero": 4,
+        "dia": 16,
+        "mes": 6,
+        "tipo": "Ordinaria",
+        "asistencias": 20,
+        "jovenes": 4
+      },
+      {
+        "localidad": "Tunjuelito",
+        "numero": 5,
+        "dia": 7,
+        "mes": 7,
+        "tipo": "Extraordinaria",
+        "asistencias": 18,
+        "jovenes": 3
+      },
+      {
+        "localidad": "Tunjuelito",
+        "numero": 6,
+        "dia": 18,
+        "mes": 8,
+        "tipo": "Ordinaria",
+        "asistencias": 18,
+        "jovenes": 4
+      },
+      {
+        "localidad": "Usaquén",
         "numero": 1,
         "dia": 24,
         "mes": 2,
         "tipo": "Ordinaria",
-        "asistencias": 23,
+        "asistencias": 22,
+        "jovenes": 1
+      },
+      {
+        "localidad": "Usaquén",
+        "numero": 2,
+        "dia": 18,
+        "mes": 3,
+        "tipo": "Extraordinaria",
+        "asistencias": 17,
+        "jovenes": 1
+      },
+      {
+        "localidad": "Usaquén",
+        "numero": 3,
+        "dia": 21,
+        "mes": 4,
+        "tipo": "Ordinaria",
+        "asistencias": 22,
         "jovenes": 5
       },
       {
-        "localidad": "Sumapaz",
-        "numero": 2,
-        "dia": 23,
+        "localidad": "Usaquén",
+        "numero": 4,
+        "dia": 19,
         "mes": 5,
-        "tipo": "Ordinaria",
-        "asistencias": 22,
-        "jovenes": 9
+        "tipo": "Extraordinaria",
+        "asistencias": 21,
+        "jovenes": 6
       },
       {
-        "localidad": "Sumapaz",
-        "numero": 3,
-        "dia": 12,
-        "mes": 7,
+        "localidad": "Usaquén",
+        "numero": 5,
+        "dia": 16,
+        "mes": 6,
         "tipo": "Ordinaria",
+        "asistencias": 22,
+        "jovenes": 11
+      },
+      {
+        "localidad": "Usaquén",
+        "numero": 6,
+        "dia": 19,
+        "mes": 8,
+        "tipo": "Ordinaria",
+        "asistencias": 18,
+        "jovenes": 7
+      },
+      {
+        "localidad": "Usaquén",
+        "numero": 7,
+        "dia": 20,
+        "mes": 10,
+        "tipo": "Ordinaria",
+        "asistencias": 6,
+        "jovenes": 0
+      },
+      {
+        "localidad": "Usme",
+        "numero": 1,
+        "dia": 20,
+        "mes": 2,
+        "tipo": "Ordinaria",
+        "asistencias": 34,
+        "jovenes": 12
+      },
+      {
+        "localidad": "Usme",
+        "numero": 2,
+        "dia": 20,
+        "mes": 3,
+        "tipo": "Extraordinaria",
         "asistencias": 12,
         "jovenes": 2
       },
       {
-        "localidad": "Sumapaz",
-        "numero": 4,
-        "dia": 12,
-        "mes": 9,
+        "localidad": "Usme",
+        "numero": 3,
+        "dia": 17,
+        "mes": 4,
         "tipo": "Ordinaria",
-        "asistencias": 20,
-        "jovenes": 6
+        "asistencias": 15,
+        "jovenes": 5
       },
       {
-        "localidad": "Sumapaz",
-        "numero": 5,
-        "dia": 3,
-        "mes": 10,
+        "localidad": "Usme",
+        "numero": 4,
+        "dia": 30,
+        "mes": 5,
         "tipo": "Extraordinaria",
-        "asistencias": 14,
-        "jovenes": 4
+        "asistencias": 28,
+        "jovenes": 17
+      },
+      {
+        "localidad": "Usme",
+        "numero": 5,
+        "dia": 19,
+        "mes": 6,
+        "tipo": "Ordinaria",
+        "asistencias": 11,
+        "jovenes": 3
+      },
+      {
+        "localidad": "Usme",
+        "numero": 6,
+        "dia": 21,
+        "mes": 8,
+        "tipo": "Ordinaria",
+        "asistencias": 27,
+        "jovenes": 7
       }
     ],
     "nombres_consulta": [
@@ -3348,151 +3348,11 @@
     ],
     "por_localidad": [
       {
-        "localidad": "Usaquén",
+        "localidad": "Antonio Nariño",
         "meses": [
           1,
           1,
           1,
-          1,
-          1,
-          0,
-          1,
-          0,
-          1
-        ]
-      },
-      {
-        "localidad": "Chapinero",
-        "meses": [
-          1,
-          0,
-          1,
-          0,
-          1,
-          0,
-          1,
-          0,
-          1
-        ]
-      },
-      {
-        "localidad": "Santa Fe",
-        "meses": [
-          1,
-          0,
-          1,
-          0,
-          0,
-          1,
-          0,
-          1,
-          0
-        ]
-      },
-      {
-        "localidad": "San Cristóbal",
-        "meses": [
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1
-        ]
-      },
-      {
-        "localidad": "Usme",
-        "meses": [
-          1,
-          1,
-          1,
-          1,
-          1,
-          0,
-          1,
-          0,
-          0
-        ]
-      },
-      {
-        "localidad": "Tunjuelito",
-        "meses": [
-          1,
-          1,
-          1,
-          0,
-          1,
-          1,
-          1,
-          0,
-          0
-        ]
-      },
-      {
-        "localidad": "Bosa",
-        "meses": [
-          2,
-          1,
-          1,
-          0,
-          1,
-          2,
-          0,
-          1,
-          0
-        ]
-      },
-      {
-        "localidad": "Kennedy",
-        "meses": [
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          0,
-          1,
-          1
-        ]
-      },
-      {
-        "localidad": "Fontibón",
-        "meses": [
-          1,
-          1,
-          1,
-          0,
-          1,
-          1,
-          1,
-          0,
-          1
-        ]
-      },
-      {
-        "localidad": "Engativá",
-        "meses": [
-          1,
-          0,
-          1,
-          0,
-          2,
-          0,
-          1,
-          1,
-          0
-        ]
-      },
-      {
-        "localidad": "Suba",
-        "meses": [
-          1,
-          1,
-          0,
           1,
           1,
           0,
@@ -3516,80 +3376,24 @@
         ]
       },
       {
-        "localidad": "Teusaquillo",
+        "localidad": "Bosa",
         "meses": [
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1
-        ]
-      },
-      {
-        "localidad": "Los Mártires",
-        "meses": [
-          1,
+          2,
           1,
           1,
           0,
           1,
-          0,
-          1,
-          0,
-          1
-        ]
-      },
-      {
-        "localidad": "Antonio Nariño",
-        "meses": [
-          1,
-          1,
-          1,
-          1,
-          1,
-          0,
-          1,
-          1,
-          1
-        ]
-      },
-      {
-        "localidad": "Puente Aranda",
-        "meses": [
-          1,
-          0,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1
-        ]
-      },
-      {
-        "localidad": "La Candelaria",
-        "meses": [
-          1,
-          0,
-          1,
-          0,
-          0,
-          0,
+          2,
           0,
           1,
           0
         ]
       },
       {
-        "localidad": "Rafael Uribe Uribe",
+        "localidad": "Chapinero",
         "meses": [
           1,
-          1,
+          0,
           1,
           0,
           1,
@@ -3614,6 +3418,146 @@
         ]
       },
       {
+        "localidad": "Engativá",
+        "meses": [
+          1,
+          0,
+          1,
+          0,
+          2,
+          0,
+          1,
+          1,
+          0
+        ]
+      },
+      {
+        "localidad": "Fontibón",
+        "meses": [
+          1,
+          1,
+          1,
+          0,
+          1,
+          1,
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "localidad": "Kennedy",
+        "meses": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          1,
+          1
+        ]
+      },
+      {
+        "localidad": "La Candelaria",
+        "meses": [
+          1,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "localidad": "Los Mártires",
+        "meses": [
+          1,
+          1,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "localidad": "Puente Aranda",
+        "meses": [
+          1,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "localidad": "Rafael Uribe Uribe",
+        "meses": [
+          1,
+          1,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "localidad": "San Cristóbal",
+        "meses": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "localidad": "Santa Fe",
+        "meses": [
+          1,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "localidad": "Suba",
+        "meses": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          1,
+          1
+        ]
+      },
+      {
         "localidad": "Sumapaz",
         "meses": [
           1,
@@ -3625,6 +3569,62 @@
           0,
           1,
           1
+        ]
+      },
+      {
+        "localidad": "Teusaquillo",
+        "meses": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "localidad": "Tunjuelito",
+        "meses": [
+          1,
+          1,
+          1,
+          0,
+          1,
+          1,
+          1,
+          0,
+          0
+        ]
+      },
+      {
+        "localidad": "Usaquén",
+        "meses": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "localidad": "Usme",
+        "meses": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          1,
+          0,
+          0
         ]
       }
     ],

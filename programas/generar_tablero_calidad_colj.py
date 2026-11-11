@@ -396,6 +396,13 @@ def sin_tildes(texto):
     return "".join(c for c in texto if unicodedata.category(c) != "Mn").lower()
 
 
+# Las tablas del tablero muestran las localidades en orden alfabético, porque así
+# se buscan (pedido de Carolina del 11-nov-2026; la consulta ya iba así). ORDEN
+# sigue siendo el orden oficial por número de localidad y no se toca: las actas
+# de 2024 (ACTAS_2024) están escritas en ese orden.
+ORDEN_ALFABETICO = sorted(ORDEN, key=sin_tildes)
+
+
 def bimestres_cerrados_al(fecha):
     """Bimestres que ya terminaron en la fecha de corte.
 
@@ -703,14 +710,14 @@ def datos_por_mes(del_anio, unicas, fecha_corte):
                       "meses": [int(((ses["Localidad"] == loc)
                                      & (ses["mes"] == m)).sum())
                                 for m in meses]}
-                     for loc in ORDEN]
+                     for loc in ORDEN_ALFABETICO]
 
     # Una fila por sesión para la consulta de la página de periodicidad. Va
     # ordenada por localidad y fecha, como el anexo del reporte trimestral,
     # y solo lleva localidad, número, fecha, tipo y cifras: nada que nombre
     # personas. El número se cuenta por fecha dentro de cada localidad y no se
     # toma del formulario, porque las localidades a veces lo escriben mal.
-    orden_loc = {loc: i for i, loc in enumerate(ORDEN)}
+    orden_loc = {loc: i for i, loc in enumerate(ORDEN_ALFABETICO)}
     lista = ses.assign(pos=ses["Localidad"].map(orden_loc)) \
                .sort_values(["pos", "fecha"])
     lista["numero"] = lista.groupby("Localidad").cumcount() + 1
@@ -950,7 +957,7 @@ def construir():
         por_loc[a["localidad"]].append(a)
 
     localidades = []
-    for nombre in ORDEN:
+    for nombre in ORDEN_ALFABETICO:
         propias = sorted(por_loc.get(nombre, []),
                          key=lambda x: x["fecha_nombre"] or "")
         del_form = unicas[unicas["Localidad"] == nombre]
@@ -1304,7 +1311,7 @@ def construir():
     conteos[ANIO] = {l["localidad"]: l["actas"] for l in localidades}
     serie = [dict([("localidad", loc)]
                   + [("a%d" % a, conteos[a].get(loc, 0)) for a in ANIOS_SERIE])
-             for loc in ORDEN]
+             for loc in ORDEN_ALFABETICO]
     totales_serie = {"a%d" % a: sum(x["a%d" % a] for x in serie)
                      for a in ANIOS_SERIE}
     totales_serie["sesiones_matriz_2024"] = SESIONES_MATRIZ_2024
